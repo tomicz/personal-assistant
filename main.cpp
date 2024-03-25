@@ -16,23 +16,25 @@ void addCalories()
 
 void startApplication()
 {
-    std::string commandsArray[10];
-    commandsArray[0] = "a"; 
-    commandsArray[1] = "h";
-    commandsArray[2] = "q";  
-
     std::string command = "";
-    std::cout << "Type command (a)add to start the applicaiton. Enter (h)elp for help.To quit enter (q)uit." << std::endl;
+    std::cout << "Type command (a)dd to start the applicaiton. Enter (h)elp for help.To quit enter (q)uit." << std::endl;
     std::cin >> command;
 
-    for(int i = 0; i < sizeof(commandsArray); i++)
+    if(command == "a")
     {
-        if(command == commandsArray[i])
-        {
-            std::cout << "This is a program for adding calories to data base" << std::endl;
-            addCalories();
-            break;
-        }
+        std::cout << "This is a program for adding calories to data base" << std::endl;
+        addCalories();
+    }
+    else if(command == "h")
+    { 
+       std::cout << "Commands are: " << std::endl;
+       std::cout << "(a)dd" << std::endl;
+       std::cout << "(h)elp" << std::endl;
+       std::cout << "(q)uit" << std::endl;
+    }
+    else if(command == "q")
+    {
+       exit(0); 
     }
 }
 
