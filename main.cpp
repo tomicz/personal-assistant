@@ -1,5 +1,7 @@
 #include <iostream>
 #include <string>
+#include <time.h>
+#include <typeinfo>
 
 void addCalories()
 {
@@ -61,12 +63,23 @@ void startApplication()
 
 int main()
 {
+    clock_t start;
+    clock_t end;
+    double cycle_count;
+
+    start = clock();
+
     std::cout << "\n";
     std::cout << "Copyright @ Tomicz Engineering LLC" << std::endl;
     std::cout << "Visit our website at tomiczengineering.com for more information." << std::endl;
     std::cout << "\n";
 
     startApplication();
-   
+
+    end = clock();
+
+    double timeToExecute = double(end - start) / (double) CLOCKS_PER_SEC;
+    std::cout << "Time to execute: " << timeToExecute << std::endl;
+
     return 0;
 }
