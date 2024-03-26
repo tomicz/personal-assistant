@@ -4,14 +4,35 @@
 void addCalories()
 {
     std::string itemName = "";
-    int calories = {0};
+    float quantity = {100};
+    float calories = {0};
+    float fat = {0};
+    float carbohydrates = {0};
+    float protein = {0};
+    float caloriesFormula;
+    
+    caloriesFormula = calories / 100 * quantity;
      
     std::cout << "Enter item name" << std::endl;
     std::cin >> itemName;
 
-    std::cout << "Enter calories: " << std::endl;
+    std::cout << "Enter calories per 100g: " << std::endl;
     std::cin >> calories;  
-    std::cout << "You added item " << itemName << " with " << calories << " calories to a database." << std::endl;
+
+    std::cout << "Enter fat per 100g: " << std::endl;
+    std::cin >> fat;
+
+    std::cout << "Enter carbohydrates per 100g: " << std::endl;
+    std::cin >> carbohydrates;
+    
+    std::cout << "Enter protein per 100g: " << std::endl;
+    std::cin >> protein;
+
+    std::cout << "You added item " << itemName << std::endl;
+    std::cout << "Calories: " << calories << "g" << std::endl;
+    std::cout << "Fat: " << fat << "g" << std::endl;
+    std::cout << "Carbohudrates: " << carbohydrates << "g" << std::endl;
+    std::cout << "Protein: " << protein << "g" << std::endl;
 }
 
 void startApplication()
