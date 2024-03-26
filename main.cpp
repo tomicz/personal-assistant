@@ -65,7 +65,6 @@ int main()
 {
     clock_t start;
     clock_t end;
-    double cycle_count;
 
     start = clock();
 
