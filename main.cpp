@@ -1,7 +1,6 @@
 #include <iostream>
 #include <string>
 #include <time.h>
-#include <typeinfo>
 
 void addCalories()
 {
@@ -11,12 +10,12 @@ void addCalories()
     float fat = {0};
     float carbohydrates = {0};
     float protein = {0};
-    float caloriesFormula;
-    
-    caloriesFormula = calories / 100 * quantity;
      
     std::cout << "Enter item name" << std::endl;
     std::cin >> itemName;
+    
+    std::cout << "Enter quantity " << std::endl;
+    std::cin >> quantity;
 
     std::cout << "Enter calories per 100g: " << std::endl;
     std::cin >> calories;  
@@ -31,6 +30,8 @@ void addCalories()
     std::cin >> protein;
 
     std::cout << "You added item " << itemName << std::endl;
+
+    std::cout << "Quantity: " << quantity << "units" << std::endl;
     std::cout << "Calories: " << calories << "g" << std::endl;
     std::cout << "Fat: " << fat << "g" << std::endl;
     std::cout << "Carbohudrates: " << carbohydrates << "g" << std::endl;
