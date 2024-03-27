@@ -95,7 +95,7 @@ void startApplication()
     std::string command = "";
     std::cout << "Type command (A)dd to start the applicaiton. Enter (H)elp for help.To quit enter (Q)uit." << std::endl;
     std::cout << "To add a new day entry type (N)ew. << std::endl" << std::endl;
-    std::cout << "Read database (R)ead" << std::endl;
+    std::cout << "Read database (R)ead." << std::endl;
     std::cin >> command;
 
     if(command == "a" || command == "A")
