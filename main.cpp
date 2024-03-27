@@ -90,7 +90,7 @@ void add_calories()
     write_to_create_db(itemData);
 }
 
-void startApplication()
+void start_application()
 {
     std::string command = "";
     std::cout << "Type command (A)dd to start the applicaiton. Enter (H)elp for help.To quit enter (Q)uit." << std::endl;
@@ -139,7 +139,7 @@ int main()
     std::cout << "Visit our website at tomiczengineering.com for more information." << std::endl;
     std::cout << "\n";
 
-    startApplication();
+    start_application();
 
     end = clock();
 
