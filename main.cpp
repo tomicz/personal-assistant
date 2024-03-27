@@ -66,23 +66,30 @@ void add_calories()
 void startApplication()
 {
     std::string command = "";
-    std::cout << "Type command (a)dd to start the applicaiton. Enter (h)elp for help.To quit enter (q)uit." << std::endl;
+    std::cout << "Type command (A)dd to start the applicaiton. Enter (H)elp for help.To quit enter (Q)uit." << std::endl;
+    std::cout << "To add a new day entry type (N)ew. << std::endl" << std::endl;
     std::cin >> command;
 
-    if(command == "a")
+    if(command == "a" || command == "A")
     {
         std::cout << "This is a program for adding calories to data base" << std::endl;
         add_calories();
     }
-    else if(command == "h")
+    else if(command == "h" || command == "H")
     { 
        std::cout << "Commands are: " << std::endl;
-       std::cout << "(a)dd" << std::endl;
-       std::cout << "(h)elp" << std::endl;
-       std::cout << "(q)uit" << std::endl;
+       std::cout << "(A)dd" << std::endl;
+       std::cout << "(N)ew" << std::endl;
+       std::cout << "(H)elp" << std::endl;
+       std::cout << "(Q)uit" << std::endl;
     }
-    else if(command == "q")
+    else if(command == "n" || command == "N")
     {
+        std::cout << "Trying to creaete a new daily entry" << std::endl;
+    }
+    else if(command == "q" || command == "Q")
+    {
+        std::cout << "Command does not exit, please try agian." << std::endl;
        exit(0); 
     }
 }
