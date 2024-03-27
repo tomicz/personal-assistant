@@ -36,10 +36,10 @@ void addCalories()
     std::cout << "You added item " << itemName << std::endl;
     
     std::cout << "Brand: " << brand_name << std::endl;
-    std::cout << "Quantity: " << quantity << "units" << std::endl;
+    std::cout << "Quantity: " << quantity << " units" << std::endl;
     std::cout << "Calories: " << calories << "g" << std::endl;
     std::cout << "Fat: " << fat << "g" << std::endl;
-    std::cout << "Carbohudrates: " << carbohydrates << "g" << std::endl;
+    std::cout << "Carbohydrates: " << carbohydrates << "g" << std::endl;
     std::cout << "Protein: " << protein << "g" << std::endl;
 }
 
