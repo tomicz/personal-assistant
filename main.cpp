@@ -2,6 +2,33 @@
 #include <string>
 #include <time.h>
 #include <fstream>
+#include <vector>
+
+void read_db()
+{
+    std::ifstream database("db.txt");
+    
+    if(!database.is_open())
+    {
+        std::cout << "Error: File stream is not open" << std::endl;
+    }
+    
+    std::vector<std::string> lines;
+    std::string line;
+    
+    while(std::getline(database, line))
+    {
+        lines.push_back(line);     
+    }
+
+    database.close();
+
+    for(int i = 0; i < lines.size(); i++)
+    {
+        std::cout << lines.at(i) << ::std::endl;
+    }
+    std::cout << "Reading database." << std::endl;        
+}
 
 void write_to_create_db(std::string itemData)
 {
@@ -68,6 +95,7 @@ void startApplication()
     std::string command = "";
     std::cout << "Type command (A)dd to start the applicaiton. Enter (H)elp for help.To quit enter (Q)uit." << std::endl;
     std::cout << "To add a new day entry type (N)ew. << std::endl" << std::endl;
+    std::cout << "Read database (R)ead" << std::endl;
     std::cin >> command;
 
     if(command == "a" || command == "A")
@@ -80,12 +108,17 @@ void startApplication()
        std::cout << "Commands are: " << std::endl;
        std::cout << "(A)dd" << std::endl;
        std::cout << "(N)ew" << std::endl;
+       std::cout << "(R)ead" << std::endl;
        std::cout << "(H)elp" << std::endl;
        std::cout << "(Q)uit" << std::endl;
     }
     else if(command == "n" || command == "N")
     {
         std::cout << "Trying to creaete a new daily entry" << std::endl;
+    }
+    else if(command == "r" || command == "R")
+    {
+        read_db();
     }
     else if(command == "q" || command == "Q")
     {
