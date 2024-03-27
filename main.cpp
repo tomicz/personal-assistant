@@ -1,8 +1,17 @@
 #include <iostream>
 #include <string>
 #include <time.h>
+#include <fstream>
 
-void addCalories()
+void write_to_create_db()
+{
+    std::ofstream database ("db.txt");
+    
+    database.close();
+    std::cout << "Created a database successfully" << std::endl;
+}
+
+void add_calories()
 {
     std::string itemName = "";
     std::string brand_name = "";
@@ -41,6 +50,8 @@ void addCalories()
     std::cout << "Fat: " << fat << "g" << std::endl;
     std::cout << "Carbohydrates: " << carbohydrates << "g" << std::endl;
     std::cout << "Protein: " << protein << "g" << std::endl;
+
+    write_to_create_db();
 }
 
 void startApplication()
@@ -52,7 +63,7 @@ void startApplication()
     if(command == "a")
     {
         std::cout << "This is a program for adding calories to data base" << std::endl;
-        addCalories();
+        add_calories();
     }
     else if(command == "h")
     { 
