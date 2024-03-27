@@ -3,10 +3,10 @@
 #include <time.h>
 #include <fstream>
 
-void write_to_create_db()
+void write_to_create_db(std::string itemData)
 {
-    std::ofstream database ("db.txt");
-    
+    std::ofstream database ("db.txt", std::ios::app);
+    database << "\n" << itemData;    
     database.close();
     std::cout << "Created a database successfully" << std::endl;
 }
@@ -15,12 +15,13 @@ void add_calories()
 {
     std::string itemName = "";
     std::string brand_name = "";
-    float quantity = {100};
+    float quantity = {0};
     float calories = {0};
     float fat = {0};
     float carbohydrates = {0};
     float protein = {0};
-     
+    std::string itemData;
+
     std::cout << "Enter item name" << std::endl;
     std::cin >> itemName;
     
@@ -50,8 +51,16 @@ void add_calories()
     std::cout << "Fat: " << fat << "g" << std::endl;
     std::cout << "Carbohydrates: " << carbohydrates << "g" << std::endl;
     std::cout << "Protein: " << protein << "g" << std::endl;
+    
+    itemData = itemName + ", "
+        + brand_name 
+        +  ", "+ std::to_string(quantity) 
+        + ", " + std::to_string(calories) 
+        + ", " + std::to_string(fat) 
+        + ", " + std::to_string(carbohydrates) 
+        + ", " + std::to_string(protein);
 
-    write_to_create_db();
+    write_to_create_db(itemData);
 }
 
 void startApplication()
