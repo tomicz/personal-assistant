@@ -5,6 +5,7 @@
 void addCalories()
 {
     std::string itemName = "";
+    std::string brand_name = "";
     float quantity = {100};
     float calories = {0};
     float fat = {0};
@@ -14,6 +15,9 @@ void addCalories()
     std::cout << "Enter item name" << std::endl;
     std::cin >> itemName;
     
+    std::cout << "Enter brand name: "  << std::endl;
+    std::cin >> brand_name;
+
     std::cout << "Enter quantity " << std::endl;
     std::cin >> quantity;
 
@@ -30,7 +34,8 @@ void addCalories()
     std::cin >> protein;
 
     std::cout << "You added item " << itemName << std::endl;
-
+    
+    std::cout << "Brand: " << brand_name << std::endl;
     std::cout << "Quantity: " << quantity << "units" << std::endl;
     std::cout << "Calories: " << calories << "g" << std::endl;
     std::cout << "Fat: " << fat << "g" << std::endl;
