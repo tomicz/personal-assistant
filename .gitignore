@@ -32,8 +32,8 @@
 *.app
 
 # Project
-db.txt
 *.swp
+*.txt
 
 # App Store
 .DS_Store
