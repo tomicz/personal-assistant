@@ -5,6 +5,16 @@
 #include <vector>
 #include <iomanip>
 
+void read_help()
+{
+    std::cout << "Commands are: " << std::endl;
+    std::cout << "(A)dd" << std::endl;
+    std::cout << "(N)ew" << std::endl;
+    std::cout << "(R)ead" << std::endl;
+    std::cout << "(H)elp" << std::endl;
+    std::cout << "(Q)uit" << std::endl;
+}
+
 void read_db()
 {
     std::ifstream database("db.txt");
@@ -108,17 +118,12 @@ void start_application()
 
     if(command == "a" || command == "A")
     {
-        std::cout << "This is a program for adding calories to data base" << std::endl;
+        std::cout << "To add new items to database, enter required information requested below." << std::endl;
         add_calories();
     }
     else if(command == "h" || command == "H")
     { 
-       std::cout << "Commands are: " << std::endl;
-       std::cout << "(A)dd" << std::endl;
-       std::cout << "(N)ew" << std::endl;
-       std::cout << "(R)ead" << std::endl;
-       std::cout << "(H)elp" << std::endl;
-       std::cout << "(Q)uit" << std::endl;
+		read_help();
     }
     else if(command == "n" || command == "N")
     {
