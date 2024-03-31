@@ -10,9 +10,55 @@
 
 namespace fs = std::filesystem;
 
-void add_new_data_to_db()
+
+std::string remove_symbols(const std::string& input) {
+    std::string result;
+    for (char c : input) {
+        if (std::isalnum(c)) { // Check if the character is alphanumeric
+            result += c;
+        }
+    }
+    return result;
+}
+
+std::string get_meal_time()
 {
+	std::cout << "Select:" << std::endl;
+	std::cout << "1. Breakfast" <<std::endl;	
+	std::cout << "2. Lunch" <<std::endl;	
+	std::cout << "3. Dinner" <<std::endl;	
+
+	char option{};
+
+	std::cout << "Enter option: ";
+	std::cin >> option;
 	
+	if(option == '1')
+	{
+		return "Breakfast";
+	}
+	else if(option == '2')
+	{
+		return "Lunch";
+	}
+	else if(option == '3')
+	{
+		return "Dinner";	
+	}
+
+	return "Invalid option";
+}
+
+std::string create_directory(std::string date)
+{
+	std::string file_path = "db/" + date + "/";
+
+	if(!fs::exists(file_path))
+	{
+		fs::create_directories(file_path);		
+	}
+
+	return file_path;
 }
 
 void add_new_daily_entry()
@@ -27,12 +73,12 @@ void add_new_daily_entry()
     std::string year_str = std::to_string(year);
     std::string month_str = (month < 10) ? "0" + std::to_string(month) : std::to_string(month);
     std::string day_str = (day < 10) ? "0" + std::to_string(day) : std::to_string(day);
-
     std::string date_string = year_str + "-" + month_str + "-" + day_str;
-	std::ofstream timestamp (date_string + ".txt", std::ios::app);
-	std::cout << "Successuflly added a new entry" << std::endl;	
-
-	add_new_data_to_db();
+	
+	std::string path = create_directory(remove_symbols(date_string));
+	path += get_meal_time() + ".txt";
+	std::cout << path << std::endl;
+	std::ofstream timestamp(path, std::ios::app);
 }
 
 void read_help()
@@ -179,7 +225,6 @@ int main()
     clock_t end;
 
     start = clock();
-
     std::cout << "\n";
     std::cout << "Copyright @ Tomicz Engineering LLC" << std::endl;
     std::cout << "Visit our website at tomiczengineering.com for more information." << std::endl;
