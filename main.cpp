@@ -95,9 +95,15 @@ void add_calories()
 void start_application()
 {
     std::string command = "";
-    std::cout << "Type command (A)dd to start the applicaiton. Enter (H)elp for help.To quit enter (Q)uit." << std::endl;
-    std::cout << "To add a new day entry type (N)ew. << std::endl" << std::endl;
-    std::cout << "Read database (R)ead." << std::endl;
+	std::cout << "-------------------------------------------------" << std::endl;
+	std::cout << "COMMAND LINE INFORMATION" << std::endl;
+	std::cout << "-------------------------------------------------" << std::endl;
+    std::cout << "1. Type command (A)dd to start the applicaiton." << std::endl;
+    std::cout << "2. To add a new day entry type (N)ew." << std::endl;
+    std::cout << "3. Read database (R)ead." << std::endl;
+	std::cout << "4. Enter (H)elp for help." << std::endl;
+	std::cout << "5. To quit enter (Q)uit." << std::endl;
+	std::cout << "Enter command: ";
     std::getline(std::cin, command);
 
     if(command == "a" || command == "A")
@@ -124,9 +130,12 @@ void start_application()
     }
     else if(command == "q" || command == "Q")
     {
-        std::cout << "Command does not exit, please try agian." << std::endl;
-       exit(0); 
+        std::cout << "Exited application. Copyright @ Tomicz Engineering LLC" << std::endl;
     }
+	else
+	{
+		std::cout << "Command does not exist, please try another." << std::endl;
+	}
 }
 
 int main()
