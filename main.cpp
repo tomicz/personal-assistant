@@ -11,10 +11,14 @@
 namespace fs = std::filesystem;
 
 
-std::string remove_symbols(const std::string& input) {
+std::string remove_symbols(const std::string& input) 
+{
     std::string result;
-    for (char c : input) {
-        if (std::isalnum(c)) { // Check if the character is alphanumeric
+	
+    for (char c : input)
+	{
+        if (std::isalnum(c)) 
+		{
             result += c;
         }
     }
