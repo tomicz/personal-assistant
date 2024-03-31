@@ -6,6 +6,14 @@
 #include <iomanip>
 #include <chrono>
 #include <ctime>
+#include <filesystem>
+
+namespace fs = std::filesystem;
+
+void add_new_data_to_db()
+{
+	
+}
 
 void add_new_daily_entry()
 {
@@ -23,6 +31,8 @@ void add_new_daily_entry()
     std::string date_string = year_str + "-" + month_str + "-" + day_str;
 	std::ofstream timestamp (date_string + ".txt", std::ios::app);
 	std::cout << "Successuflly added a new entry" << std::endl;	
+
+	add_new_data_to_db();
 }
 
 void read_help()
