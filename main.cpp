@@ -4,6 +4,26 @@
 #include <fstream>
 #include <vector>
 #include <iomanip>
+#include <chrono>
+#include <ctime>
+
+void add_new_daily_entry()
+{
+    std::time_t date_now = std::time(0);
+    std::tm* time = std::localtime(&date_now);
+
+    int year = time->tm_year + 1900;
+    int month = time->tm_mon + 1;
+    int day = time->tm_mday;
+
+    std::string year_str = std::to_string(year);
+    std::string month_str = (month < 10) ? "0" + std::to_string(month) : std::to_string(month);
+    std::string day_str = (day < 10) ? "0" + std::to_string(day) : std::to_string(day);
+
+    std::string date_string = year_str + "-" + month_str + "-" + day_str;
+	std::ofstream timestamp (date_string + ".txt", std::ios::app);
+	std::cout << "Successuflly added a new entry" << std::endl;	
+}
 
 void read_help()
 {
@@ -127,7 +147,7 @@ void start_application()
     }
     else if(command == "n" || command == "N")
     {
-        std::cout << "Trying to creaete a new daily entry" << std::endl;
+		add_new_daily_entry();
     }
     else if(command == "r" || command == "R")
     {
