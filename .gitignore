@@ -34,3 +34,6 @@
 # Project
 db.txt
 *.swp
+
+# App Store
+.DS_Store
