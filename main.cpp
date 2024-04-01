@@ -4,7 +4,6 @@
 #include <fstream>
 #include <vector>
 #include <iomanip>
-#include <chrono>
 #include <ctime>
 #include <filesystem>
 
@@ -101,7 +100,6 @@ void add_new_daily_entry()
 	std::string path = create_directory(remove_symbols(date_string));
 	path += get_meal_time() + ".txt";
 	std::cout << path << std::endl;
-
 	std:: string meal_data = add_meal_entry();
 	std::ofstream timestamp(path, std::ios::app);
 	timestamp << '\n' << meal_data;
@@ -273,8 +271,7 @@ void start_application()
     else if(command == "q" || command == "Q")
     {
         std::cout << "Exited application. Copyright @ Tomicz Engineering LLC" << std::endl;
-    }
-	else
+    }else
 	{
 		std::cout << "Command does not exist, please try another." << std::endl;
 	}
