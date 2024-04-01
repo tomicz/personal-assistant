@@ -10,6 +10,8 @@
 
 namespace fs = std::filesystem;
 
+void read_db(bool = false);
+std::string get_element_from_db(int = 0);
 
 std::string remove_symbols(const std::string& input) 
 {
@@ -23,6 +25,23 @@ std::string remove_symbols(const std::string& input)
         }
     }
     return result;
+}
+
+std::string add_meal_entry()
+{
+	std::cout << "Select a meal from database by entering a number" << std::endl;
+	read_db(true);
+	std::cout << "Enter meal number: ";
+
+	int option{};
+	
+	std::cin >> option;
+	std::cout << "You selected: " << option << std::endl;
+	
+	std::string result = get_element_from_db(option);
+	std::cout << result << std::endl;
+
+	return result;
 }
 
 std::string get_meal_time()
@@ -82,7 +101,11 @@ void add_new_daily_entry()
 	std::string path = create_directory(remove_symbols(date_string));
 	path += get_meal_time() + ".txt";
 	std::cout << path << std::endl;
+
+	std:: string meal_data = add_meal_entry();
 	std::ofstream timestamp(path, std::ios::app);
+	timestamp << '\n' << meal_data;
+	timestamp.close();
 }
 
 void read_help()
@@ -95,7 +118,32 @@ void read_help()
     std::cout << "(Q)uit" << std::endl;
 }
 
-void read_db()
+std::string get_element_from_db(int index)
+{
+    std::ifstream database("db.txt");
+    std::vector<std::string> lines;
+    std::string line;
+    
+    while(std::getline(database, line))
+    {
+        lines.push_back(line);     
+    }
+
+    database.close();
+
+    for(int i = 0; i <= index; i++)
+    {
+		if(i == index)
+		{
+			line = lines.at(i);
+			break;
+		}
+    }
+
+	return line;
+}
+
+void read_db(bool ordered)
 {
     std::ifstream database("db.txt");
     
@@ -117,8 +165,17 @@ void read_db()
     for(int i = 0; i < lines.size(); i++)
     {
         std::cout << std::fixed << std::setprecision(1);
-        std::cout << lines.at(i) << ::std::endl;
+
+		if(!ordered)
+		{
+        	std::cout << lines.at(i) << ::std::endl;
+		}
+		else
+		{
+        	std::cout << i << ": " << lines.at(i) << ::std::endl;
+		}
     }
+
     std::cout << "Finished reading database." << std::endl;        
 }
 
@@ -211,7 +268,7 @@ void start_application()
     }
     else if(command == "r" || command == "R")
     {
-        read_db();
+        read_db(false);
     }
     else if(command == "q" || command == "Q")
     {
