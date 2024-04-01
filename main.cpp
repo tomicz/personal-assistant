@@ -6,11 +6,9 @@
 #include <iomanip>
 #include <ctime>
 #include <filesystem>
+#include "includes/database.h"
 
 namespace fs = std::filesystem;
-
-void read_db(bool = false);
-std::string get_element_from_db(int = 0);
 
 std::string remove_symbols(const std::string& input) 
 {
@@ -71,7 +69,7 @@ std::string get_meal_time()
 	return "Invalid option";
 }
 
-std::string create_directory(std::string date)
+std::string create_directory(const std::string& date)
 {
 	std::string file_path = "db/" + date + "/";
 
@@ -114,75 +112,6 @@ void read_help()
     std::cout << "(R)ead" << std::endl;
     std::cout << "(H)elp" << std::endl;
     std::cout << "(Q)uit" << std::endl;
-}
-
-std::string get_element_from_db(int index)
-{
-    std::ifstream database("db.txt");
-    std::vector<std::string> lines;
-    std::string line;
-    
-    while(std::getline(database, line))
-    {
-        lines.push_back(line);     
-    }
-
-    database.close();
-
-    for(int i = 0; i <= index; i++)
-    {
-		if(i == index)
-		{
-			line = lines.at(i);
-			break;
-		}
-    }
-
-	return line;
-}
-
-void read_db(bool ordered)
-{
-    std::ifstream database("db.txt");
-    
-    if(!database.is_open())
-    {
-        std::cout << "Error: File stream is not open" << std::endl;
-    }
-    
-    std::vector<std::string> lines;
-    std::string line;
-    
-    while(std::getline(database, line))
-    {
-        lines.push_back(line);     
-    }
-
-    database.close();
-
-    for(int i = 0; i < lines.size(); i++)
-    {
-        std::cout << std::fixed << std::setprecision(1);
-
-		if(!ordered)
-		{
-        	std::cout << lines.at(i) << ::std::endl;
-		}
-		else
-		{
-        	std::cout << i << ": " << lines.at(i) << ::std::endl;
-		}
-    }
-
-    std::cout << "Finished reading database." << std::endl;        
-}
-
-void write_to_create_db(std::string itemData)
-{
-    std::ofstream database ("db.txt", std::ios::app);
-    database << "\n" << itemData;    
-    database.close();
-    std::cout << "Added an item to database." << std::endl;
 }
 
 void add_calories()
@@ -234,7 +163,7 @@ void add_calories()
         + ", " + std::to_string(carbohydrates) 
         + ", " + std::to_string(protein);
 
-    write_to_create_db(itemData);
+    write_to_db(itemData);
 }
 
 void start_application()
