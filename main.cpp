@@ -2,27 +2,12 @@
 #include <string>
 #include <time.h>
 #include <fstream>
-#include <vector>
-#include <iomanip>
 #include <ctime>
 #include <filesystem>
 #include "includes/database.h"
+#include "includes/helpers.h"
 
 namespace fs = std::filesystem;
-
-std::string remove_symbols(const std::string& input) 
-{
-    std::string result;
-	
-    for (char c : input)
-	{
-        if (std::isalnum(c)) 
-		{
-            result += c;
-        }
-    }
-    return result;
-}
 
 std::string add_meal_entry()
 {
@@ -69,16 +54,12 @@ std::string get_meal_time()
 	return "Invalid option";
 }
 
-std::string create_directory(const std::string& date)
+void create_directory(const std::string& file_path)
 {
-	std::string file_path = "db/" + date + "/";
-
 	if(!fs::exists(file_path))
 	{
 		fs::create_directories(file_path);		
 	}
-
-	return file_path;
 }
 
 void add_new_daily_entry()
@@ -95,11 +76,13 @@ void add_new_daily_entry()
     std::string day_str = (day < 10) ? "0" + std::to_string(day) : std::to_string(day);
     std::string date_string = year_str + "-" + month_str + "-" + day_str;
 	
-	std::string path = create_directory(remove_symbols(date_string));
-	path += get_meal_time() + ".txt";
-	std::cout << path << std::endl;
-	std:: string meal_data = add_meal_entry();
-	std::ofstream timestamp(path, std::ios::app);
+	std::string file_path = "db/" + remove_symbols(date_string) + "/";
+	
+	create_directory(file_path);
+	std::cout << file_path << std::endl;
+	std::string meal_data = add_meal_entry();
+	
+    std::ofstream timestamp(file_path + get_meal_time() + ".txt", std::ios::app);
 	timestamp << '\n' << meal_data;
 	timestamp.close();
 }

@@ -1,10 +1,8 @@
 #include <iostream>
-#include <filesystem>
 #include <fstream>
 #include <string>
 #include <vector>
-
-namespace fs = std::filesystem;
+#include "database.h"
 
 void read_db(bool ordered)
 {
@@ -25,7 +23,7 @@ void read_db(bool ordered)
 
     database.close();
 
-    for(int i = 0; i < lines.size(); i++)
+    for(size_t i = 0; i < lines.size(); i++)
     {
         std::cout << std::fixed << std::setprecision(1);
 
@@ -66,7 +64,7 @@ std::string get_element_from_db(int index)
 	return line;
 }
 
-void write_to_db(const std::string itemData)
+void write_to_db(const std::string &itemData)
 {
     std::ofstream database ("db.txt", std::ios::app);
     database << "\n" << itemData;    
