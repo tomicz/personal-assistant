@@ -4,6 +4,47 @@
 #include <vector>
 #include "database.h"
 
+std::string modify_data_at_index(int index, std::string &data)
+{
+	int current_index = 0;
+	int current_comma_index = {};
+	int next_comma_index {};
+
+	for(size_t i = 0; i < data.length(); i++)
+	{
+		if(data[i] == ',')
+		{
+			if(current_index == index - 1)
+			{
+				current_comma_index = i; 
+				break;
+			}
+		
+			current_index++;
+		}
+	}
+	
+	for(size_t i = current_comma_index + 2; i < data.length(); i++)
+	{
+		if(data[i] == ',')
+		{
+			next_comma_index = i;
+			break;
+		}
+	}
+	
+	double amount{};
+	
+	std::cout << "Enter amount(g): " << std::endl;
+	std::cin >> amount;	
+	
+	current_comma_index +=  2;
+	next_comma_index -= 2;
+	data.replace(current_comma_index, next_comma_index - current_comma_index, std::to_string(amount));
+
+	return data;
+}
+
 void read_db(bool ordered)
 {
     std::ifstream database("db.txt");

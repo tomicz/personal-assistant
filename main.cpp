@@ -1,9 +1,11 @@
+#include <__system_error/errc.h>
 #include <iostream>
 #include <string>
 #include <time.h>
 #include <fstream>
 #include <ctime>
 #include <filesystem>
+#include <vector>
 #include "includes/database.h"
 #include "includes/helpers.h"
 
@@ -22,6 +24,8 @@ std::string add_meal_entry()
 	
 	std::string result = get_element_from_db(option);
 	std::cout << result << std::endl;
+	
+	modify_data_at_index(2,result);		
 
 	return result;
 }
