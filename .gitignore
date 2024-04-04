@@ -26,6 +26,9 @@
 *.a
 *.lib
 
+#editor dependencies
+*.vscode
+
 # Executables
 *.exe
 *.out
