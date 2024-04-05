@@ -4,7 +4,7 @@
 #include <vector>
 #include "database.h"
 
-std::string modify_data_at_index(int index, double &amount, std::string &data)
+std::string enter_new_data_at_index(int index, double &amount, std::string &data)
 {
 	int current_index = 0;
 	int current_comma_index = {};

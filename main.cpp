@@ -26,7 +26,7 @@ std::string add_meal_entry()
 	double amount{};
 	std::cout << "Enter amount(g): ";
 	std::cin >> amount;
-	modify_data_at_index(2, amount, result);		
+	enter_new_data_at_index(2, amount, result);		
 
 	return result;
 }
