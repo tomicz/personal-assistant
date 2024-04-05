@@ -4,7 +4,7 @@
 #include <vector>
 #include "database.h"
 
-std::string modify_data_at_index(int index, std::string &data)
+std::string modify_data_at_index(int index, double &amount, std::string &data)
 {
 	int current_index = 0;
 	int current_comma_index = {};
@@ -32,11 +32,6 @@ std::string modify_data_at_index(int index, std::string &data)
 			break;
 		}
 	}
-	
-	double amount{};
-	
-	std::cout << "Enter amount(g): " << std::endl;
-	std::cin >> amount;	
 	
 	current_comma_index +=  2;
 	next_comma_index -= 2;
