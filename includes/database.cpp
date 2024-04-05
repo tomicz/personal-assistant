@@ -4,40 +4,53 @@
 #include <vector>
 #include "database.h"
 
-std::string enter_new_data_at_index(int index, double &amount, std::string &data)
+int get_comma_index(int at_index, std::string &data)
 {
-	int current_index = 0;
-	int current_comma_index = {};
-	int next_comma_index {};
+	int current_index{};
+	int current_comma_index{};
 
-	for(size_t i = 0; i < data.length(); i++)
+	for(int i = 0; i < data.length(); i++)
 	{
-		if(data[i] == ',')
+		if(data[i] == ',' )
 		{
-			if(current_index == index - 1)
+			if(current_index == at_index)
 			{
 				current_comma_index = i; 
 				break;
 			}
 		
 			current_index++;
-		}
-	}
-	
-	for(size_t i = current_comma_index + 2; i < data.length(); i++)
-	{
-		if(data[i] == ',')
+		}else
 		{
-			next_comma_index = i;
-			break;
+			current_comma_index = data.length() - 1;
 		}
 	}
-	
-	current_comma_index +=  2;
-	next_comma_index -= 2;
-	data.replace(current_comma_index, next_comma_index - current_comma_index, std::to_string(amount));
 
-	return data;
+	return current_comma_index;
+}
+
+std::string modify_data_at_index(int index, std::string &data)
+{
+	std::string value_str{};
+
+	int current_comma = get_comma_index(index, data);
+	int next_comma = get_comma_index(index + 1, data);
+	
+	for(int i  = current_comma + 2; i < next_comma; i++)
+	{
+		value_str += data[i];
+	}
+
+	return value_str; 
+}
+
+void enter_new_data_at_index(int index, double amount, std::string &data)
+{
+	int current_comma = get_comma_index(index, data);
+	int next_comma = get_comma_index(index + 1, data);
+	int string_length = next_comma - current_comma;
+	
+	data.replace(current_comma + 2, string_length - 2, std::to_string(amount));
 }
 
 void read_db(bool ordered)

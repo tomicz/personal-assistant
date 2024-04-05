@@ -26,7 +26,25 @@ std::string add_meal_entry()
 	double amount{};
 	std::cout << "Enter amount(g): ";
 	std::cin >> amount;
-	enter_new_data_at_index(2, amount, result);		
+	
+
+	std::string calories = modify_data_at_index(2, result);
+	std::string fat = modify_data_at_index(3, result);
+	std::string ug = modify_data_at_index(4, result);
+	std::string protein = modify_data_at_index(5, result);
+
+	double calories_formula = std::stod(calories) / 100.0 * amount;
+	double fat_formula = std::stod(fat) / 100.0 * amount;
+	double ug_formula = std::stod(ug) / 100.0 * amount;
+	double protein_formula = std::stod(protein) / 100.0 * amount;
+
+	enter_new_data_at_index(1, amount, result); 
+	enter_new_data_at_index(2, calories_formula, result); 
+	enter_new_data_at_index(3, fat_formula, result); 
+	enter_new_data_at_index(4, ug_formula, result); 
+	enter_new_data_at_index(5, protein_formula, result); 
+
+	std::cout << "Data: " << result << std::endl;
 
 	return result;
 }
