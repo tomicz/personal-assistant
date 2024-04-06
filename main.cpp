@@ -178,11 +178,11 @@ void start_application()
 	std::cout << "-------------------------------------------------" << std::endl;
 	std::cout << "COMMAND LINE INFORMATION" << std::endl;
 	std::cout << "-------------------------------------------------" << std::endl;
-    std::cout << "1. Type command (A)dd to start the applicaiton." << std::endl;
-    std::cout << "2. To add a new day entry type (N)ew." << std::endl;
-    std::cout << "3. Read database (R)ead." << std::endl;
-	std::cout << "4. Enter (H)elp for help." << std::endl;
-	std::cout << "5. To quit enter (Q)uit." << std::endl;
+    std::cout << "1. (A)dd to database." << std::endl;
+    std::cout << "2. (N)ew to create a new daily entry." << std::endl;
+    std::cout << "3. (R)ead database." << std::endl;
+	std::cout << "4. (H)elp." << std::endl;
+	std::cout << "5. (Q)uit." << std::endl;
 	std::cout << "Enter command: ";
     std::getline(std::cin, command);
 
