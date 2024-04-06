@@ -113,10 +113,10 @@ void add_new_daily_entry()
 void read_help()
 {
     std::cout << "Commands are: " << std::endl;
-    std::cout << "(A)dd" << std::endl;
-    std::cout << "(N)ew" << std::endl;
-    std::cout << "(R)ead" << std::endl;
-    std::cout << "(H)elp" << std::endl;
+    std::cout << "(A)dd - Add a new element to a database." << std::endl;
+    std::cout << "(N)ew - Add a new element to a dairy." << std::endl;
+    std::cout << "(R)ead - Read food database." << std::endl;
+    std::cout << "(H)elp - Get help." << std::endl;
     std::cout << "(Q)uit" << std::endl;
 }
 
