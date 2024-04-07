@@ -4,6 +4,34 @@
 #include <vector>
 #include "database.h"
 
+void remove_element_at_index(int index)
+{
+	std::ifstream database("db.txt");
+	std::ofstream temp_database("temp_database.txt");
+
+	if(!database || !temp_database)
+	{
+		std::cout << "Error: Cannot open database";
+	}
+
+	std::string line_to_delete{};
+	std::string temp_line{};
+
+	while(std::getline(database, temp_line))
+	{
+		if(temp_line != line_to_delete)
+		{
+			temp_database << temp_line << std::endl;
+		}
+	}
+
+	database.close();
+	temp_database.close();
+
+	remove("db.txt");
+	rename("temp_database.txt", "db.txt");	
+}
+
 int get_comma_index(int at_index, std::string &data)
 {
 	int current_index{};
