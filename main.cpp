@@ -116,6 +116,7 @@ void read_help()
     std::cout << "(A)dd - Add a new element to a database." << std::endl;
     std::cout << "(N)ew - Add a new element to a dairy." << std::endl;
     std::cout << "(R)ead - Read food database." << std::endl;
+	std::cout << "(D)elete - Delete an element from database." << std::endl;
     std::cout << "(H)elp - Get help." << std::endl;
     std::cout << "(Q)uit" << std::endl;
 }
@@ -174,39 +175,44 @@ void add_calories()
 
 void start_application()
 {
-    std::string command = "";
+	std::string command{}; 
 	std::cout << "-------------------------------------------------" << std::endl;
 	std::cout << "COMMAND LINE INFORMATION" << std::endl;
 	std::cout << "-------------------------------------------------" << std::endl;
     std::cout << "1. (A)dd to database." << std::endl;
     std::cout << "2. (N)ew to create a new daily entry." << std::endl;
     std::cout << "3. (R)ead database." << std::endl;
-	std::cout << "4. (H)elp." << std::endl;
-	std::cout << "5. (Q)uit." << std::endl;
+	std::cout << "4. (D)elete element." << std::endl;
+	std::cout << "5. (H)elp." << std::endl;
+	std::cout << "6. (Q)uit." << std::endl;
 	std::cout << "Enter command: ";
     std::getline(std::cin, command);
 
-    if(command == "a" || command == "A")
-    {
-        std::cout << "To add new items to database, enter required information requested below." << std::endl;
-        add_calories();
-    }
-    else if(command == "h" || command == "H")
-    { 
+	if(command == "a" || command == "A")
+	{
+		std::cout << "To add new items to database, enter required information requested below." << std::endl;
+		add_calories();
+	}
+	else if(command == "h" || command == "H")
+	{ 
 		read_help();
-    }
-    else if(command == "n" || command == "N")
-    {
+	}
+	else if(command == "n" || command == "N")
+	{
 		add_new_daily_entry();
-    }
-    else if(command == "r" || command == "R")
-    {
-        read_db(false);
-    }
-    else if(command == "q" || command == "Q")
-    {
-        std::cout << "Exited application. Copyright @ Tomicz Engineering LLC" << std::endl;
-    }else
+	}
+	else if(command == "r" || command == "R")
+	{
+		read_db(false);
+	}
+	else if(command == "q" || command == "Q")
+	{
+		std::cout << "Application closed" << std::endl;	
+	}
+	else if(command == "d" || command == "D")
+	{
+		remove_element_at_index();	
+	}else
 	{
 		std::cout << "Command does not exist, please try another." << std::endl;
 	}
@@ -218,11 +224,12 @@ int main()
     clock_t end;
 
     start = clock();
+
     std::cout << "\n";
     std::cout << "Copyright @ Tomicz Engineering LLC" << std::endl;
     std::cout << "Visit our website at tomiczengineering.com for more information." << std::endl;
     std::cout << "\n";
-
+	
     start_application();
 
     end = clock();

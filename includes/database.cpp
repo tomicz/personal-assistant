@@ -4,9 +4,23 @@
 #include <vector>
 #include "database.h"
 
-void remove_element_at_index(int index)
+int get_database_size()
 {
-	std::ifstream database("db.txt");
+	int  count{};
+	std::ifstream database("db/db.txt");
+	std::string line;
+
+	while(std::getline(database, line))
+	{
+		count++;	
+	}
+
+	return count;
+}
+
+void remove_element_at_index()
+{
+	std::ifstream database("db/db.txt");
 	std::ofstream temp_database("temp_database.txt");
 
 	if(!database || !temp_database)
@@ -14,8 +28,26 @@ void remove_element_at_index(int index)
 		std::cout << "Error: Cannot open database";
 	}
 
-	std::string line_to_delete{};
+	read_db(true);
+	int index{};
+	int i{};
+
+	std::cout << "Enter food index: ";
+	std::cin >> index;
+
 	std::string temp_line{};
+	std::string line_to_delete{};
+
+	while(std::getline(database, temp_line))
+	{
+		if(index == i)
+		{
+			line_to_delete = get_element_from_db(index);	
+			break;
+		}
+		
+		i++;
+	}
 
 	while(std::getline(database, temp_line))
 	{
@@ -25,10 +57,12 @@ void remove_element_at_index(int index)
 		}
 	}
 
+	std::cout << "Line deleted: " << line_to_delete << std::endl;
+
 	database.close();
 	temp_database.close();
 
-	remove("db.txt");
+	remove("db/db.txt");
 	rename("temp_database.txt", "db.txt");	
 }
 
@@ -83,7 +117,7 @@ void enter_new_data_at_index(int index, double amount, std::string &data)
 
 void read_db(bool ordered)
 {
-    std::ifstream database("db.txt");
+    std::ifstream database("db/db.txt");
     
     if(!database.is_open())
     {
@@ -115,10 +149,9 @@ void read_db(bool ordered)
     }
 }
 
-
 std::string get_element_from_db(int index)
 {
-    std::ifstream database("db.txt");
+    std::ifstream database("db/db.txt");
     std::vector<std::string> lines;
     std::string line;
     
@@ -141,10 +174,20 @@ std::string get_element_from_db(int index)
 	return line;
 }
 
-void write_to_db(const std::string &itemData)
+void write_to_db(const std::string &item_data)
 {
-    std::ofstream database ("db.txt", std::ios::app);
-    database << "\n" << itemData;    
+    std::ofstream database ("db/db.txt", std::ios::app);
+
+	int count = get_database_size();
+	
+	if(count <= 0)
+	{
+    	database << item_data;    
+	}else
+	{
+		database << "\n" << item_data; 
+	}
+
     database.close();
     std::cout << "Added an item to database." << std::endl;
 }
