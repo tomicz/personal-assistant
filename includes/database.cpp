@@ -6,7 +6,7 @@
 
 int get_database_size()
 {
-	int  count{};
+	int count{};
 	std::ifstream database("db/db.txt");
 	std::string line;
 

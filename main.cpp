@@ -97,7 +97,7 @@ void add_new_daily_entry()
     std::string year_str = std::to_string(year);
     std::string month_str = (month < 10) ? "0" + std::to_string(month) : std::to_string(month);
     std::string day_str = (day < 10) ? "0" + std::to_string(day) : std::to_string(day);
-    std::string date_string = year_str + "-" + month_str + "-" + day_str;
+    std::string date_string = day_str + "-" + month_str + "-" + year_str;
 	
 	std::string file_path = "db/" + remove_symbols(date_string) + "/";
 	
