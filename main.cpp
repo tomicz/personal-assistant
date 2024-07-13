@@ -1,13 +1,11 @@
 #include <iostream>
+#include <random>
 #include <string>
 #include <time.h>
 #include <fstream>
 #include <ctime>
-#include <filesystem>
 #include "includes/database.h"
-#include "includes/helpers.h"
 
-namespace fs = std::filesystem;
 
 std::string add_meal_entry()
 {
@@ -26,7 +24,6 @@ std::string add_meal_entry()
 	double amount{};
 	std::cout << "Enter amount(g): ";
 	std::cin >> amount;
-	
 
 	std::string calories = modify_data_at_index(2, result);
 	std::string fat = modify_data_at_index(3, result);
@@ -75,14 +72,6 @@ std::string get_meal_time()
 	}
 
 	return "Invalid option";
-}
-
-void create_directory(const std::string& file_path)
-{
-	if(!fs::exists(file_path))
-	{
-		fs::create_directories(file_path);		
-	}
 }
 
 void add_new_daily_entry()
@@ -183,8 +172,9 @@ void start_application()
     std::cout << "2. (N)ew to create a new daily entry." << std::endl;
     std::cout << "3. (R)ead database." << std::endl;
 	std::cout << "4. (D)elete element." << std::endl;
-	std::cout << "5. (H)elp." << std::endl;
-	std::cout << "6. (Q)uit." << std::endl;
+	std::cout << "5. (E)nter weight." << std::endl;
+	std::cout << "6. (H)elp." << std::endl;
+	std::cout << "7. (Q)uit." << std::endl;
 	std::cout << "Enter command: ";
     std::getline(std::cin, command);
 
@@ -208,6 +198,16 @@ void start_application()
 	else if(command == "q" || command == "Q")
 	{
 		std::cout << "Application closed" << std::endl;	
+	}
+	else if(command == "e" || command == "E")
+	{
+		double weight;
+		std::cout << "Enter weight: ";
+		std::cin >> weight;
+		std::string file_path = "db/" + create_date_stamp();
+
+		create_directory(file_path);
+		add_weight(file_path, weight);
 	}
 	else if(command == "d" || command == "D")
 	{
