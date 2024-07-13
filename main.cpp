@@ -101,13 +101,14 @@ void add_new_daily_entry()
 
 void read_help()
 {
-    std::cout << "Commands are: " << std::endl;
-    std::cout << "(A)dd - Add a new element to a database." << std::endl;
-    std::cout << "(N)ew - Add a new element to a dairy." << std::endl;
-    std::cout << "(R)ead - Read food database." << std::endl;
-	std::cout << "(D)elete - Delete an element from database." << std::endl;
-    std::cout << "(H)elp - Get help." << std::endl;
-    std::cout << "(Q)uit" << std::endl;
+    std::cout << "Commands: " << std::endl;
+    std::cout << "1. (A)dd - Add new food to a database." << std::endl;
+    std::cout << "2. (H)elp - Get help." << std::endl;
+    std::cout << "3. (N)ew - Enter food into a dairy." << std::endl;
+    std::cout << "4. (R)ead - Read all food data in database." << std::endl;
+	std::cout << "5. (E)nter your weight(kg)." << std::endl;
+	std::cout << "6. (D)elete - Delete food from database." << std::endl;
+    std::cout << "7. (Q)uit" << std::endl;
 }
 
 void add_calories()
