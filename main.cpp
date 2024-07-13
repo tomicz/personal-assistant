@@ -169,37 +169,37 @@ void start_application()
 	std::cout << "COMMAND LINE INFORMATION" << std::endl;
 	std::cout << "-------------------------------------------------" << std::endl;
     std::cout << "1. (A)dd to database." << std::endl;
-    std::cout << "2. (N)ew to create a new daily entry." << std::endl;
-    std::cout << "3. (R)ead database." << std::endl;
-	std::cout << "4. (D)elete element." << std::endl;
+	std::cout << "2. (H)elp." << std::endl;
+    std::cout << "3. (N)ew to create a new daily entry." << std::endl;
+    std::cout << "4. (R)ead database." << std::endl;
 	std::cout << "5. (E)nter weight." << std::endl;
-	std::cout << "6. (H)elp." << std::endl;
+	std::cout << "6. (D)elete element." << std::endl;
 	std::cout << "7. (Q)uit." << std::endl;
 	std::cout << "Enter command: ";
     std::getline(std::cin, command);
 
-	if(command == "a" || command == "A")
+	if(command == "a" || command == "A" || command == "1")
 	{
 		std::cout << "To add new items to database, enter required information requested below." << std::endl;
 		add_calories();
 	}
-	else if(command == "h" || command == "H")
+	else if(command == "h" || command == "H" || command == "2")
 	{ 
 		read_help();
 	}
-	else if(command == "n" || command == "N")
+	else if(command == "n" || command == "N" || command == "3")
 	{
 		add_new_daily_entry();
 	}
-	else if(command == "r" || command == "R")
+	else if(command == "r" || command == "R" || command == "4")
 	{
 		read_db(false);
 	}
-	else if(command == "q" || command == "Q")
+	else if(command == "q" || command == "Q" || command == "7")
 	{
 		std::cout << "Application closed" << std::endl;	
 	}
-	else if(command == "e" || command == "E")
+	else if(command == "e" || command == "E" || command == "5")
 	{
 		double weight;
 		std::cout << "Enter weight: ";
@@ -209,7 +209,7 @@ void start_application()
 		create_directory(file_path);
 		add_weight(file_path, weight);
 	}
-	else if(command == "d" || command == "D")
+	else if(command == "d" || command == "D" || command == "6")
 	{
 		remove_element_at_index();	
 	}else
