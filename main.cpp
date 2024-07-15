@@ -111,7 +111,7 @@ void add_new_daily_entry()
 	std::string meal_data = add_meal_entry();
 	
     std::ofstream timestamp(file_path + get_meal_time() + ".txt", std::ios::app);
-	timestamp << '\n' << meal_data;
+	timestamp << meal_data << '\n';
 	timestamp.close();
 }
 
