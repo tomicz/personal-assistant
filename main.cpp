@@ -6,6 +6,22 @@
 #include <ctime>
 #include "includes/database.h"
 
+void enter_goals() 
+{
+	double goal_weight;
+	std::cout << "Enter goal weight:";
+	std::cin >> goal_weight; 
+
+	double calories_goal;
+	std::cout << "Enter calories daily goal:";
+	std::cin >> calories_goal; 
+
+	std::string file_path = "db/";
+	create_directory(file_path);
+	create_db_file(file_path, "goals");
+	write_to_file(file_path, "goals", "goal weight, " + std::to_string(goal_weight));
+	write_to_file(file_path, "goals", "calories goal, " + std::to_string(calories_goal));
+}
 
 std::string add_meal_entry()
 {
@@ -109,6 +125,7 @@ void read_help()
 	std::cout << "5. (E)nter your weight(kg)." << std::endl;
 	std::cout << "6. (D)elete - Delete food from database." << std::endl;
     std::cout << "7. (Q)uit" << std::endl;
+	std::cout << "8. Enter weight and calorie goals." << std::endl;
 }
 
 void add_calories()
@@ -176,6 +193,7 @@ void start_application()
 	std::cout << "5. (E)nter weight." << std::endl;
 	std::cout << "6. (D)elete element." << std::endl;
 	std::cout << "7. (Q)uit." << std::endl;
+	std::cout << "8. Enter goals." << std::endl;
 	std::cout << "Enter command: ";
     std::getline(std::cin, command);
 
@@ -209,6 +227,10 @@ void start_application()
 
 		create_directory(file_path);
 		add_weight(file_path, weight);
+	}
+	else if(command == "8")
+	{
+		enter_goals();	
 	}
 	else if(command == "d" || command == "D" || command == "6")
 	{
