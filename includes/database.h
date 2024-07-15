@@ -2,6 +2,8 @@
 #include <string>
 #include <filesystem>
 
+void write_to_file(std::string file_path, std::string file_name, std::string data);
+void create_db_file(std::string file_path, std::string file_name);
 std::string remove_symbols(const std::string& input);
 void create_directory(const std::string& file_path);
 std::string create_date_stamp();

@@ -8,6 +8,24 @@
 
 namespace fs = std::filesystem;
 
+void write_to_file(std::string file_path, std::string file_name, std::string data)
+{
+	std::ofstream file(file_path + file_name + ".txt", std::ios::app);
+	
+	if(file.is_open())
+	{
+		file << data << std::endl;
+	}
+
+	file.close();
+}
+
+void create_db_file(std::string file_path, std::string file_name)
+{
+	std::ofstream file(file_path + file_name + ".txt", std::ios::app);
+	std::cout << "Created a file " << file_name << " at path " << file_path << std::endl;
+}
+
 std::string remove_symbols(const std::string& input) 
 {
     std::string result;
