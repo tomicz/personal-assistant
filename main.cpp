@@ -229,6 +229,9 @@ void start_application()
 
 		create_directory(file_path);
 		add_weight(file_path, weight);
+
+		std::cin.ignore(1000, '\n');
+		start_application();	
 	}
 	else if(command == "8")
 	{
