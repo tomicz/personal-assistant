@@ -7,6 +7,8 @@
 #include "includes/database.h"
 #include "includes/blood_pressure_controller.h"
 
+void start_application();
+
 void read_diary_options()
 {
 	std::cout << "-------------------------------------------------" << std::endl;
@@ -132,14 +134,14 @@ void add_new_daily_entry()
 void read_help()
 {
     std::cout << "Commands: " << std::endl;
-    std::cout << "1. (A)dd - Add new food to a database." << std::endl;
-    std::cout << "2. (H)elp - Get help." << std::endl;
-    std::cout << "3. (N)ew - Enter food into a dairy." << std::endl;
-    std::cout << "4. (R)ead - Read all food data in database." << std::endl;
-	std::cout << "5. (E)nter your weight(kg)." << std::endl;
-	std::cout << "6. (D)elete - Delete food from database." << std::endl;
-    std::cout << "7. (Q)uit" << std::endl;
-	std::cout << "8. Enter weight and calorie goals." << std::endl;
+    std::cout << "1. Food database and dairy entries." << std::endl;
+    std::cout << "2. Blood pressure and pulse." << std::endl;
+    std::cout << "3. Enter current weight. Only once per day." << std::endl;
+	std::cout << "4. Enter goals like weight." << std::endl;
+    std::cout << "5. Get description of all commands." << std::endl;
+    std::cout << "To quit application enter lower case q" << std::endl;
+
+	start_application();
 }
 
 void add_calories()
