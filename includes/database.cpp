@@ -290,17 +290,10 @@ void add_weight(std::string &file_path, const double &weight)
 void write_to_db(const std::string &item_data)
 {
     std::ofstream database ("db/db.txt", std::ios::app);
+	std::string formatted_data = item_data + "\n";
 
-	int count = get_database_size();
-	
-	if(count <= 0)
-	{
-    	database << item_data;    
-	}else
-	{
-		database << "\n" << item_data; 
-	}
-
+    database << formatted_data;    
     database.close();
+
     std::cout << "Added an item to database." << std::endl;
 }
