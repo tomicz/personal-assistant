@@ -6,8 +6,18 @@
 #include <ctime>
 #include "includes/database.h"
 #include "includes/blood_pressure_controller.h"
+#include <algorithm>
 
+void set_header(std::string header);
 void start_application();
+
+void set_header(std::string header)
+{
+	std::transform(header.begin(), header.end(), header.begin(), ::toupper);	
+	std::cout << "-------------------------------------------------" << std::endl;
+	std::cout << header << std::endl;
+	std::cout << "-------------------------------------------------" << std::endl;
+}
 
 void read_diary_options()
 {
@@ -133,6 +143,8 @@ void add_new_daily_entry()
 
 void read_help()
 {
+	set_header("Help");	
+
     std::cout << "Commands: " << std::endl;
     std::cout << "1. Food database and dairy entries." << std::endl;
     std::cout << "2. Blood pressure and pulse." << std::endl;
@@ -236,6 +248,7 @@ void start_application()
 			}
 			else if(selected_option == '3')
 			{
+				set_header("Food database");
 				read_db(false);
 				read_diary_options();	
 			}
