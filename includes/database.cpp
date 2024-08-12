@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <ostream>
 #include <string>
 #include <sys/wait.h>
 #include <vector>
@@ -237,14 +238,24 @@ std::string get_element_from_db(int index)
 	return line;
 }
 
+void write_to_table(std::string &file_path, std::string &data)
+{
+	std::ofstream entry(file_path, std::ios::app);
+
+	entry << data + "\n";
+	entry.close(); 
+
+	std::cout << "Added data to a database " << data << std::endl;
+}
+
 void add_weight(std::string &file_path, const double &weight)
 {
     std::ofstream daily_entry(file_path + "/daily_entry.txt", std::ios::app);
 
-	daily_entry << "weight, " << weight; 
+	daily_entry << "weight: " << weight << "\n";
     daily_entry.close();
 
-    std::cout << "Added an weight to daily entry." << std::endl;
+    std::cout << "Added weight to daily entry." << std::endl;
 }
 
 void write_to_db(const std::string &item_data)

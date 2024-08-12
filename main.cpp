@@ -5,6 +5,7 @@
 #include <fstream>
 #include <ctime>
 #include "includes/database.h"
+#include "includes/blood_pressure_controller.h"
 
 void enter_goals() 
 {
@@ -194,6 +195,7 @@ void start_application()
 	std::cout << "6. (D)elete element." << std::endl;
 	std::cout << "7. (Q)uit." << std::endl;
 	std::cout << "8. Enter goals." << std::endl;
+	std::cout << "9. Health." << std::endl;
 	std::cout << "Enter command: ";
     std::getline(std::cin, command);
 
@@ -231,6 +233,53 @@ void start_application()
 	else if(command == "8")
 	{
 		enter_goals();	
+	}
+	else if(command == "9")
+	{
+		std::cout << "This is medical panel where you can see all your medical information. Select options below." << std::endl;
+		std::cout << "1. Enter blood pressure" << std::endl;
+		std::cout << "2. Enter pulse" << std::endl;
+		std::cout << "3. Back" << std::endl;
+		
+		int selected_option = 0;
+		const int exit_condition = 3;
+
+		do{
+			std::cout << "Select option: ";	
+			std::cin >> selected_option;
+
+			if(selected_option == 1)
+			{
+				int sys = 0;
+				std::cout << "Enter SYS: ";	
+				std::cin >> sys; 
+
+				int dia = 0;
+				std::cout << "Enter DIA: ";	
+				std::cin >> dia; 
+
+				enter_sys_and_dia(sys, dia);
+
+				std::cout << "You entered SYS: " << sys << " and DIA: " << dia << std::endl;
+
+				selected_option = exit_condition;
+			}
+			else if(selected_option == 2)
+			{
+				int pulse = 0;
+				std::cout << "Enter pulse: ";
+				std::cin >> pulse;
+
+				enter_pulse(pulse);
+
+				std::cout << "You entered pulse: " << pulse << std::endl;	
+
+				selected_option = exit_condition;
+			}
+		}while(selected_option != exit_condition);
+		
+		std::cin.ignore(1000, '\n');
+		start_application();	
 	}
 	else if(command == "d" || command == "D" || command == "6")
 	{
