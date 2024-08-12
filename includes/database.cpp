@@ -82,52 +82,79 @@ int get_database_size()
 	return count;
 }
 
+void display_lines_with_indices(std::ifstream& file)
+{
+    int index = 0;
+    std::string line;
+    while (std::getline(file, line))
+    {
+        std::cout << index << ": " << line << std::endl;
+        ++index;
+    }
+}
+
 void remove_element_at_index()
 {
-	std::ifstream database("db/db.txt");
-	std::ofstream temp_database("temp_database.txt");
+    std::ifstream database("db/db.txt");
+    std::ofstream temp_database("temp_database.txt");
 
-	if(!database || !temp_database)
-	{
-		std::cout << "Error: Cannot open database";
-	}
+    if (!database || !temp_database)
+    {
+        std::cout << "Error: Cannot open database" << std::endl;
+        return;
+    }
 
-	read_db(true);
-	int index{};
-	int i{};
+    // Display all lines with indices
+    std::cout << "Current entries in the database:\n";
+    display_lines_with_indices(database);
 
-	std::cout << "Enter food index: ";
-	std::cin >> index;
+    // Reopen the file to reset the read position
+    database.clear(); // Clear EOF and other flags
+    database.seekg(0); // Rewind to the beginning of the file
 
-	std::string temp_line{};
-	std::string line_to_delete{};
+    char user_choice;
+    std::cout << "\nEnter 'q' to quit or any other key to proceed: ";
+    std::cin >> user_choice;
 
-	while(std::getline(database, temp_line))
-	{
-		if(index == i)
-		{
-			line_to_delete = get_element_from_db(index);	
-			break;
-		}
-		
-		i++;
-	}
+    if (user_choice == 'q' || user_choice == 'Q')
+    {
+        std::cout << "Operation cancelled.\n";
+        return;
+    }
 
-	while(std::getline(database, temp_line))
-	{
-		if(temp_line != line_to_delete)
-		{
-			temp_database << temp_line << std::endl;
-		}
-	}
+    int index{};
+    std::cout << "\nEnter food index to delete: ";
+    std::cin >> index;
 
-	std::cout << "Line deleted: " << line_to_delete << std::endl;
+    std::string temp_line{};
+    int current_index = 0;
+    bool line_deleted = false;
 
-	database.close();
-	temp_database.close();
+    while (std::getline(database, temp_line))
+    {
+        if (current_index == index)
+        {
+            std::cout << "Line deleted: " << temp_line << std::endl;
+            line_deleted = true;
+        }
+        else
+        {
+            temp_database << temp_line << std::endl;
+        }
+        ++current_index;
+    }
 
-	remove("db/db.txt");
-	rename("temp_database.txt", "db.txt");	
+    if (!line_deleted)
+    {
+        std::cout << "Error: Invalid index. No line was deleted." << std::endl;
+    }
+
+    database.close();
+    temp_database.close();
+
+    // Replace the original file with the modified file
+    remove("db/db.txt");
+    rename("temp_database.txt", "db/db.txt");
 }
 
 int get_comma_index(int at_index, std::string &data)
