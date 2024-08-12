@@ -7,6 +7,19 @@
 #include "includes/database.h"
 #include "includes/blood_pressure_controller.h"
 
+void read_diary_options()
+{
+	std::cout << "-------------------------------------------------" << std::endl;
+	std::cout << "PERSONAL DIARY." << std::endl;
+	std::cout << "-------------------------------------------------" << std::endl;
+
+	std::cout << "1. Add food to a database." << std::endl;
+	std::cout << "2. Remove food from database." << std::endl;
+	std::cout << "3. Read food database." << std::endl;
+	std::cout << "4. Add daily entry." << std::endl;
+	std::cout << "Enter q to go back." << std::endl;
+}
+
 void enter_goals() 
 {
 	double goal_weight;
@@ -139,6 +152,7 @@ void add_calories()
     float carbohydrates = {0};
     float protein = {0};
     std::string itemData;
+	std::cin.ignore(1000, '\n');
     
     std::cout << "Enter item name: ";
     std::getline(std::cin, item_name);
@@ -187,40 +201,62 @@ void start_application()
 	std::cout << "-------------------------------------------------" << std::endl;
 	std::cout << "COMMAND LINE INFORMATION" << std::endl;
 	std::cout << "-------------------------------------------------" << std::endl;
-    std::cout << "1. (A)dd to database." << std::endl;
-	std::cout << "2. (H)elp." << std::endl;
-    std::cout << "3. (N)ew to create a new daily entry." << std::endl;
-    std::cout << "4. (R)ead database." << std::endl;
-	std::cout << "5. (E)nter weight." << std::endl;
-	std::cout << "6. (D)elete element." << std::endl;
-	std::cout << "7. (Q)uit." << std::endl;
-	std::cout << "8. Enter goals." << std::endl;
-	std::cout << "9. Health." << std::endl;
+    std::cout << "1. Diary." << std::endl;
+	std::cout << "2. Health." << std::endl;
+	std::cout << "3. Enter weight." << std::endl;
+	std::cout << "4. Enter goals." << std::endl;
+	std::cout << "5. Help." << std::endl;
+	std::cout << "Enter q to quit application." << std::endl;
 	std::cout << "Enter command: ";
     std::getline(std::cin, command);
 
-	if(command == "a" || command == "A" || command == "1")
+	if(command == "1")
 	{
-		std::cout << "To add new items to database, enter required information requested below." << std::endl;
-		add_calories();
+		read_diary_options();	
+
+		char selected_option{};
+		char exit_condition = 'q';
+
+		do{
+			std::cout << "Select option: ";	
+			std::cin >> selected_option;
+
+			if(selected_option == '1')
+			{
+				std::cout << "To add new items to database, enter required information requested below." << std::endl;
+				add_calories();		
+				read_diary_options();	
+			}
+			else if(selected_option == '2')
+			{
+				remove_element_at_index();	
+				read_diary_options();	
+			}
+			else if(selected_option == '3')
+			{
+				read_db(false);
+				read_diary_options();	
+			}
+			else if(selected_option == '4')
+			{
+				add_new_daily_entry();
+				read_diary_options();	
+			}
+			
+		}while(selected_option != exit_condition);
+
+		std::cin.ignore(1000, '\n');
+		start_application();
 	}
-	else if(command == "h" || command == "H" || command == "2")
+	else if(command == "5")
 	{ 
 		read_help();
 	}
-	else if(command == "n" || command == "N" || command == "3")
-	{
-		add_new_daily_entry();
-	}
-	else if(command == "r" || command == "R" || command == "4")
-	{
-		read_db(false);
-	}
-	else if(command == "q" || command == "Q" || command == "7")
+	else if(command == "q")
 	{
 		std::cout << "Application closed" << std::endl;	
 	}
-	else if(command == "e" || command == "E" || command == "5")
+	else if(command == "3")
 	{
 		double weight;
 		std::cout << "Enter weight: ";
@@ -233,11 +269,11 @@ void start_application()
 		std::cin.ignore(1000, '\n');
 		start_application();	
 	}
-	else if(command == "8")
+	else if(command == "4")
 	{
 		enter_goals();	
 	}
-	else if(command == "9")
+	else if(command == "2")
 	{
 		std::cout << "This is medical panel where you can see all your medical information. Select options below." << std::endl;
 		std::cout << "1. Enter blood pressure" << std::endl;
@@ -283,10 +319,6 @@ void start_application()
 		
 		std::cin.ignore(1000, '\n');
 		start_application();	
-	}
-	else if(command == "d" || command == "D" || command == "6")
-	{
-		remove_element_at_index();	
 	}else
 	{
 		std::cout << "Command does not exist, please try another." << std::endl;
