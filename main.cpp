@@ -274,6 +274,8 @@ void start_application()
 	else if(command == "4")
 	{
 		enter_goals();	
+		std::cin.ignore(1000, '\n');
+		start_application();
 	}
 	else if(command == "2")
 	{
