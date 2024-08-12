@@ -109,10 +109,10 @@ void add_new_daily_entry()
 	
 	create_directory(file_path);
 	std::cout << file_path << std::endl;
-	std::string meal_data = add_meal_entry();
+	std::string meal_data = add_meal_entry() + "\n";
 	
     std::ofstream timestamp(file_path + get_meal_time() + ".txt", std::ios::app);
-	timestamp << meal_data << '\n';
+	timestamp << meal_data;
 	timestamp.close();
 }
 

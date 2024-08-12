@@ -252,7 +252,9 @@ void add_weight(std::string &file_path, const double &weight)
 {
     std::ofstream daily_entry(file_path + "/daily_entry.txt", std::ios::app);
 
-	daily_entry << "weight: " << weight << "\n";
+	std::string formattedData = "weight: " + std::to_string(weight) + "\n";
+
+	daily_entry << formattedData;
     daily_entry.close();
 
     std::cout << "Added weight to daily entry." << std::endl;
