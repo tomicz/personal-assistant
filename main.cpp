@@ -4,9 +4,10 @@
 #include <time.h>
 #include <fstream>
 #include <ctime>
+#include <algorithm>
 #include "includes/database.h"
 #include "includes/blood_pressure_controller.h"
-#include <algorithm>
+#include "includes/parser.h"
 
 void set_header(std::string header);
 void start_application();
@@ -29,6 +30,7 @@ void read_diary_options()
 	std::cout << "2. Remove food from database." << std::endl;
 	std::cout << "3. Read food database." << std::endl;
 	std::cout << "4. Add daily entry." << std::endl;
+	std::cout << "5. Read daily entry." << std::endl;
 	std::cout << "Enter q to go back." << std::endl;
 }
 
@@ -257,7 +259,22 @@ void start_application()
 				add_new_daily_entry();
 				read_diary_options();	
 			}
-			
+			else if(selected_option == '5')
+			{
+				std::string date = create_date_stamp();
+				std::string file_path_breakfast = "db/" + date + "/" + "Breakfast.txt";	
+				std::string file_path_lunch = "db/" + date + "/" + "Lunch.txt";	
+				std::string file_path_dinner = "db/" + date + "/" + "Dinner.txt";	
+
+				set_header("Breakfast");
+				read_file(file_path_breakfast);
+				
+				set_header("Lunch");
+				read_file(file_path_lunch);
+				
+				set_header("Dinner");
+				read_file(file_path_dinner);
+			}
 		}while(selected_option != exit_condition);
 
 		std::cin.ignore(1000, '\n');
