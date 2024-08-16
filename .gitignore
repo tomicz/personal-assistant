@@ -40,3 +40,6 @@
 
 # App Store
 .DS_Store
+
+# Output binary
+output

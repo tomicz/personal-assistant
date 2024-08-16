@@ -11,6 +11,22 @@
 
 void set_header(std::string header);
 void start_application();
+void read_commands(std::string &command);
+
+void read_commands(std::string &command)
+{
+	std::cout << "-------------------------------------------------" << std::endl;
+	std::cout << "COMMAND LINE INFORMATION" << std::endl;
+	std::cout << "-------------------------------------------------" << std::endl;
+    std::cout << "1. Diary." << std::endl;
+	std::cout << "2. Health." << std::endl;
+	std::cout << "3. Enter weight." << std::endl;
+	std::cout << "4. Enter goals." << std::endl;
+	std::cout << "5. Help." << std::endl;
+	std::cout << "Enter q to quit application." << std::endl;
+	std::cout << "Enter command: ";
+    std::getline(std::cin, command);
+}
 
 void set_header(std::string header)
 {
@@ -211,74 +227,69 @@ void add_calories()
     write_to_db(itemData);
 }
 
+void start_diary()
+{
+	read_diary_options();	
+
+	char selected_option{};
+	char exit_condition = 'q';
+
+	do{
+		std::cout << "Select option: ";	
+		std::cin >> selected_option;
+
+		if(selected_option == '1')
+		{
+			std::cout << "To add new items to database, enter required information requested below." << std::endl;
+			add_calories();		
+			read_diary_options();	
+		}
+		else if(selected_option == '2')
+		{
+			remove_element_at_index();	
+			read_diary_options();	
+		}
+		else if(selected_option == '3')
+		{
+			set_header("Food database");
+			read_db(false);
+			read_diary_options();	
+		}
+		else if(selected_option == '4')
+		{
+			add_new_daily_entry();
+			read_diary_options();	
+		}
+		else if(selected_option == '5')
+		{
+			std::string date = create_date_stamp();
+			std::string file_path_breakfast = "db/" + date + "/" + "Breakfast.txt";	
+			std::string file_path_lunch = "db/" + date + "/" + "Lunch.txt";	
+			std::string file_path_dinner = "db/" + date + "/" + "Dinner.txt";	
+
+			set_header("Breakfast");
+			read_file(file_path_breakfast);
+			
+			set_header("Lunch");
+			read_file(file_path_lunch);
+			
+			set_header("Dinner");
+			read_file(file_path_dinner);
+		}
+	}while(selected_option != exit_condition);
+
+	std::cin.ignore(1000, '\n');
+	start_application();
+}
+
 void start_application()
 {
 	std::string command{}; 
-	std::cout << "-------------------------------------------------" << std::endl;
-	std::cout << "COMMAND LINE INFORMATION" << std::endl;
-	std::cout << "-------------------------------------------------" << std::endl;
-    std::cout << "1. Diary." << std::endl;
-	std::cout << "2. Health." << std::endl;
-	std::cout << "3. Enter weight." << std::endl;
-	std::cout << "4. Enter goals." << std::endl;
-	std::cout << "5. Help." << std::endl;
-	std::cout << "Enter q to quit application." << std::endl;
-	std::cout << "Enter command: ";
-    std::getline(std::cin, command);
+	read_commands(command);
 
 	if(command == "1")
 	{
-		read_diary_options();	
-
-		char selected_option{};
-		char exit_condition = 'q';
-
-		do{
-			std::cout << "Select option: ";	
-			std::cin >> selected_option;
-
-			if(selected_option == '1')
-			{
-				std::cout << "To add new items to database, enter required information requested below." << std::endl;
-				add_calories();		
-				read_diary_options();	
-			}
-			else if(selected_option == '2')
-			{
-				remove_element_at_index();	
-				read_diary_options();	
-			}
-			else if(selected_option == '3')
-			{
-				set_header("Food database");
-				read_db(false);
-				read_diary_options();	
-			}
-			else if(selected_option == '4')
-			{
-				add_new_daily_entry();
-				read_diary_options();	
-			}
-			else if(selected_option == '5')
-			{
-				std::string date = create_date_stamp();
-				std::string file_path_breakfast = "db/" + date + "/" + "Breakfast.txt";	
-				std::string file_path_lunch = "db/" + date + "/" + "Lunch.txt";	
-				std::string file_path_dinner = "db/" + date + "/" + "Dinner.txt";	
-
-				set_header("Breakfast");
-				read_file(file_path_breakfast);
-				
-				set_header("Lunch");
-				read_file(file_path_lunch);
-				
-				set_header("Dinner");
-				read_file(file_path_dinner);
-			}
-		}while(selected_option != exit_condition);
-
-		std::cin.ignore(1000, '\n');
-		start_application();
+		start_diary();
 	}
 	else if(command == "5")
 	{ 
