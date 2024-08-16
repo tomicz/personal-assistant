@@ -323,16 +323,17 @@ void start_application()
 		std::cout << "This is medical panel where you can see all your medical information. Select options below." << std::endl;
 		std::cout << "1. Enter blood pressure" << std::endl;
 		std::cout << "2. Enter pulse" << std::endl;
-		std::cout << "3. Back" << std::endl;
+		std::cout << "3. Read" << std::endl;
+		std::cout << "q. Back" << std::endl;
 		
-		int selected_option = 0;
-		const int exit_condition = 3;
+		char selected_option = 0;
+		const char exit_condition = 'q';
 
 		do{
 			std::cout << "Select option: ";	
 			std::cin >> selected_option;
 
-			if(selected_option == 1)
+			if(selected_option == '1')
 			{
 				int sys = 0;
 				std::cout << "Enter SYS: ";	
@@ -348,7 +349,7 @@ void start_application()
 
 				selected_option = exit_condition;
 			}
-			else if(selected_option == 2)
+			else if(selected_option == '2')
 			{
 				int pulse = 0;
 				std::cout << "Enter pulse: ";
@@ -359,6 +360,14 @@ void start_application()
 				std::cout << "You entered pulse: " << pulse << std::endl;	
 
 				selected_option = exit_condition;
+			}
+			else if(selected_option == '3')
+			{
+				std::string date = create_date_stamp();
+				std::string file_path = "db/" + date + "/" + "daily_entry.txt";	
+
+				set_header("Daily health data");
+				read_file(file_path);
 			}
 		}while(selected_option != exit_condition);
 		
