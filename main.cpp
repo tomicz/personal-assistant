@@ -178,11 +178,13 @@ void add_calories()
 {
     std::string item_name;
     std::string brand_name;
+
     float quantity = {0};
     float calories = {0};
     float fat = {0};
     float carbohydrates = {0};
     float protein = {0};
+
     std::string itemData;
 	std::cin.ignore(1000, '\n');
     
@@ -192,7 +194,7 @@ void add_calories()
     std::cout << "Enter brand name: ";
     std::getline(std::cin, brand_name);
 	
-    std::cout << "Enter quantity:";
+    std::cout << "Enter quantity: ";
     std::cin >> quantity;
 
     std::cout << "Enter calories per 100g: ";
