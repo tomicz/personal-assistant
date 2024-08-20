@@ -8,33 +8,10 @@
 #include "includes/database.h"
 #include "includes/blood_pressure_controller.h"
 #include "includes/parser.h"
+#include "includes/user_interface.h"
 
-void set_header(std::string header);
 void start_application();
 void read_commands(std::string &command);
-
-void read_commands(std::string &command)
-{
-	std::cout << "-------------------------------------------------" << std::endl;
-	std::cout << "COMMAND LINE INFORMATION" << std::endl;
-	std::cout << "-------------------------------------------------" << std::endl;
-    std::cout << "1. Diary." << std::endl;
-	std::cout << "2. Health." << std::endl;
-	std::cout << "3. Enter weight." << std::endl;
-	std::cout << "4. Enter goals." << std::endl;
-	std::cout << "5. Help." << std::endl;
-	std::cout << "Enter q to quit application." << std::endl;
-	std::cout << "Enter command: ";
-    std::getline(std::cin, command);
-}
-
-void set_header(std::string header)
-{
-	std::transform(header.begin(), header.end(), header.begin(), ::toupper);	
-	std::cout << "-------------------------------------------------" << std::endl;
-	std::cout << header << std::endl;
-	std::cout << "-------------------------------------------------" << std::endl;
-}
 
 void read_diary_options()
 {
@@ -287,7 +264,7 @@ void start_diary()
 void start_application()
 {
 	std::string command{}; 
-	read_commands(command);
+	open_menu_home(command);
 
 	if(command == "1")
 	{
@@ -296,6 +273,10 @@ void start_application()
 	else if(command == "5")
 	{ 
 		read_help();
+	}
+	else if(command == "6")
+	{
+		open_menu_settings();
 	}
 	else if(command == "q")
 	{

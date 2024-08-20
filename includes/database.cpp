@@ -12,6 +12,11 @@ namespace fs = std::filesystem;
 void write_to_file(std::string file_path, std::string file_name, std::string data)
 {
 	std::ofstream file(file_path + file_name + ".txt", std::ios::app);
+
+	if(!file)
+	{
+		std::cerr << "File path does not exist: " << file_path << file_name << std::endl;
+	}
 	
 	if(file.is_open())
 	{
