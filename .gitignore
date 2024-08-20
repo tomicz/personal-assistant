@@ -43,3 +43,6 @@
 
 # Output binary
 output
+
+# Folders
+db/
