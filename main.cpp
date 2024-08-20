@@ -146,6 +146,7 @@ void read_help()
     std::cout << "3. Enter current weight. Only once per day." << std::endl;
 	std::cout << "4. Enter goals like weight." << std::endl;
     std::cout << "5. Get description of all commands." << std::endl;
+    std::cout << "6. Settings menu allows to create new folders and database files." << std::endl;
     std::cout << "To quit application enter lower case q" << std::endl;
 
 	start_application();
