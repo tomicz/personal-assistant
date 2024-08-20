@@ -1,10 +1,8 @@
 #include <iostream>
-#include <random>
 #include <string>
 #include <time.h>
 #include <fstream>
 #include <ctime>
-#include <algorithm>
 #include "includes/database.h"
 #include "includes/blood_pressure_controller.h"
 #include "includes/parser.h"
