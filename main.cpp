@@ -7,6 +7,7 @@
 #include "includes/blood_pressure_controller.h"
 #include "includes/parser.h"
 #include "includes/user_interface.h"
+#include "includes/dairy.h"
 
 void start_application();
 void read_commands(std::string &command);
@@ -240,6 +241,7 @@ void start_diary()
 		}
 		else if(selected_option == '5')
 		{
+            Dairy* dairy = new Dairy();
 			std::string date = create_date_stamp();
 			std::string file_path_breakfast = "db/" + date + "/" + "breakfast.txt";	
 			std::string file_path_lunch = "db/" + date + "/" + "lunch.txt";	
@@ -247,12 +249,20 @@ void start_diary()
 
 			set_header("Breakfast");
 			read_file(file_path_breakfast);
+            std::cout << "--- total ---" << std::endl;
+            std::cout << dairy->get_breakfast_total() << std::endl;
 			
 			set_header("Lunch");
 			read_file(file_path_lunch);
+            std::cout << "--- total ---" << std::endl;
+            std::cout << dairy->get_lunch_total() << std::endl;
 			
 			set_header("Dinner");
 			read_file(file_path_dinner);
+            std::cout << "--- total ---" << std::endl;
+            std::cout << dairy->get_dinner_total() << std::endl;
+
+            delete dairy;
 		}
 	}while(selected_option != exit_condition);
 
@@ -372,7 +382,7 @@ int main()
     std::cout << "Copyright @ Tomicz Engineering LLC" << std::endl;
     std::cout << "Visit our website at tomiczengineering.com for more information." << std::endl;
     std::cout << "\n";
-	
+    
     start_application();
 
     end = clock();

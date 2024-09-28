@@ -3,8 +3,8 @@ CXX = g++
 CXXFLAGS = -std=c++17 -Wall -g
 
 # Targets and rules
-output: main.o database.o blood_pressure_controller.o parser.o user_interface.o
-	$(CXX) $(CXXFLAGS) main.o database.o blood_pressure_controller.o parser.o user_interface.o -o output
+output: main.o database.o blood_pressure_controller.o parser.o user_interface.o dairy.o
+	$(CXX) $(CXXFLAGS) main.o database.o blood_pressure_controller.o parser.o user_interface.o dairy.o -o output
 
 main.o: main.cpp
 	$(CXX) $(CXXFLAGS) -c main.cpp
@@ -20,6 +20,9 @@ parser.o: includes/parser.cpp includes/parser.h
 
 user_interface.o: includes/user_interface.cpp includes/user_interface.h
 	$(CXX) $(CXXFLAGS) -c includes/user_interface.cpp -o user_interface.o
+
+dairy.o: includes/dairy.cpp includes/dairy.h
+	$(CXX) $(CXXFLAGS) -c includes/dairy.cpp -o dairy.o
 
 clean: 
 	rm -f *.o output

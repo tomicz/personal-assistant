@@ -32,45 +32,12 @@ void create_db_file(std::string file_path, std::string file_name)
 	std::cout << "Created a file " << file_name << " at path " << file_path << std::endl;
 }
 
-std::string remove_symbols(const std::string& input) 
-{
-    std::string result;
-	
-    for (char c : input)
-	{
-        if (std::isalnum(c)) 
-		{
-            result += c;
-        }
-    }
-
-    return result;
-}
-
 void create_directory(const std::string& file_path)
 {
 	if(!fs::exists(file_path))
 	{
 		fs::create_directories(file_path);		
 	}
-}
-
-std::string create_date_stamp()
-{
-    std::time_t date_now = std::time(0);
-    std::tm* time = std::localtime(&date_now);
-
-    int year = time->tm_year + 1900;
-    int month = time->tm_mon + 1;
-    int day = time->tm_mday;
-
-    std::string year_str = std::to_string(year);
-    std::string month_str = (month < 10) ? "0" + std::to_string(month) : std::to_string(month);
-    std::string day_str = (day < 10) ? "0" + std::to_string(day) : std::to_string(day);
-    std::string date_string = day_str + "-" + month_str + "-" + year_str;
-	std::string date = remove_symbols(date_string);
-
-	return date;
 }
 
 int get_database_size()
