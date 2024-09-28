@@ -233,7 +233,6 @@ void read_db(bool ordered)
     for(size_t i = 0; i < lines.size(); i++)
     {
         std::cout << std::fixed << std::setprecision(1);
-
 		if(!ordered)
 		{
         	std::cout << lines.at(i) << ::std::endl;

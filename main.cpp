@@ -95,15 +95,15 @@ std::string get_meal_time()
 	
 	if(option == '1')
 	{
-		return "Breakfast";
+		return "breakfast";
 	}
 	else if(option == '2')
 	{
-		return "Lunch";
+		return "lunch";
 	}
 	else if(option == '3')
 	{
-		return "Dinner";	
+		return "dinner";	
 	}
 
 	return "Invalid option";
@@ -230,7 +230,7 @@ void start_diary()
 		else if(selected_option == '3')
 		{
 			set_header("Food database");
-			read_db(false);
+			read_db(true);
 			read_diary_options();	
 		}
 		else if(selected_option == '4')
@@ -241,9 +241,9 @@ void start_diary()
 		else if(selected_option == '5')
 		{
 			std::string date = create_date_stamp();
-			std::string file_path_breakfast = "db/" + date + "/" + "Breakfast.txt";	
-			std::string file_path_lunch = "db/" + date + "/" + "Lunch.txt";	
-			std::string file_path_dinner = "db/" + date + "/" + "Dinner.txt";	
+			std::string file_path_breakfast = "db/" + date + "/" + "breakfast.txt";	
+			std::string file_path_lunch = "db/" + date + "/" + "lunch.txt";	
+			std::string file_path_dinner = "db/" + date + "/" + "dinner.txt";	
 
 			set_header("Breakfast");
 			read_file(file_path_breakfast);
