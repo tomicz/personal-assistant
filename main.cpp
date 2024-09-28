@@ -261,6 +261,9 @@ void start_diary()
 			read_file(file_path_dinner);
             std::cout << "--- total ---" << std::endl;
             std::cout << dairy->get_dinner_total() << std::endl;
+            
+            set_header("DAILY TOTAL");
+            std:: cout << dairy->get_total_all_meals() << std::endl;
 
             delete dairy;
 		}

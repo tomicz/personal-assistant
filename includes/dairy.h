@@ -9,6 +9,7 @@ class Dairy {
         std::string get_breakfast_total();
         std::string get_lunch_total();
         std::string get_dinner_total();
+        std::string get_total_all_meals();
 
     private:
         std::string return_total(std::ifstream& file);

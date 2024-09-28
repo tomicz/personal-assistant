@@ -66,3 +66,46 @@ std::string Dairy::return_total(std::ifstream& file){
     }
     return total;
 }
+
+std::string Dairy::get_total_all_meals() {
+    std::string breakfast_total = get_breakfast_total();
+    std::string lunch_total = get_lunch_total();
+    std::string dinner_total = get_dinner_total();
+
+    double total_amount = 0.0;
+    double total_calories = 0.0;
+    double total_fat = 0.0;
+    double total_carbs = 0.0;
+    double total_protein = 0.0;
+
+    auto accumulate_totals = [&](const std::string& meal_total) {
+        std::stringstream ss(meal_total);
+        std::string token;
+        
+        while (std::getline(ss, token, ',')) {
+            std::string key;
+            double value;
+            std::stringstream token_stream(token);
+            std::getline(token_stream, key, ':');
+            token_stream >> value;
+            
+            if (key == "amount(g)") total_amount += value;
+            else if (key == " calories") total_calories += value;
+            else if (key == " fat") total_fat += value;
+            else if (key == " carbs") total_carbs += value;
+            else if (key == " protein") total_protein += value;
+        }
+    };
+
+    accumulate_totals(breakfast_total);
+    accumulate_totals(lunch_total);
+    accumulate_totals(dinner_total);
+
+    std::string total = "Total Amount(g): " + std::to_string(total_amount) +
+                        ", Total Calories: " + std::to_string(total_calories) +
+                        ", Total Fat: " + std::to_string(total_fat) +
+                        ", Total Carbohydrates: " + std::to_string(total_carbs) +
+                        ", Total Protein: " + std::to_string(total_protein);
+
+    return total;
+}
