@@ -308,6 +308,7 @@ void start_application()
 		std::cout << "1. Enter blood pressure" << std::endl;
 		std::cout << "2. Enter pulse" << std::endl;
 		std::cout << "3. Read" << std::endl;
+		std::cout << "4. Read weight entries" << std::endl;
 		std::cout << "q. Back" << std::endl;
 		
 		char selected_option = 0;
@@ -353,6 +354,15 @@ void start_application()
 				set_header("Daily health data");
 				read_file(file_path);
 			}
+			else if(selected_option == '4')
+			{
+				set_header("Total weight entries");
+                Weight weight;        
+                weight.get_weight_all();
+                for(std::string entry: weight.get_weight_all()){
+                    std::cout << entry << "\n";
+                }
+			}
 		}while(selected_option != exit_condition);
 		
 		std::cin.ignore(1000, '\n');
@@ -375,11 +385,6 @@ int main()
     std::cout << "Visit our website at tomiczengineering.com for more information." << std::endl;
     std::cout << "\n";
     
-    Weight weight;        
-    weight.get_weight_all();
-    for(std::string entry: weight.get_weight_all()){
-        std::cout << entry << "\n";
-    }
     start_application();
 
     end = clock();
