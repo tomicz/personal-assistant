@@ -3,15 +3,17 @@
 #include <fstream>
 #include <vector>
 #include <string>
-#include <algorithm>  // For std::sort
+#include <algorithm>
+#include <iomanip>
 #include "weight.h"
 #include "parser.h"
+#include <sstream>
 
 namespace fs = std::filesystem;
 
 std::vector<std::string> Weight::get_weight_all() {
     std::string file_path = "db/dailies/";
-    std::vector<std::pair<std::string, std::string>> weight_entries;  // Store both YYYYMMDD date and human-readable weight entry
+    std::vector<std::pair<std::string, std::string>> weight_entries;
 
     try {
         for (const auto& entry : fs::directory_iterator(file_path)) {
@@ -48,10 +50,20 @@ std::vector<std::string> Weight::get_weight_all() {
     });
 
     std::vector<std::string> sorted_weight_entries;
+    const int date_width = 20;
+    const int weight_width = 10;
     for (const auto& entry : weight_entries) {
-        sorted_weight_entries.push_back(entry.second);
+        std::string::size_type colon_pos = entry.second.find(':');
+        if (colon_pos != std::string::npos) {
+            std::string date = entry.second.substr(0, colon_pos);
+            std::string weight = entry.second.substr(colon_pos + 1);
+            std::ostringstream formatted_entry;
+            formatted_entry << std::setw(date_width) << std::left << date
+                            << ": " << std::setw(weight_width) << std::right << std::fixed << std::setprecision(1) << weight;
+            sorted_weight_entries.push_back(formatted_entry.str());
+        }
     }
 
-    return sorted_weight_entries; 
+    return sorted_weight_entries;
 }
 
