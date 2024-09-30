@@ -388,7 +388,10 @@ int main()
     std::cout << "\n";
     
     Weight weight;        
-    weight.read_weight();
+    weight.get_weight_all();
+    for(std::string entry: weight.get_weight_all()){
+        std::cout << entry << "\n";
+    }
     start_application();
 
     end = clock();
