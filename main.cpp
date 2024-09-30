@@ -357,11 +357,12 @@ void start_application()
 			else if(selected_option == '4')
 			{
 				set_header("Total weight entries");
-                Weight weight;        
-                weight.get_weight_all();
-                for(std::string entry: weight.get_weight_all()){
+                Weight* weight = new Weight();
+                weight->get_weight_all();
+                for(std::string entry: weight->get_weight_all()){
                     std::cout << entry << "\n";
                 }
+                delete weight;
 			}
 		}while(selected_option != exit_condition);
 		
