@@ -7,21 +7,21 @@
 
 std::string Dairy::get_breakfast_total(){
     std::string date = create_date_stamp();
-    std::string file_path = "db/" + date + "/" + "breakfast.txt";
+    std::string file_path = "db/dailies/" + date + "/" + "breakfast.txt";
     std::ifstream dairy_data(file_path);
     return return_total(dairy_data);
 }
 
 std::string Dairy::get_lunch_total(){
     std::string date = create_date_stamp();
-    std::string file_path = "db/" + date + "/" + "lunch.txt";
+    std::string file_path = "db/dailies/" + date + "/" + "lunch.txt";
     std::ifstream dairy_data(file_path);
     return return_total(dairy_data);
 }
 
 std::string Dairy::get_dinner_total(){
     std::string date = create_date_stamp();
-    std::string file_path = "db/" + date + "/" + "dinner.txt";
+    std::string file_path = "db/dailies" + date + "/" + "dinner.txt";
     std::ifstream dairy_data(file_path);
     return return_total(dairy_data);
 }

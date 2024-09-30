@@ -37,7 +37,7 @@ void enter_goals()
 	std::cout << "Enter calories daily goal:";
 	std::cin >> calories_goal; 
 
-	std::string file_path = "db/";
+	std::string file_path = "db/dailies/";
 	create_directory(file_path);
 	create_db_file(file_path, "goals");
 	write_to_file(file_path, "goals", "goal weight, " + std::to_string(goal_weight));
@@ -125,7 +125,7 @@ void add_new_daily_entry()
     std::string day_str = (day < 10) ? "0" + std::to_string(day) : std::to_string(day);
     std::string date_string = day_str + "-" + month_str + "-" + year_str;
 	
-	std::string file_path = "db/" + remove_symbols(date_string) + "/";
+	std::string file_path = "db/dailies/" + remove_symbols(date_string) + "/";
 	
 	create_directory(file_path);
 	std::cout << file_path << std::endl;
@@ -244,9 +244,9 @@ void start_diary()
 		{
             Dairy* dairy = new Dairy();
 			std::string date = create_date_stamp();
-			std::string file_path_breakfast = "db/" + date + "/" + "breakfast.txt";	
-			std::string file_path_lunch = "db/" + date + "/" + "lunch.txt";	
-			std::string file_path_dinner = "db/" + date + "/" + "dinner.txt";	
+			std::string file_path_breakfast = "db/dailies/" + date + "/" + "breakfast.txt";	
+			std::string file_path_lunch = "db/dailies/" + date + "/" + "lunch.txt";	
+			std::string file_path_dinner = "db/dailies/" + date + "/" + "dinner.txt";	
 
 			set_header("Breakfast");
 			read_file(file_path_breakfast);
@@ -300,7 +300,7 @@ void start_application()
 		double weight;
 		std::cout << "Enter weight: ";
 		std::cin >> weight;
-		std::string file_path = "db/" + create_date_stamp();
+		std::string file_path = "db/dailies" + create_date_stamp();
 
 		create_directory(file_path);
 		add_weight(file_path, weight);
@@ -360,7 +360,7 @@ void start_application()
 			else if(selected_option == '3')
 			{
 				std::string date = create_date_stamp();
-				std::string file_path = "db/" + date + "/" + "daily_entry.txt";	
+				std::string file_path = "db/dailies/" + date + "/" + "daily_entry.txt";	
 
 				set_header("Daily health data");
 				read_file(file_path);
