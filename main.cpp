@@ -113,19 +113,7 @@ std::string get_meal_time()
 
 void add_new_daily_entry()
 {
-    std::time_t date_now = std::time(0);
-    std::tm* time = std::localtime(&date_now);
-
-    int year = time->tm_year + 1900;
-    int month = time->tm_mon + 1;
-    int day = time->tm_mday;
-
-    std::string year_str = std::to_string(year);
-    std::string month_str = (month < 10) ? "0" + std::to_string(month) : std::to_string(month);
-    std::string day_str = (day < 10) ? "0" + std::to_string(day) : std::to_string(day);
-    std::string date_string = day_str + "-" + month_str + "-" + year_str;
-	
-	std::string file_path = "db/dailies/" + remove_symbols(date_string) + "/";
+	std::string file_path = "db/dailies/" + create_date_stamp() + "/";
 	
 	create_directory(file_path);
 	std::cout << file_path << std::endl;

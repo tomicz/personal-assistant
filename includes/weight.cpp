@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include "weight.h"
+#include "parser.h"
 
 namespace fs = std::filesystem;
 
@@ -34,7 +35,7 @@ std::vector<std::string> Weight::get_weight_all(){
         while (std::getline(daily_file, line)) {
             if (line.rfind("weight:", 0) == 0) {  
                 std::string weight_value = line.substr(7);  
-                std::string daily_weight = d_name + ": " + weight_value;
+                std::string daily_weight = convert_to_date(d_name) + ": " + weight_value;
                 weight_entries.push_back(daily_weight);
                 break;  
             }
