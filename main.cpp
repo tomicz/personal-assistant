@@ -288,7 +288,7 @@ void start_application()
 		double weight;
 		std::cout << "Enter weight: ";
 		std::cin >> weight;
-		std::string file_path = "db/dailies" + create_date_stamp();
+		std::string file_path = "db/dailies/" + create_date_stamp();
 
 		create_directory(file_path);
 		add_weight(file_path, weight);
