@@ -8,6 +8,7 @@
 #include "includes/parser.h"
 #include "includes/user_interface.h"
 #include "includes/dairy.h"
+#include "includes/weight.h"
 
 void start_application();
 void read_commands(std::string &command);
@@ -386,6 +387,8 @@ int main()
     std::cout << "Visit our website at tomiczengineering.com for more information." << std::endl;
     std::cout << "\n";
     
+    Weight weight;        
+    weight.read_weight();
     start_application();
 
     end = clock();
