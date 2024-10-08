@@ -5,28 +5,29 @@
 #include "dairy.h"
 #include "parser.h"
 
-std::string Dairy::get_breakfast_total(){
+Food* Dairy::get_breakfast_total(){
     std::string date = create_date_stamp();
     std::string file_path = "db/dailies/" + date + "/" + "breakfast.txt";
     std::ifstream dairy_data(file_path);
     return return_total(dairy_data);
 }
 
-std::string Dairy::get_lunch_total(){
+Food* Dairy::get_lunch_total(){
     std::string date = create_date_stamp();
     std::string file_path = "db/dailies/" + date + "/" + "lunch.txt";
     std::ifstream dairy_data(file_path);
     return return_total(dairy_data);
 }
 
-std::string Dairy::get_dinner_total(){
+Food* Dairy::get_dinner_total(){
     std::string date = create_date_stamp();
     std::string file_path = "db/dailies" + date + "/" + "dinner.txt";
     std::ifstream dairy_data(file_path);
     return return_total(dairy_data);
 }
 
-std::string Dairy::return_total(std::ifstream& file){
+Food* Dairy::return_total(std::ifstream& file){
+    Food* food = new Food();
     std::string total;
     double total_amount = 0.0;
     double total_calories = 0.0;
@@ -58,19 +59,26 @@ std::string Dairy::return_total(std::ifstream& file){
             total_fat += fat;
             total_carbs += carbs;
             total_protein += protein;
+            food->name = "Total";
+            food->brand = "";
+            food->amount = total_amount;
+            food->calories = total_calories;
+            food->fat = total_fat;
+            food->carbs = total_carbs;
+            food->protein = total_protein;
         }
 
         file.close();
 
         total = "amount(g):" + std::to_string(total_amount ) + ", calories: " + std::to_string(total_calories ) + ", fat: " + std::to_string(total_fat ) + ", carbs: " + std::to_string(total_carbs ) + ", protein: " + std::to_string(total_protein);
     }
-    return total;
+    return food;
 }
 
-std::string Dairy::get_total_all_meals() {
-    std::string breakfast_total = get_breakfast_total();
-    std::string lunch_total = get_lunch_total();
-    std::string dinner_total = get_dinner_total();
+Food* Dairy::get_total_all_meals() {
+    Food* breakfast_total = get_breakfast_total();
+    Food* lunch_total = get_lunch_total();
+    Food* dinner_total = get_dinner_total();
 
     double total_amount = 0.0;
     double total_calories = 0.0;
@@ -97,9 +105,9 @@ std::string Dairy::get_total_all_meals() {
         }
     };
 
-    accumulate_totals(breakfast_total);
-    accumulate_totals(lunch_total);
-    accumulate_totals(dinner_total);
+    //accumulate_totals(breakfast_total);
+    //accumulate_totals(lunch_total);
+    //accumulate_totals(dinner_total);
 
     std::string total = "Total Amount(g): " + std::to_string(total_amount) +
                         ", Total Calories: " + std::to_string(total_calories) +
@@ -107,5 +115,5 @@ std::string Dairy::get_total_all_meals() {
                         ", Total Carbohydrates: " + std::to_string(total_carbs) +
                         ", Total Protein: " + std::to_string(total_protein);
 
-    return total;
+    return nullptr;
 }
