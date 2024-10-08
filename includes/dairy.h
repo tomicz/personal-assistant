@@ -4,6 +4,16 @@
 #include <string>
 #include <fstream>
 
+struct Food{
+    std::string name;
+    std::string brand;
+    double amount;
+    double calories;
+    double fat;
+    double carbs;
+    double protein;
+};
+
 class Dairy {
     public:
         std::string get_breakfast_total();
