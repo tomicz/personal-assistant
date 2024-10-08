@@ -197,7 +197,16 @@ void add_calories()
 
 void read_meal_data(std::string meal_name){
     Dairy* dairy = new Dairy();
-    std::cout << std::string(150, '-') << std::endl;
+    std::string entry_path = meal_name;
+    std::vector<Food*> entries = dairy->get_food_entries(entry_path);
+    if(entries.empty()){
+        delete dairy;
+        return;
+    }
+    const std::string CYAN = "\033[36m";
+    const std::string RESET = "\033[0m";
+    std::cout << std::string(126, '-') << std::endl;
+    std::cout << std::left << std::setw(3) << "" << CYAN << std::setw(30) << meal_name << RESET << std::endl;
     std::cout << std::left
         << std::setw(3) << "" 
         << std::setw(30) << "Name" 
@@ -208,9 +217,7 @@ void read_meal_data(std::string meal_name){
         << std::setw(15) << "Carbs"
         << std::setw(15) << "Protein"
         << std::setw(15) << std::endl;
-    std::cout << std::string(150, '-') << std::endl;
-    std::string entry_path = meal_name;
-    std::vector<Food*> entries = dairy->get_food_entries(entry_path);
+    std::cout << std::string(126, '-') << std::endl;
     int i = 0;
     for(Food* entry: entries){
         i++;

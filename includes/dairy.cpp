@@ -13,7 +13,6 @@ std::vector<Food*> Dairy::get_food_entries(std::string& meal_name) {
     std::ifstream file(file_path);
 
     if (!file.is_open()) {
-        std::cerr << "Could not open the file: " << file_path << std::endl;
         return entries;
     }
 
