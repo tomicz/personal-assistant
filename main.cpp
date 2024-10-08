@@ -304,6 +304,7 @@ void start_diary()
                 << std::endl;
 
             std::cout << std::string(128, '-') << std::endl;
+            delete dairy;
 		}
 	}while(selected_option != exit_condition);
 
