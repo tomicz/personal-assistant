@@ -205,19 +205,19 @@ void read_meal_data(std::string meal_name){
     }
     const std::string CYAN = "\033[36m";
     const std::string RESET = "\033[0m";
-    std::cout << std::string(126, '-') << std::endl;
-    std::cout << std::left << std::setw(3) << "" << CYAN << std::setw(30) << meal_name << RESET << std::endl;
+    std::cout << std::string(128, '-') << std::endl;
     std::cout << std::left
         << std::setw(3) << "" 
         << std::setw(30) << "Name" 
         << std::setw(25) << "Brand"
         << std::setw(15) << "Amount(g)"
-        << std::setw(15) << "Calories)"
+        << std::setw(15) << "Calories"
         << std::setw(15) << "Fat"
         << std::setw(15) << "Carbs"
         << std::setw(15) << "Protein"
-        << std::setw(15) << std::endl;
-    std::cout << std::string(126, '-') << std::endl;
+        << CYAN << std::setw(15) << meal_name << RESET
+        << std::endl;
+    std::cout << std::endl;
     int i = 0;
     for(Food* entry: entries){
         i++;
@@ -232,17 +232,18 @@ void read_meal_data(std::string meal_name){
             << std::setw(15) << entry->protein
             << std::endl;
     }
-    Food* breakfast = dairy->get_meal_total(entry_path);
+    Food* meal = dairy->get_meal_total(entry_path);
     std::cout << std::left 
-        << std::setw(3) << ""
-        << std::setw(30) << breakfast->name
-        << std::setw(25)<< breakfast->brand
-        << std::setw(15)<< breakfast->amount
-        << std::setw(15)<< breakfast->calories
-        << std::setw(15)<< breakfast->fat
-        << std::setw(15)<< breakfast->carbs
-        << std::setw(15)<< breakfast->protein
+        << std::setw(3)  << ""
+        << CYAN << std::setw(30) << meal->name
+        << std::setw(25) << meal->brand
+        << std::setw(15) << meal->amount
+        << std::setw(15) << meal->calories
+        << std::setw(15) << meal->fat
+        << std::setw(15) << meal->carbs
+        << std::setw(15) << meal->protein << RESET
         << std::endl;
+
 
     delete dairy;
 }
@@ -285,6 +286,24 @@ void start_diary()
             read_meal_data("breakfast");
             read_meal_data("lunch");
             read_meal_data("dinner");
+
+            std::cout << std::string(128, '-') << std::endl;
+            const std::string CYAN = "\033[36m";
+            const std::string RESET = "\033[0m";
+            Dairy* dairy = new Dairy();
+            Food* total = dairy->get_total_all_meals();
+            std::cout << std::left 
+                << std::setw(3)  << ""
+                << CYAN << std::setw(30) << total->name
+                << std::setw(25) << total->brand
+                << std::setw(15) << total->amount
+                << std::setw(15) << total->calories
+                << std::setw(15) << total->fat
+                << std::setw(15) << total->carbs
+                << std::setw(15) << total->protein << RESET
+                << std::endl;
+
+            std::cout << std::string(128, '-') << std::endl;
 		}
 	}while(selected_option != exit_condition);
 

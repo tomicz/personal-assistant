@@ -85,53 +85,42 @@ Food* Dairy::return_total(std::ifstream& file){
             food->carbs = total_carbs;
             food->protein = total_protein;
         }
-
         file.close();
-
-        total = "amount(g):" + std::to_string(total_amount ) + ", calories: " + std::to_string(total_calories ) + ", fat: " + std::to_string(total_fat ) + ", carbs: " + std::to_string(total_carbs ) + ", protein: " + std::to_string(total_protein);
     }
     return food;
 }
 
 Food* Dairy::get_total_all_meals() {
-    //Food* breakfast_total = get_breakfast_total();
-    //Food* lunch_total = get_lunch_total();
-    //Food* dinner_total = get_dinner_total();
+    std::vector<Food*> totals;
+    Food* total = new Food();
+    Food* breakfast_total = get_meal_total("breakfast");
+    Food* lunch_total = get_meal_total("lunch");
+    Food* dinner_total = get_meal_total("dinner");
+    totals.push_back(breakfast_total);
+    totals.push_back(lunch_total);
+    totals.push_back(dinner_total);
 
-    //double total_amount = 0.0;
-    //double total_calories = 0.0;
-    //double total_fat = 0.0;
-    //double total_carbs = 0.0;
-    //double total_protein = 0.0;
+    double total_amount = 0.0;
+    double total_calories = 0.0;
+    double total_fat = 0.0;
+    double total_carbs = 0.0;
+    double total_protein = 0.0;
+    
+    for(Food* entry: totals){
+        total_amount += entry->amount;
+        total_calories += entry->calories;
+        total_fat += entry->carbs;
+        total_carbs += entry->carbs;
+        total_protein += entry->protein;
+    }
 
-    //auto accumulate_totals = [&](const std::string& meal_total) {
-    //    std::stringstream ss(meal_total);
-    //    std::string token;
-    //    
-    //    while (std::getline(ss, token, ',')) {
-    //        std::string key;
-    //        double value;
-    //        std::stringstream token_stream(token);
-    //        std::getline(token_stream, key, ':');
-    //        token_stream >> value;
-    //        
-    //        if (key == "amount(g)") total_amount += value;
-    //        else if (key == " calories") total_calories += value;
-    //        else if (key == " fat") total_fat += value;
-    //        else if (key == " carbs") total_carbs += value;
-    //        else if (key == " protein") total_protein += value;
-    //    }
-    //};
+    total->name =  "Total all";
+    total->brand = "";
+    total->amount = total_amount;
+    total->calories = total_calories;
+    total->fat = total_fat;
+    total->carbs = total_carbs; 
+    total->protein = total_protein; 
 
-    //accumulate_totals(breakfast_total);
-    //accumulate_totals(lunch_total);
-    //accumulate_totals(dinner_total);
-
-    //std::string total = "Total Amount(g): " + std::to_string(total_amount) +
-    //                    ", Total Calories: " + std::to_string(total_calories) +
-    //                    ", Total Fat: " + std::to_string(total_fat) +
-    //                    ", Total Carbohydrates: " + std::to_string(total_carbs) +
-    //                    ", Total Protein: " + std::to_string(total_protein);
-
-    return nullptr;
+    return total;
 }
