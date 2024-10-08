@@ -16,9 +16,8 @@ struct Food{
 
 class Dairy {
     public:
-        Food* get_breakfast_total();
-        Food* get_lunch_total();
-        Food* get_dinner_total();
+        std::vector<Food*> get_food_entries(std::string& meal_name);
+        Food* get_meal_total(std::string meal_name);
         Food* get_total_all_meals();
 
     private:

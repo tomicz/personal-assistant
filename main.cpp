@@ -195,6 +195,51 @@ void add_calories()
     write_to_db(itemData);
 }
 
+void read_meal_data(std::string meal_name){
+    Dairy* dairy = new Dairy();
+    std::cout << std::string(150, '-') << std::endl;
+    std::cout << std::left
+        << std::setw(3) << "" 
+        << std::setw(30) << "Name" 
+        << std::setw(25) << "Brand"
+        << std::setw(15) << "Amount(g)"
+        << std::setw(15) << "Calories)"
+        << std::setw(15) << "Fat"
+        << std::setw(15) << "Carbs"
+        << std::setw(15) << "Protein"
+        << std::setw(15) << std::endl;
+    std::cout << std::string(150, '-') << std::endl;
+    std::string entry_path = meal_name;
+    std::vector<Food*> entries = dairy->get_food_entries(entry_path);
+    int i = 0;
+    for(Food* entry: entries){
+        i++;
+        std::cout << std::left
+            << std::setw(3)  << std::to_string(i) + "."
+            << std::setw(29) << entry->name
+            << std::setw(26) << entry->brand
+            << std::setw(15) << entry->amount
+            << std::setw(15) << entry->calories
+            << std::setw(15) << entry->fat
+            << std::setw(15) << entry->carbs
+            << std::setw(15) << entry->protein
+            << std::endl;
+    }
+    Food* breakfast = dairy->get_meal_total(entry_path);
+    std::cout << std::left 
+        << std::setw(3) << ""
+        << std::setw(30) << breakfast->name
+        << std::setw(25)<< breakfast->brand
+        << std::setw(15)<< breakfast->amount
+        << std::setw(15)<< breakfast->calories
+        << std::setw(15)<< breakfast->fat
+        << std::setw(15)<< breakfast->carbs
+        << std::setw(15)<< breakfast->protein
+        << std::endl;
+
+    delete dairy;
+}
+
 void start_diary()
 {
 	read_diary_options();	
@@ -230,52 +275,9 @@ void start_diary()
 		}
 		else if(selected_option == '5')
 		{
-            Dairy* dairy = new Dairy();
-			std::string date = create_date_stamp();
-			std::string file_path_breakfast = "db/dailies/" + date + "/" + "breakfast.txt";	
-			std::string file_path_lunch = "db/dailies/" + date + "/" + "lunch.txt";	
-			std::string file_path_dinner = "db/dailies/" + date + "/" + "dinner.txt";	
-           
-            std::cout << std::string(150, '-') << std::endl;
-            std::cout << std::left
-                << std::setw(3) << "" 
-                << std::setw(30) << "Name" 
-                << std::setw(25) << "Brand"
-                << std::setw(15) << "Amount(g)"
-                << std::setw(15) << "Fat"
-                << std::setw(15) << "Carbs"
-                << std::setw(15) << "Protein"
-                << std::setw(15) << std::endl;
-            std::cout << std::string(150, '-') << std::endl;
-
-
-            Food* breakfast = dairy->get_breakfast_total();
-            std::cout << std::left 
-                << std::setw(3) << ""
-                << std::setw(30) << breakfast->name
-                << std::setw(25)<< breakfast->brand
-                << std::setw(15)<< breakfast->amount
-                << std::setw(15)<< breakfast->fat
-                << std::setw(15)<< breakfast->carbs
-                << std::setw(15)<< breakfast->protein
-                << std::endl;
-			//read_file(file_path_breakfast);
-            //std::cout << dairy->get_breakfast_total() << std::endl;
-			
-			//set_header("Lunch");
-			//read_file(file_path_lunch);
-            //std::cout << "--- total ---" << std::endl;
-            //std::cout << dairy->get_lunch_total() << std::endl;
-			//
-			//set_header("Dinner");
-			//read_file(file_path_dinner);
-            //std::cout << "--- total ---" << std::endl;
-            //std::cout << dairy->get_dinner_total() << std::endl;
-            //
-            //set_header("DAILY TOTAL");
-            //std:: cout << dairy->get_total_all_meals() << std::endl;
-
-            delete dairy;
+            read_meal_data("breakfast");
+            read_meal_data("lunch");
+            read_meal_data("dinner");
 		}
 	}while(selected_option != exit_condition);
 
