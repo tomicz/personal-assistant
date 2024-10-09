@@ -196,6 +196,8 @@ void add_calories()
 }
 
 void read_meal_data(std::string meal_name){
+    const std::string CYAN = "\033[36m";
+    const std::string RESET = "\033[0m";
     Dairy* dairy = new Dairy();
     std::string entry_path = meal_name;
     std::vector<Food*> entries = dairy->get_food_entries(entry_path);
@@ -203,8 +205,6 @@ void read_meal_data(std::string meal_name){
         delete dairy;
         return;
     }
-    const std::string CYAN = "\033[36m";
-    const std::string RESET = "\033[0m";
     std::cout << std::string(128, '-') << std::endl;
     std::cout << std::left
         << std::setw(3) << "" 
@@ -283,13 +283,16 @@ void start_diary()
 		}
 		else if(selected_option == '5')
 		{
+            const std::string CYAN = "\033[36m";
+            const std::string RESET = "\033[0m";
+            std::cout << std::endl;
+            std::cout << CYAN << "YOUR DAILY ENTRIES" << RESET;
+            std::cout << std::endl;
             read_meal_data("breakfast");
             read_meal_data("lunch");
             read_meal_data("dinner");
 
             std::cout << std::string(128, '-') << std::endl;
-            const std::string CYAN = "\033[36m";
-            const std::string RESET = "\033[0m";
             Dairy* dairy = new Dairy();
             Food* total = dairy->get_total_all_meals();
             std::cout << std::left 
