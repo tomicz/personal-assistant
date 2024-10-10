@@ -47,7 +47,7 @@ void enter_goals()
 std::string add_meal_entry()
 {
 	std::cout << "Select a meal from database by entering a number" << std::endl;
-	read_db(true);
+	read_db();
 	std::cout << "Enter meal number: ";
 
 	int option{};
@@ -272,8 +272,7 @@ void start_diary()
 		}
 		else if(selected_option == '3')
 		{
-			set_header("Food database");
-			read_db(true);
+			read_db();
 			read_diary_options();	
 		}
 		else if(selected_option == '4')

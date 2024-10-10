@@ -4,8 +4,10 @@
 #include <string>
 #include <sys/wait.h>
 #include <vector>
-#include "database.h"
 #include <filesystem>
+#include <sstream>
+#include "database.h"
+#include "dairy.h"
 
 namespace fs = std::filesystem;
 
@@ -181,8 +183,10 @@ void enter_new_data_at_index(int index, double amount, std::string &data)
 	data.replace(current_comma + 2, string_length - 2, std::to_string(amount));
 }
 
-void read_db(bool ordered)
+void read_db()
 {
+    std::cout << std::endl;
+    std::cout << CYAN << "FOOD DATABASE" << RESET << std::endl;
     std::ifstream database("db/db.txt");
     
     if(!database.is_open())
@@ -190,27 +194,54 @@ void read_db(bool ordered)
         std::cout << "Error: File stream is not open" << std::endl;
     }
     
-    std::vector<std::string> lines;
+    std::vector<Food*> entries;
     std::string line;
     
-    while(std::getline(database, line))
-    {
-        lines.push_back(line);     
+    while (std::getline(database, line)) {
+        std::stringstream ss(line); 
+        Food* entry = new Food();
+        std::getline(ss, entry->name, ','); 
+        std::getline(ss, entry->brand, ',');
+        ss >> entry->amount;
+        ss.ignore(1);
+        ss >> entry->calories;
+        ss.ignore(1);
+        ss >> entry->fat;
+        ss.ignore(1); 
+        ss >> entry->carbs; 
+        ss.ignore(1);
+        ss >> entry->protein; 
+        entries.push_back(entry);
     }
 
     database.close();
 
-    for(size_t i = 0; i < lines.size(); i++)
+    std::cout << std::string(140, '-') << std::endl;
+    std::cout << std::left
+        << std::setw(5) << "" 
+        << std::setw(40) << "Name" 
+        << std::setw(25) << "Brand"
+        << std::setw(15) << "Amount(g)"
+        << std::setw(15) << "Calories"
+        << std::setw(15) << "Fat"
+        << std::setw(15) << "Carbs"
+        << std::setw(15) << "Protein"
+        << std::endl;
+    std::cout << std::string(140, '-') << std::endl;
+
+    for(size_t i = 0; i < entries.size(); i++)
     {
-        std::cout << std::fixed << std::setprecision(1);
-		if(!ordered)
-		{
-        	std::cout << lines.at(i) << ::std::endl;
-		}
-		else
-		{
-        	std::cout << CYAN << i << RESET << ": " << lines.at(i) << ::std::endl;
-		}
+        std::cout 
+            << std::left
+            << CYAN << std::setw(5) << i << RESET
+            << std::setw(40) << entries[i]->name 
+            << std::setw(25) << entries[i]->brand
+            << std::setw(15) << entries[i]->amount
+            << std::setw(15) << entries[i]->calories
+            << std::setw(15) << entries[i]->fat
+            << std::setw(15) << entries[i]->carbs
+            << std::setw(15) << entries[i]->protein
+            << std::endl;
     }
 }
 
