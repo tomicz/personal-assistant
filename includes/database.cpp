@@ -9,6 +9,9 @@
 
 namespace fs = std::filesystem;
 
+const std::string CYAN = "\033[36m";
+const std::string RESET = "\033[0m";
+
 void write_to_file(std::string file_path, std::string file_name, std::string data)
 {
 	std::ofstream file(file_path + file_name + ".txt", std::ios::app);
@@ -206,7 +209,7 @@ void read_db(bool ordered)
 		}
 		else
 		{
-        	std::cout << i << ": " << lines.at(i) << ::std::endl;
+        	std::cout << CYAN << i << RESET << ": " << lines.at(i) << ::std::endl;
 		}
     }
 }
