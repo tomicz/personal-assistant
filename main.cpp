@@ -12,6 +12,7 @@
 
 void start_application();
 void read_commands(std::string &command);
+UI ui;
 
 void read_diary_options()
 {
@@ -126,7 +127,7 @@ void add_new_daily_entry()
 
 void read_help()
 {
-	set_header("Help");	
+	ui.set_header("Help");	
 
     std::cout << "Commands: " << std::endl;
     std::cout << "1. Food database and dairy entries." << std::endl;
@@ -317,7 +318,7 @@ void start_diary()
 void start_application()
 {
 	std::string command{}; 
-	open_menu_home(command);
+	ui.open_menu_home(command);
 
 	if(command == "1")
 	{
@@ -329,7 +330,7 @@ void start_application()
 	}
 	else if(command == "6")
 	{
-		open_menu_settings();
+		ui.open_menu_settings();
 	}
 	else if(command == "q")
 	{
@@ -403,12 +404,12 @@ void start_application()
 				std::string date = create_date_stamp();
 				std::string file_path = "db/dailies/" + date + "/" + "daily_entry.txt";	
 
-				set_header("Daily health data");
+				ui.set_header("Daily health data");
 				read_file(file_path);
 			}
 			else if(selected_option == '4')
 			{
-				set_header("Total weight entries");
+				ui.set_header("Total weight entries");
                 Weight* weight = new Weight();
                 weight->get_weight_all();
                 for(std::string entry: weight->get_weight_all()){

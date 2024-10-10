@@ -3,10 +3,7 @@
 #include "database.h"
 #include "user_interface.h"
 
-void create_folder();
-void create_file();
-
-void start_program()
+void UI::start_program()
 {
 	set_header("Home");
 	std::cout << std::endl;
@@ -50,7 +47,7 @@ void start_program()
 
 }
 
-void open_menu_home(std::string &command)
+void UI::open_menu_home(std::string &command)
 {
 	std::cout << "-------------------------------------------------" << std::endl;
 	std::cout << "COMMAND LINE INFORMATION" << std::endl;
@@ -66,7 +63,7 @@ void open_menu_home(std::string &command)
     std::getline(std::cin, command);
 }
 
-void open_menu_settings()
+void UI::open_menu_settings()
 {
 	set_header("Header");
 	std::cout << "Use this menu to create and remove program folders and files." << std::endl;
@@ -102,7 +99,7 @@ void open_menu_settings()
     }
 }
 
-void create_folder()
+void UI::create_folder()
 {
 	std::string file_path{};
 	std::cout << "Enter directory path: ";
@@ -112,7 +109,7 @@ void create_folder()
 	std::cout << "Successfully created a directory at path: " << file_path << std::endl;
 }
 
-void create_file()
+void UI::create_file()
 {
 	std::string file_path{};
 	std::cout << "Enter path: ";
@@ -126,14 +123,14 @@ void create_file()
 	std::cout << "Successfully created a database file at path: " << file_path << std::endl;
 }
 
-void add_category(std::string &category_name)
+void UI::add_category(std::string &category_name)
 {
 	std::string file_path = "db/";
 	std::string file_name = "categories_list";
 	write_to_file(file_path, file_name, category_name);		
 }
 
-void set_header(std::string header_name)
+void UI::set_header(std::string header_name)
 {
 	std::transform(header_name.begin(), header_name.end(), header_name.begin(), ::toupper);	
 	std::cout << "-------------------------------------------------" << std::endl;
