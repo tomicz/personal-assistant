@@ -1,6 +1,6 @@
 # Variables
 CXX = g++
-CXXFLAGS = -std=c++17 -Wall -g
+CXXFLAGS = -std=c++17 -Wall -g -Iinclude
 BUILD_DIR = build
 SRC_DIR = src
 INCLUDE_DIR = include
