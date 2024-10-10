@@ -3,12 +3,12 @@
 #include <time.h>
 #include <fstream>
 #include <ctime>
-#include "includes/database.h"
-#include "includes/blood_pressure_controller.h"
-#include "includes/parser.h"
-#include "includes/user_interface.h"
-#include "includes/dairy.h"
-#include "includes/weight.h"
+#include "include/database.h"
+#include "include/blood_pressure_controller.h"
+#include "include/parser.h"
+#include "include/user_interface.h"
+#include "include/dairy.h"
+#include "include/weight.h"
 
 void start_application();
 void read_commands(std::string &command);
@@ -16,10 +16,6 @@ UI ui;
 
 void read_diary_options()
 {
-	std::cout << "-------------------------------------------------" << std::endl;
-	std::cout << "PERSONAL DIARY." << std::endl;
-	std::cout << "-------------------------------------------------" << std::endl;
-
 	std::cout << "1. Add food to a database." << std::endl;
 	std::cout << "2. Remove food from database." << std::endl;
 	std::cout << "3. Read food database." << std::endl;

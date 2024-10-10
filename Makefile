@@ -1,31 +1,41 @@
 # Variables
 CXX = g++
 CXXFLAGS = -std=c++17 -Wall -g
+BUILD_DIR = build
+SRC_DIR = src
+INCLUDE_DIR = include
 
 # Targets and rules
-output: main.o database.o blood_pressure_controller.o parser.o user_interface.o dairy.o weight.o
-	$(CXX) $(CXXFLAGS) main.o database.o blood_pressure_controller.o parser.o user_interface.o dairy.o weight.o -o output
+output: $(BUILD_DIR)/main.o $(BUILD_DIR)/database.o $(BUILD_DIR)/blood_pressure_controller.o $(BUILD_DIR)/parser.o $(BUILD_DIR)/user_interface.o $(BUILD_DIR)/dairy.o $(BUILD_DIR)/weight.o
+	$(CXX) $(CXXFLAGS) $(BUILD_DIR)/main.o $(BUILD_DIR)/database.o $(BUILD_DIR)/blood_pressure_controller.o $(BUILD_DIR)/parser.o $(BUILD_DIR)/user_interface.o $(BUILD_DIR)/dairy.o $(BUILD_DIR)/weight.o -o $(BUILD_DIR)/output
 
-main.o: main.cpp
-	$(CXX) $(CXXFLAGS) -c main.cpp
+# Rule to create the build directory if it doesn't exist
+$(BUILD_DIR):
+	mkdir -p $(BUILD_DIR)
 
-database.o: includes/database.cpp includes/database.h
-	$(CXX) $(CXXFLAGS) -c includes/database.cpp -o database.o
+# Object file rules
+$(BUILD_DIR)/main.o: $(SRC_DIR)/main.cpp | $(BUILD_DIR)
+	$(CXX) $(CXXFLAGS) -I$(INCLUDE_DIR) -c $(SRC_DIR)/main.cpp -o $(BUILD_DIR)/main.o
 
-blood_pressure_controller.o: includes/blood_pressure_controller.cpp includes/blood_pressure_controller.h
-	$(CXX) $(CXXFLAGS) -c includes/blood_pressure_controller.cpp -o blood_pressure_controller.o
+$(BUILD_DIR)/database.o: $(SRC_DIR)/database.cpp $(INCLUDE_DIR)/database.h | $(BUILD_DIR)
+	$(CXX) $(CXXFLAGS) -I$(INCLUDE_DIR) -c $(SRC_DIR)/database.cpp -o $(BUILD_DIR)/database.o
 
-parser.o: includes/parser.cpp includes/parser.h
-	$(CXX) $(CXXFLAGS) -c includes/parser.cpp -o parser.o
+$(BUILD_DIR)/blood_pressure_controller.o: $(SRC_DIR)/blood_pressure_controller.cpp $(INCLUDE_DIR)/blood_pressure_controller.h | $(BUILD_DIR)
+	$(CXX) $(CXXFLAGS) -I$(INCLUDE_DIR) -c $(SRC_DIR)/blood_pressure_controller.cpp -o $(BUILD_DIR)/blood_pressure_controller.o
 
-user_interface.o: includes/user_interface.cpp includes/user_interface.h
-	$(CXX) $(CXXFLAGS) -c includes/user_interface.cpp -o user_interface.o
+$(BUILD_DIR)/parser.o: $(SRC_DIR)/parser.cpp $(INCLUDE_DIR)/parser.h | $(BUILD_DIR)
+	$(CXX) $(CXXFLAGS) -I$(INCLUDE_DIR) -c $(SRC_DIR)/parser.cpp -o $(BUILD_DIR)/parser.o
 
-dairy.o: includes/dairy.cpp includes/dairy.h
-	$(CXX) $(CXXFLAGS) -c includes/dairy.cpp -o dairy.o
+$(BUILD_DIR)/user_interface.o: $(SRC_DIR)/user_interface.cpp $(INCLUDE_DIR)/user_interface.h | $(BUILD_DIR)
+	$(CXX) $(CXXFLAGS) -I$(INCLUDE_DIR) -c $(SRC_DIR)/user_interface.cpp -o $(BUILD_DIR)/user_interface.o
 
-weight.o: includes/weight.cpp includes/weight.h
-	$(CXX) $(CXXFLAGS) -c includes/weight.cpp -o weight.o
+$(BUILD_DIR)/dairy.o: $(SRC_DIR)/dairy.cpp $(INCLUDE_DIR)/dairy.h | $(BUILD_DIR)
+	$(CXX) $(CXXFLAGS) -I$(INCLUDE_DIR) -c $(SRC_DIR)/dairy.cpp -o $(BUILD_DIR)/dairy.o
 
-clean: 
-	rm -f *.o output
+$(BUILD_DIR)/weight.o: $(SRC_DIR)/weight.cpp $(INCLUDE_DIR)/weight.h | $(BUILD_DIR)
+	$(CXX) $(CXXFLAGS) -I$(INCLUDE_DIR) -c $(SRC_DIR)/weight.cpp -o $(BUILD_DIR)/weight.o
+
+# Clean rule
+clean:
+	rm -rf $(BUILD_DIR)/*.o $(BUILD_DIR)/output
+
