@@ -318,7 +318,7 @@ void start_diary()
 void start_application()
 {
 	std::string command{}; 
-	ui.open_menu_home(command);
+	//ui.open_menu_home(command);
 
 	if(command == "1")
 	{
@@ -436,10 +436,9 @@ int main()
 
     std::cout << "\n";
     std::cout << "Copyright @ Tomicz Engineering LLC" << std::endl;
-    std::cout << "Visit our website at tomiczengineering.com for more information." << std::endl;
-    std::cout << "\n";
+    std::cout << "Visit tomiczengineering.com for more information." << std::endl;
     
-    start_application();
+    ui.start_program();
 
     end = clock();
 

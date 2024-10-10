@@ -3,10 +3,12 @@
 #include "database.h"
 #include "user_interface.h"
 
+const std::string CYAN = "\033[36m";
+const std::string RESET = "\033[0m";
+
 void UI::start_program()
 {
 	set_header("Home");
-	std::cout << std::endl;
 
     std::cout << "1. Diary." << std::endl;
 	std::cout << "2. Health." << std::endl;
@@ -18,18 +20,17 @@ void UI::start_program()
 	
 	std::cout << "Select options: ";
     char command{};
+
     std::cin >> command;
-
     switch(command) 
-	{
+    {
         case '1':
-
+            open_dairy_menu();
             break;
         case '2':
 
             break;
         case '3':
-
             break;
         case '4':
             // Do something for case '4'
@@ -41,17 +42,14 @@ void UI::start_program()
             // Do something for case '4'
             break;
         default:
-            std::cout << "Invalid command entered." << std::endl;
+            std::cout << "Invalid command" << std::endl;
             break;
     }
-
 }
 
-void UI::open_menu_home(std::string &command)
+void UI::open_menu_home()
 {
-	std::cout << "-------------------------------------------------" << std::endl;
-	std::cout << "COMMAND LINE INFORMATION" << std::endl;
-	std::cout << "-------------------------------------------------" << std::endl;
+    set_header("Home");
     std::cout << "1. Diary." << std::endl;
 	std::cout << "2. Health." << std::endl;
 	std::cout << "3. Enter weight." << std::endl;
@@ -60,7 +58,6 @@ void UI::open_menu_home(std::string &command)
 	std::cout << "6. Settings." << std::endl;
 	std::cout << "Enter q to quit application." << std::endl;
 	std::cout << "Enter command: ";
-    std::getline(std::cin, command);
 }
 
 void UI::open_menu_settings()
@@ -132,8 +129,32 @@ void UI::add_category(std::string &category_name)
 
 void UI::set_header(std::string header_name)
 {
+    std::cout << std::endl;
 	std::transform(header_name.begin(), header_name.end(), header_name.begin(), ::toupper);	
-	std::cout << "-------------------------------------------------" << std::endl;
-	std::cout << header_name << std::endl;
-	std::cout << "-------------------------------------------------" << std::endl;
+	std::cout << std::string(100, '-') << std::endl;
+	std::cout << "--- " << CYAN << header_name << RESET << " " << std::string(96 - header_name.size()-1, '-') << std::endl;
+	std::cout << std::string(100, '-') << std::endl;
+    std::cout << std::endl;
+}
+
+void UI::open_dairy_menu(){
+    set_header("Dairy");
+
+	std::cout << "1. Add | "; 
+	std::cout << "2. Remove | ";
+	std::cout << "3. Read | ";
+	std::cout << "4. Add daily | ";
+	std::cout << "5. Read daily" << std::endl;
+	std::cout << "Enter q to go back." << std::endl;
+    std::cout << "Enter command: ";
+
+    char command{};
+    std::cin >> command;
+    if(command == '3'){
+        read_db();                
+        open_dairy_menu();
+    }
+    else if(command == 'q'){
+        start_program();
+    }
 }
