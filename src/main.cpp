@@ -3,12 +3,12 @@
 #include <time.h>
 #include <fstream>
 #include <ctime>
-#include "include/database.h"
-#include "include/blood_pressure_controller.h"
-#include "include/parser.h"
-#include "include/user_interface.h"
-#include "include/dairy.h"
-#include "include/weight.h"
+#include "../include/database.h"
+#include "../include/blood_pressure_controller.h"
+#include "../include/parser.h"
+#include "../include/user_interface.h"
+#include "../include/dairy.h"
+#include "../include/weight.h"
 
 void start_application();
 void read_commands(std::string &command);
@@ -137,61 +137,6 @@ void read_help()
 	start_application();
 }
 
-void add_calories()
-{
-    std::string item_name;
-    std::string brand_name;
-
-    float quantity = {0};
-    float calories = {0};
-    float fat = {0};
-    float carbohydrates = {0};
-    float protein = {0};
-
-    std::string itemData;
-	std::cin.ignore(1000, '\n');
-    
-    std::cout << "Enter item name: ";
-    std::getline(std::cin, item_name);
-
-    std::cout << "Enter brand name: ";
-    std::getline(std::cin, brand_name);
-	
-    std::cout << "Enter quantity: ";
-    std::cin >> quantity;
-
-    std::cout << "Enter calories per 100g: ";
-    std::cin >> calories;  
-
-    std::cout << "Enter fat per 100g: ";
-    std::cin >> fat;
-
-    std::cout << "Enter carbohydrates per 100g: ";
-    std::cin >> carbohydrates;
-    
-    std::cout << "Enter protein per 100g: ";
-    std::cin >> protein;
-
-    std::cout << "You added item " << item_name << std::endl;
-    
-    std::cout << "Brand: " << brand_name << std::endl;
-    std::cout << "Quantity: " << quantity << " units" << std::endl;
-    std::cout << "Calories: " << calories << "g" << std::endl;
-    std::cout << "Fat: " << fat << "g" << std::endl;
-    std::cout << "Carbohydrates: " << carbohydrates << "g" << std::endl;
-    std::cout << "Protein: " << protein << "g" << std::endl;
-
-    itemData = item_name + ", "
-        + brand_name 
-        +  ", "+ std::to_string(quantity) 
-        + ", " + std::to_string(calories) 
-        + ", " + std::to_string(fat) 
-        + ", " + std::to_string(carbohydrates) 
-        + ", " + std::to_string(protein);
-
-    write_to_db(itemData);
-}
-
 void read_meal_data(std::string meal_name){
     const std::string CYAN = "\033[36m";
     const std::string RESET = "\033[0m";
@@ -256,18 +201,7 @@ void start_diary()
 		std::cout << "Select option: ";	
 		std::cin >> selected_option;
 
-		if(selected_option == '1')
-		{
-			std::cout << "To add new items to database, enter required information requested below." << std::endl;
-			add_calories();		
-			read_diary_options();	
-		}
-		else if(selected_option == '2')
-		{
-			remove_element_at_index();	
-			read_diary_options();	
-		}
-		else if(selected_option == '3')
+		if(selected_option == '3')
 		{
 			read_db();
 			read_diary_options();	

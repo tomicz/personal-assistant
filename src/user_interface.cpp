@@ -1,7 +1,8 @@
 #include <iostream>
 #include <string>
-#include "database.h"
-#include "user_interface.h"
+#include "../include/database.h"
+#include "../include/user_interface.h"
+#include "../include/dairy.h"
 
 const std::string CYAN = "\033[36m";
 const std::string RESET = "\033[0m";
@@ -25,7 +26,7 @@ void UI::start_program()
     switch(command) 
     {
         case '1':
-            open_dairy_menu();
+            open_dairy_menu(false);
             break;
         case '2':
 
@@ -137,22 +138,33 @@ void UI::set_header(std::string header_name)
     std::cout << std::endl;
 }
 
-void UI::open_dairy_menu(){
-    set_header("Dairy");
-
-	std::cout << "1. Add | "; 
-	std::cout << "2. Remove | ";
-	std::cout << "3. Read | ";
-	std::cout << "4. Add daily | ";
-	std::cout << "5. Read daily" << std::endl;
-	std::cout << "Enter q to go back." << std::endl;
+void UI::open_dairy_menu(bool show_as_list){
+    Dairy* dairy = new Dairy();
+    set_header("Food Database");
+    std::string seperator = show_as_list ? "| " : "\n";
+    std::string menu_options = 
+        "1. Add " + seperator + 
+        "2. Remove " + seperator +
+        "3. Read " + seperator +
+        "(Q)uit";
+    std::cout << menu_options;
+    std::cout << std::endl;
     std::cout << "Enter command: ";
 
     char command{};
     std::cin >> command;
-    if(command == '3'){
+    if(command == '1'){
+        dairy->add_new_food(); 
+        open_dairy_menu(true);
+        delete dairy;
+    }
+    else if(command == '2'){
+        dairy->remove_food();
+        open_dairy_menu(true);
+    }
+    else if(command == '3'){
         read_db();                
-        open_dairy_menu();
+        open_dairy_menu(true);
     }
     else if(command == 'q'){
         start_program();

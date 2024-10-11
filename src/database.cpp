@@ -6,8 +6,8 @@
 #include <vector>
 #include <filesystem>
 #include <sstream>
-#include "database.h"
-#include "dairy.h"
+#include "../include/database.h"
+#include "../include/dairy.h"
 
 namespace fs = std::filesystem;
 
@@ -70,69 +70,6 @@ void display_lines_with_indices(std::ifstream& file)
     }
 }
 
-void remove_element_at_index()
-{
-    std::ifstream database("db/db.txt");
-    std::ofstream temp_database("temp_database.txt");
-
-    if (!database || !temp_database)
-    {
-        std::cout << "Error: Cannot open database" << std::endl;
-        return;
-    }
-
-    // Display all lines with indices
-    std::cout << "Current entries in the database:\n";
-    display_lines_with_indices(database);
-
-    // Reopen the file to reset the read position
-    database.clear(); // Clear EOF and other flags
-    database.seekg(0); // Rewind to the beginning of the file
-
-    char user_choice;
-    std::cout << "\nEnter 'q' to quit or any other key to proceed: ";
-    std::cin >> user_choice;
-
-    if (user_choice == 'q' || user_choice == 'Q')
-    {
-        std::cout << "Operation cancelled.\n";
-        return;
-    }
-
-    int index{};
-    std::cout << "\nEnter food index to delete: ";
-    std::cin >> index;
-
-    std::string temp_line{};
-    int current_index = 0;
-    bool line_deleted = false;
-
-    while (std::getline(database, temp_line))
-    {
-        if (current_index == index)
-        {
-            std::cout << "Line deleted: " << temp_line << std::endl;
-            line_deleted = true;
-        }
-        else
-        {
-            temp_database << temp_line << std::endl;
-        }
-        ++current_index;
-    }
-
-    if (!line_deleted)
-    {
-        std::cout << "Error: Invalid index. No line was deleted." << std::endl;
-    }
-
-    database.close();
-    temp_database.close();
-
-    // Replace the original file with the modified file
-    remove("db/db.txt");
-    rename("temp_database.txt", "db/db.txt");
-}
 
 int get_comma_index(int at_index, std::string &data)
 {
@@ -187,7 +124,7 @@ void read_db()
 {
     std::cout << std::endl;
     std::cout << CYAN << "FOOD DATABASE" << RESET << std::endl;
-    std::ifstream database("db/db.txt");
+    std::ifstream database("../db/db.txt");
     
     if(!database.is_open())
     {
@@ -294,7 +231,7 @@ void add_weight(std::string &file_path, const double &weight)
 
 void write_to_db(const std::string &item_data)
 {
-    std::ofstream database ("db/db.txt", std::ios::app);
+    std::ofstream database ("../db/db.txt", std::ios::app);
 	std::string formatted_data = item_data + "\n";
 
     database << formatted_data;    

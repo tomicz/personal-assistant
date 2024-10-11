@@ -18,8 +18,7 @@ class UI{
         void create_folder();
         void create_file();
         void add_category(std::string &category_name);
-        void open_dairy_menu();
-    
+        void open_dairy_menu(bool show_as_list);
 };
 
 #endif

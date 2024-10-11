@@ -19,6 +19,8 @@ class Dairy {
         std::vector<Food*> get_food_entries(std::string& meal_name);
         Food* get_meal_total(std::string meal_name);
         Food* get_total_all_meals();
+        void add_new_food();
+        void remove_food();
 
     private:
         Food* return_total(std::ifstream& file);

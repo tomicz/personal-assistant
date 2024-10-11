@@ -2,8 +2,9 @@
 #include <fstream>
 #include <string>
 #include <sstream>
-#include "dairy.h"
-#include "parser.h"
+#include "../include/dairy.h"
+#include "../include/parser.h"
+#include "../include/database.h"
 
 std::vector<Food*> Dairy::get_food_entries(std::string& meal_name) {
     std::vector<Food*> entries;
@@ -123,4 +124,122 @@ Food* Dairy::get_total_all_meals() {
     total->protein = total_protein; 
 
     return total;
+}
+
+void Dairy::add_new_food()
+{
+    std::string item_name;
+    std::string brand_name;
+
+    float quantity = {0};
+    float calories = {0};
+    float fat = {0};
+    float carbohydrates = {0};
+    float protein = {0};
+
+    std::string itemData;
+	std::cin.ignore(1000, '\n');
+    
+    std::cout << "Enter item name: ";
+    std::getline(std::cin, item_name);
+
+    std::cout << "Enter brand name: ";
+    std::getline(std::cin, brand_name);
+	
+    std::cout << "Enter quantity: ";
+    std::cin >> quantity;
+
+    std::cout << "Enter calories per 100g: ";
+    std::cin >> calories;  
+
+    std::cout << "Enter fat per 100g: ";
+    std::cin >> fat;
+
+    std::cout << "Enter carbohydrates per 100g: ";
+    std::cin >> carbohydrates;
+    
+    std::cout << "Enter protein per 100g: ";
+    std::cin >> protein;
+
+    std::cout << "You added item " << item_name << std::endl;
+    
+    std::cout << "Brand: " << brand_name << std::endl;
+    std::cout << "Quantity: " << quantity << " units" << std::endl;
+    std::cout << "Calories: " << calories << "g" << std::endl;
+    std::cout << "Fat: " << fat << "g" << std::endl;
+    std::cout << "Carbohydrates: " << carbohydrates << "g" << std::endl;
+    std::cout << "Protein: " << protein << "g" << std::endl;
+
+    itemData = item_name + ", "
+        + brand_name 
+        +  ", "+ std::to_string(quantity) 
+        + ", " + std::to_string(calories) 
+        + ", " + std::to_string(fat) 
+        + ", " + std::to_string(carbohydrates) 
+        + ", " + std::to_string(protein);
+
+    write_to_db(itemData);
+}
+
+void Dairy::remove_food(){
+    std::ifstream database("../db/db.txt");
+    std::ofstream temp_database("temp_database.txt");
+
+    if (!database || !temp_database)
+    {
+        std::cout << "Error: Cannot open database" << std::endl;
+        return;
+    }
+
+    // Display all lines with indices
+    std::cout << "Current entries in the database:\n";
+    read_db();
+
+    // Reopen the file to reset the read position
+    database.clear(); // Clear EOF and other flags
+    database.seekg(0); // Rewind to the beginning of the file
+
+    char user_choice;
+    std::cout << "\n Want to proceed? (Y)es?, (N)o?";
+    std::cin >> user_choice;
+
+    if (user_choice == 'n' || user_choice == 'N'){
+        std::cout << "Operation cancelled.\n";
+        return;
+    }
+    else if(user_choice == 'y' || user_choice == 'Y'){
+        int index{};
+        std::cout << "\nEnter food index to delete: ";
+        std::cin >> index;
+
+        std::string temp_line{};
+        int current_index = 0;
+        bool line_deleted = false;
+
+        while (std::getline(database, temp_line))
+        {
+            if (current_index == index)
+            {
+                std::cout << "Line deleted: " << temp_line << std::endl;
+                line_deleted = true;
+            }
+            else
+            {
+                temp_database << temp_line << std::endl;
+            }
+            ++current_index;
+        }
+
+        if (!line_deleted)
+        {
+            std::cout << "Error: Invalid index. No line was deleted." << std::endl;
+        }
+
+        database.close();
+        temp_database.close();
+
+        // Replace the original file with the modified file
+        remove("../db/db.txt");
+        rename("temp_database.txt", "../db/db.txt");
+    }
 }
