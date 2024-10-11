@@ -3,6 +3,8 @@
 #include "../include/database.h"
 #include "../include/user_interface.h"
 #include "../include/dairy.h"
+#include "../include/parser.h"
+#include "../include/weight.h"
 
 const std::string CYAN = "\033[36m";
 const std::string RESET = "\033[0m";
@@ -13,9 +15,7 @@ void UI::start_program()
 
     std::cout << "1. Diary." << std::endl;
 	std::cout << "2. Health." << std::endl;
-	std::cout << "3. Enter weight." << std::endl;
-	std::cout << "4. Enter goals." << std::endl;
-	std::cout << "Enter q to quit application." << std::endl;
+	std::cout << "(Q)uit application." << std::endl;
 	
 	std::cout << "Select options: ";
     char command{};
@@ -27,7 +27,7 @@ void UI::start_program()
             open_dairy_menu();
             break;
         case '2':
-
+            open_health_menu();
             break;
         case '3':
             break;
@@ -46,19 +46,6 @@ void UI::start_program()
     }
 }
 
-void UI::open_menu_home()
-{
-    set_header("Home");
-    std::cout << "1. Diary." << std::endl;
-	std::cout << "2. Health." << std::endl;
-	std::cout << "3. Enter weight." << std::endl;
-	std::cout << "4. Enter goals." << std::endl;
-	std::cout << "5. Help." << std::endl;
-	std::cout << "6. Settings." << std::endl;
-	std::cout << "Enter q to quit application." << std::endl;
-	std::cout << "Enter command: ";
-}
-
 void UI::set_header(std::string header_name)
 {
     std::cout << std::endl;
@@ -67,6 +54,35 @@ void UI::set_header(std::string header_name)
 	std::cout << "--- " << CYAN << header_name << RESET << " " << std::string(96 - header_name.size()-1, '-') << std::endl;
 	std::cout << std::string(100, '-') << std::endl;
     std::cout << std::endl;
+}
+
+void UI::open_health_menu(){
+    set_header("Health Menu");
+    std::string menu_options = "1. Enter Weight \n2. Read Weight \n(Q)uit";
+    std::cout << menu_options;
+    std::cout << std::endl;
+    std::cout << "Enter command: ";
+
+    char command{};
+    std::cin >> command;
+    switch(command){
+        case '1':        
+            enter_weight();
+            open_health_menu();
+            break;
+        case '2':
+            read_weight();
+            open_health_menu();
+            break;
+        case 'Q':
+           start_program(); 
+            break;
+        case 'q':
+           start_program(); 
+            break;
+        default:
+           start_program(); 
+    }
 }
 
 void UI::open_food_database(bool show_as_list){
@@ -241,4 +257,26 @@ void UI::read_meal_data(std::string meal_name){
 
 
     delete dairy;
+}
+
+void UI::enter_weight(){
+    double weight;
+    std::cout << "Enter weight: ";
+    std::cin >> weight;
+    std::string file_path = "../db/dailies/" + create_date_stamp();
+
+    create_directory(file_path);
+    add_weight(file_path, weight);
+
+    std::cin.ignore(1000, '\n');
+}
+
+void UI::read_weight(){
+    set_header("Total weight entries");
+    Weight* weight = new Weight();
+    weight->get_weight_all();
+    for(std::string entry: weight->get_weight_all()){
+        std::cout << entry << "\n";
+    }
+    delete weight;
 }

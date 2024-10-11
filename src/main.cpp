@@ -1,13 +1,11 @@
 #include <iostream>
 #include <string>
 #include <time.h>
-#include <fstream>
 #include <ctime>
 #include "../include/database.h"
 #include "../include/blood_pressure_controller.h"
 #include "../include/parser.h"
 #include "../include/user_interface.h"
-#include "../include/dairy.h"
 #include "../include/weight.h"
 
 void start_application();
@@ -32,142 +30,11 @@ void enter_goals()
 	write_to_file(file_path, "goals", "calories goal, " + std::to_string(calories_goal));
 }
 
-void read_help()
-{
-	ui.set_header("Help");	
-
-    std::cout << "Commands: " << std::endl;
-    std::cout << "1. Food database and dairy entries." << std::endl;
-    std::cout << "2. Blood pressure and pulse." << std::endl;
-    std::cout << "3. Enter current weight. Only once per day." << std::endl;
-	std::cout << "4. Enter goals like weight." << std::endl;
-    std::cout << "5. Get description of all commands." << std::endl;
-    std::cout << "6. Settings menu allows to create new folders and database files." << std::endl;
-    std::cout << "To quit application enter lower case q" << std::endl;
-
-	start_application();
-}
-
-void read_meal_data(std::string meal_name){
-    const std::string CYAN = "\033[36m";
-    const std::string RESET = "\033[0m";
-    Dairy* dairy = new Dairy();
-    std::string entry_path = meal_name;
-    std::vector<Food*> entries = dairy->get_food_entries(entry_path);
-    if(entries.empty()){
-        delete dairy;
-        return;
-    }
-    std::cout << std::string(128, '-') << std::endl;
-    std::cout << std::left
-        << std::setw(3) << "" 
-        << std::setw(30) << "Name" 
-        << std::setw(25) << "Brand"
-        << std::setw(15) << "Amount(g)"
-        << std::setw(15) << "Calories"
-        << std::setw(15) << "Fat"
-        << std::setw(15) << "Carbs"
-        << std::setw(15) << "Protein"
-        << CYAN << std::setw(15) << meal_name << RESET
-        << std::endl;
-    std::cout << std::endl;
-    int i = 0;
-    for(Food* entry: entries){
-        i++;
-        std::cout << std::left
-            << std::setw(3)  << std::to_string(i) + "."
-            << std::setw(29) << entry->name
-            << std::setw(26) << entry->brand
-            << std::setw(15) << entry->amount
-            << std::setw(15) << entry->calories
-            << std::setw(15) << entry->fat
-            << std::setw(15) << entry->carbs
-            << std::setw(15) << entry->protein
-            << std::endl;
-    }
-    Food* meal = dairy->get_meal_total(entry_path);
-    std::cout << std::left 
-        << std::setw(3)  << ""
-        << CYAN << std::setw(30) << meal->name
-        << std::setw(25) << meal->brand
-        << std::setw(15) << meal->amount
-        << std::setw(15) << meal->calories
-        << std::setw(15) << meal->fat
-        << std::setw(15) << meal->carbs
-        << std::setw(15) << meal->protein << RESET
-        << std::endl;
-
-
-    delete dairy;
-}
-
-void start_diary()
-{
-	char selected_option{};
-	char exit_condition = 'q';
-
-	do{
-		std::cout << "Select option: ";	
-		std::cin >> selected_option;
-
-		if(selected_option == '3')
-		{
-			read_db();
-		}
-		else if(selected_option == '4')
-		{
-		}
-		else if(selected_option == '5')
-		{
-            const std::string CYAN = "\033[36m";
-            const std::string RESET = "\033[0m";
-            std::cout << std::endl;
-            std::cout << CYAN << "YOUR DAILY ENTRIES" << RESET;
-            std::cout << std::endl;
-            read_meal_data("breakfast");
-            read_meal_data("lunch");
-            read_meal_data("dinner");
-
-            std::cout << std::string(128, '-') << std::endl;
-            Dairy* dairy = new Dairy();
-            Food* total = dairy->get_total_all_meals();
-            std::cout << std::left 
-                << std::setw(3)  << ""
-                << CYAN << std::setw(30) << total->name
-                << std::setw(25) << total->brand
-                << std::setw(15) << total->amount
-                << std::setw(15) << total->calories
-                << std::setw(15) << total->fat
-                << std::setw(15) << total->carbs
-                << std::setw(15) << total->protein << RESET
-                << std::endl;
-
-            std::cout << std::string(128, '-') << std::endl;
-            delete dairy;
-		}
-	}while(selected_option != exit_condition);
-
-	std::cin.ignore(1000, '\n');
-	start_application();
-}
-
 void start_application()
 {
 	std::string command{}; 
 
-	if(command == "1")
-	{
-		start_diary();
-	}
-	else if(command == "5")
-	{ 
-		read_help();
-	}
-	else if(command == "q")
-	{
-		std::cout << "Application closed" << std::endl;	
-	}
-	else if(command == "3")
+	if(command == "3")
 	{
 		double weight;
 		std::cout << "Enter weight: ";

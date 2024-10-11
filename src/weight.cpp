@@ -12,7 +12,7 @@
 namespace fs = std::filesystem;
 
 std::vector<std::string> Weight::get_weight_all() {
-    std::string file_path = "db/dailies/";
+    std::string file_path = "../db/dailies/";
     std::vector<std::pair<std::string, std::string>> weight_entries;
 
     try {
