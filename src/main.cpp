@@ -11,35 +11,11 @@ void start_application();
 void read_commands(std::string &command);
 UI ui;
 
-
-void enter_goals() 
-{
-	double goal_weight;
-	std::cout << "Enter goal weight:";
-	std::cin >> goal_weight; 
-
-	double calories_goal;
-	std::cout << "Enter calories daily goal:";
-	std::cin >> calories_goal; 
-
-	std::string file_path = "db/dailies/";
-	create_directory(file_path);
-	create_db_file(file_path, "goals");
-	write_to_file(file_path, "goals", "goal weight, " + std::to_string(goal_weight));
-	write_to_file(file_path, "goals", "calories goal, " + std::to_string(calories_goal));
-}
-
 void start_application()
 {
 	std::string command{}; 
 
-	if(command == "4")
-	{
-		enter_goals();	
-		std::cin.ignore(1000, '\n');
-		start_application();
-	}
-	else if(command == "2")
+	if(command == "2")
 	{
 		std::cout << "This is medical panel where you can see all your medical information. Select options below." << std::endl;
 		std::cout << "1. Enter blood pressure" << std::endl;
