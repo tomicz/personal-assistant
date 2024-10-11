@@ -6,7 +6,6 @@
 #include "../include/blood_pressure_controller.h"
 #include "../include/parser.h"
 #include "../include/user_interface.h"
-#include "../include/weight.h"
 
 void start_application();
 void read_commands(std::string &command);
@@ -34,20 +33,7 @@ void start_application()
 {
 	std::string command{}; 
 
-	if(command == "3")
-	{
-		double weight;
-		std::cout << "Enter weight: ";
-		std::cin >> weight;
-		std::string file_path = "db/dailies/" + create_date_stamp();
-
-		create_directory(file_path);
-		add_weight(file_path, weight);
-
-		std::cin.ignore(1000, '\n');
-		start_application();	
-	}
-	else if(command == "4")
+	if(command == "4")
 	{
 		enter_goals();	
 		std::cin.ignore(1000, '\n');
@@ -104,16 +90,6 @@ void start_application()
 
 				ui.set_header("Daily health data");
 				read_file(file_path);
-			}
-			else if(selected_option == '4')
-			{
-				ui.set_header("Total weight entries");
-                Weight* weight = new Weight();
-                weight->get_weight_all();
-                for(std::string entry: weight->get_weight_all()){
-                    std::cout << entry << "\n";
-                }
-                delete weight;
 			}
 		}while(selected_option != exit_condition);
 		
