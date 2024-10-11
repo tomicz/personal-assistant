@@ -23,6 +23,8 @@ class UI{
 
     private:
         void read_meal_data(std::string meal_name);
+        void enter_height();
+        void read_height();
 };
 
 #endif

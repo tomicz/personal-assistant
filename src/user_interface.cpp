@@ -1,5 +1,7 @@
 #include <iostream>
 #include <string>
+#include <fstream>
+#include <sstream>
 #include "../include/database.h"
 #include "../include/user_interface.h"
 #include "../include/dairy.h"
@@ -29,20 +31,8 @@ void UI::start_program()
         case '2':
             open_health_menu();
             break;
-        case '3':
-            break;
-        case '4':
-            // Do something for case '4'
-            break;
-        case '5':
-            // Do something for case '4'
-            break;
-        case '6':
-            // Do something for case '4'
-            break;
         default:
             std::cout << "Invalid command" << std::endl;
-            break;
     }
 }
 
@@ -58,7 +48,7 @@ void UI::set_header(std::string header_name)
 
 void UI::open_health_menu(){
     set_header("Health Menu");
-    std::string menu_options = "1. Enter Weight \n2. Read Weight \n(Q)uit";
+    std::string menu_options = "1. Enter Weight \n2. Read Weight \n3. Enter Height \n4. Read Height \n(Q)uit";
     std::cout << menu_options;
     std::cout << std::endl;
     std::cout << "Enter command: ";
@@ -72,6 +62,13 @@ void UI::open_health_menu(){
             break;
         case '2':
             read_weight();
+            open_health_menu();
+        case '3':
+            enter_height();
+            open_health_menu();
+            break;
+        case '4':
+            read_height();
             open_health_menu();
             break;
         case 'Q':
@@ -279,4 +276,47 @@ void UI::read_weight(){
         std::cout << entry << "\n";
     }
     delete weight;
+}
+
+void UI::enter_height(){
+    double height;
+    std::cout << "Enter height: ";
+    std::cin >> height;
+    std::string file_path = "../db/personal_data.txt";
+    std::ofstream weightstream(file_path);
+
+    if(!weightstream.is_open()){
+        std::cerr << "Failed to create personal_data.txt file";
+        return;
+    }
+
+    std::string data = "height: " + std::to_string(height);
+    weightstream << data;
+    weightstream.close();
+    std::cout << "Successfully added height " << height << " to a database.";
+} 
+
+void UI::read_height(){
+    double height{};
+    std::string file_path = "../db/personal_data.txt";
+    std::fstream file(file_path); 
+    std::string line;
+
+    if(!file.is_open()){
+        std::cerr << "Cannot open file";
+        return;
+    }
+
+    while(std::getline(file, line)){
+        if(line.find("height:") != std::string::npos){
+            std::stringstream ss(line);
+            std::string label;
+            ss >> label >> height;
+            std::cout << std::endl;
+            std::cout << "Your height is: " << height << "cm"<< std::endl;
+            break;
+        }
+    }
+
+    file.close();
 }
