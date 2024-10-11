@@ -21,9 +21,12 @@ class Dairy {
         Food* get_total_all_meals();
         void add_new_food();
         void remove_food();
+        void add_new_daily_entry();
 
     private:
         Food* return_total(std::ifstream& file);
+        std::string add_meal_entry();
+        std::string get_meal_time();
 };
 
 #endif

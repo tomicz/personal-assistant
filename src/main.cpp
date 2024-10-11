@@ -14,15 +14,6 @@ void start_application();
 void read_commands(std::string &command);
 UI ui;
 
-void read_diary_options()
-{
-	std::cout << "1. Add food to a database." << std::endl;
-	std::cout << "2. Remove food from database." << std::endl;
-	std::cout << "3. Read food database." << std::endl;
-	std::cout << "4. Add daily entry." << std::endl;
-	std::cout << "5. Read daily entry." << std::endl;
-	std::cout << "Enter q to go back." << std::endl;
-}
 
 void enter_goals() 
 {
@@ -39,86 +30,6 @@ void enter_goals()
 	create_db_file(file_path, "goals");
 	write_to_file(file_path, "goals", "goal weight, " + std::to_string(goal_weight));
 	write_to_file(file_path, "goals", "calories goal, " + std::to_string(calories_goal));
-}
-
-std::string add_meal_entry()
-{
-	std::cout << "Select a meal from database by entering a number" << std::endl;
-	read_db();
-	std::cout << "Enter meal number: ";
-
-	int option{};
-	
-	std::cin >> option;
-	std::cout << "You selected: " << option << std::endl;
-	
-	std::string result = get_element_from_db(option);
-	std::cout << result << std::endl;
-
-	double amount{};
-	std::cout << "Enter amount(g): ";
-	std::cin >> amount;
-
-	std::string calories = modify_data_at_index(2, result);
-	std::string fat = modify_data_at_index(3, result);
-	std::string ug = modify_data_at_index(4, result);
-	std::string protein = modify_data_at_index(5, result);
-
-	double calories_formula = std::stod(calories) / 100.0 * amount;
-	double fat_formula = std::stod(fat) / 100.0 * amount;
-	double ug_formula = std::stod(ug) / 100.0 * amount;
-	double protein_formula = std::stod(protein) / 100.0 * amount;
-
-	enter_new_data_at_index(1, amount, result); 
-	enter_new_data_at_index(2, calories_formula, result); 
-	enter_new_data_at_index(3, fat_formula, result); 
-	enter_new_data_at_index(4, ug_formula, result); 
-	enter_new_data_at_index(5, protein_formula, result); 
-
-	std::cout << "Data: " << result << std::endl;
-
-	return result;
-}
-
-std::string get_meal_time()
-{
-	std::cout << "Select:" << std::endl;
-	std::cout << "1. Breakfast" <<std::endl;	
-	std::cout << "2. Lunch" <<std::endl;	
-	std::cout << "3. Dinner" <<std::endl;	
-
-	char option{};
-
-	std::cout << "Enter option: ";
-	std::cin >> option;
-	
-	if(option == '1')
-	{
-		return "breakfast";
-	}
-	else if(option == '2')
-	{
-		return "lunch";
-	}
-	else if(option == '3')
-	{
-		return "dinner";	
-	}
-
-	return "Invalid option";
-}
-
-void add_new_daily_entry()
-{
-	std::string file_path = "db/dailies/" + create_date_stamp() + "/";
-	
-	create_directory(file_path);
-	std::cout << file_path << std::endl;
-	std::string meal_data = add_meal_entry() + "\n";
-	
-    std::ofstream timestamp(file_path + get_meal_time() + ".txt", std::ios::app);
-	timestamp << meal_data;
-	timestamp.close();
 }
 
 void read_help()
@@ -192,8 +103,6 @@ void read_meal_data(std::string meal_name){
 
 void start_diary()
 {
-	read_diary_options();	
-
 	char selected_option{};
 	char exit_condition = 'q';
 
@@ -204,12 +113,9 @@ void start_diary()
 		if(selected_option == '3')
 		{
 			read_db();
-			read_diary_options();	
 		}
 		else if(selected_option == '4')
 		{
-			add_new_daily_entry();
-			read_diary_options();	
 		}
 		else if(selected_option == '5')
 		{
@@ -248,7 +154,6 @@ void start_diary()
 void start_application()
 {
 	std::string command{}; 
-	//ui.open_menu_home(command);
 
 	if(command == "1")
 	{

@@ -184,7 +184,7 @@ void read_db()
 
 std::string get_element_from_db(int index)
 {
-    std::ifstream database("db/db.txt");
+    std::ifstream database("../db/db.txt");
     std::vector<std::string> lines;
     std::string line;
     

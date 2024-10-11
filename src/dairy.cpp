@@ -9,7 +9,7 @@
 std::vector<Food*> Dairy::get_food_entries(std::string& meal_name) {
     std::vector<Food*> entries;
     std::string date = create_date_stamp();
-    std::string file_path = "db/dailies/" + date + "/" + meal_name + ".txt";
+    std::string file_path = "../db/dailies/" + date + "/" + meal_name + ".txt";
     std::string output;
     std::ifstream file(file_path);
 
@@ -40,7 +40,7 @@ std::vector<Food*> Dairy::get_food_entries(std::string& meal_name) {
 
 Food* Dairy::get_meal_total(std::string meal_name){
     std::string date = create_date_stamp();
-    std::string file_path = "db/dailies/" + date + "/" + meal_name + ".txt";
+    std::string file_path = "../db/dailies/" + date + "/" + meal_name + ".txt";
     std::ifstream dairy_data(file_path);
     return return_total(dairy_data);
 }
@@ -242,4 +242,85 @@ void Dairy::remove_food(){
         remove("../db/db.txt");
         rename("temp_database.txt", "../db/db.txt");
     }
+}
+
+std::string Dairy::add_meal_entry()
+{
+	std::cout << "Select a meal from database by entering a number" << std::endl;
+	read_db();
+	std::cout << "Enter meal number: ";
+
+	int option{};
+	
+	std::cin >> option;
+	std::cout << "You selected: " << option << std::endl;
+	
+	std::string result = get_element_from_db(option);
+	std::cout << result << std::endl;
+
+	double amount{};
+	std::cout << "Enter amount(g): ";
+	std::cin >> amount;
+
+	std::string calories = modify_data_at_index(2, result);
+	std::string fat = modify_data_at_index(3, result);
+	std::string ug = modify_data_at_index(4, result);
+	std::string protein = modify_data_at_index(5, result);
+
+	double calories_formula = std::stod(calories) / 100.0 * amount;
+	double fat_formula = std::stod(fat) / 100.0 * amount;
+	double ug_formula = std::stod(ug) / 100.0 * amount;
+	double protein_formula = std::stod(protein) / 100.0 * amount;
+
+	enter_new_data_at_index(1, amount, result); 
+	enter_new_data_at_index(2, calories_formula, result); 
+	enter_new_data_at_index(3, fat_formula, result); 
+	enter_new_data_at_index(4, ug_formula, result); 
+	enter_new_data_at_index(5, protein_formula, result); 
+
+	std::cout << "Data: " << result << std::endl;
+
+	return result;
+}
+
+
+void Dairy::add_new_daily_entry()
+{
+	std::string file_path = "../db/dailies/" + create_date_stamp() + "/";
+	
+	create_directory(file_path);
+	std::cout << file_path << std::endl;
+	std::string meal_data = add_meal_entry() + "\n";
+	
+    std::ofstream timestamp(file_path + get_meal_time() + ".txt", std::ios::app);
+	timestamp << meal_data;
+	timestamp.close();
+}
+
+std::string Dairy::get_meal_time()
+{
+	std::cout << "Select:" << std::endl;
+	std::cout << "1. Breakfast" <<std::endl;	
+	std::cout << "2. Lunch" <<std::endl;	
+	std::cout << "3. Dinner" <<std::endl;	
+
+	char option{};
+
+	std::cout << "Enter option: ";
+	std::cin >> option;
+	
+	if(option == '1')
+	{
+		return "breakfast";
+	}
+	else if(option == '2')
+	{
+		return "lunch";
+	}
+	else if(option == '3')
+	{
+		return "dinner";	
+	}
+
+	return "Invalid option";
 }
