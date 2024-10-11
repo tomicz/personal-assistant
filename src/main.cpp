@@ -258,10 +258,6 @@ void start_application()
 	{ 
 		read_help();
 	}
-	else if(command == "6")
-	{
-		ui.open_menu_settings();
-	}
 	else if(command == "q")
 	{
 		std::cout << "Application closed" << std::endl;	

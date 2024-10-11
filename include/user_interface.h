@@ -13,11 +13,7 @@ class UI{
         
         void start_program();
         void open_menu_home();
-        void open_menu_settings();
         void set_header(std::string header_name);
-        void create_folder();
-        void create_file();
-        void add_category(std::string &category_name);
         void open_dairy_menu(bool show_as_list);
 };
 
