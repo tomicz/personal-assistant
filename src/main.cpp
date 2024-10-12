@@ -13,7 +13,7 @@ int main()
     start = clock();
 
     std::cout << "\n";
-    std::cout << "Copyright @ Tomicz Engineering LLC" << std::endl;
+    std::cout << "Copyright \u00A9 2024 Tomicz Engineering LLC" << std::endl;
     std::cout << "Visit tomiczengineering.com for more information." << std::endl;
     
     ui.start_program();
