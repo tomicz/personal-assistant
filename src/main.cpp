@@ -1,27 +1,22 @@
 #include <iostream>
-#include <time.h>
-#include <ctime>
+#include <chrono>
 #include "../include/user_interface.h"
 
 
 int main()
 {
-    UI ui;
-    clock_t start;
-    clock_t end;
-
-    start = clock();
+    auto start = std::chrono::high_resolution_clock::now();
 
     std::cout << "\n";
     std::cout << "Copyright \u00A9 2024 Tomicz Engineering LLC" << std::endl;
     std::cout << "Visit tomiczengineering.com for more information." << std::endl;
     
+    UI ui;
     ui.start_program();
 
-    end = clock();
-
-    double timeToExecute = double(end - start) / (double) CLOCKS_PER_SEC;
-    std::cout << "Time to execute: " << timeToExecute << std::endl;
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> timeToExecute = end - start;
+    std::cout << "Time to execute: " << timeToExecute.count() << std::endl;
 
     return 0;
 }
