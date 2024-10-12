@@ -131,11 +131,11 @@ void Dairy::add_new_food()
     std::string item_name;
     std::string brand_name;
 
-    float quantity = {0};
-    float calories = {0};
-    float fat = {0};
-    float carbohydrates = {0};
-    float protein = {0};
+    double quantity = {0};
+    double calories = {0};
+    double fat = {0};
+    double carbohydrates = {0};
+    double protein = {0};
 
     std::string itemData;
 	std::cin.ignore(1000, '\n');
