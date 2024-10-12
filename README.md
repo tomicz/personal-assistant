@@ -9,14 +9,10 @@ Weight Tracker: Record and monitor your weight each day to track your fitness jo
 
 # Getting Started
 
--   Navigate to build folder
-
-    cd build/
-
--   Compile and run by typing
-    
-    make
-    ./output
+-   Navigate to the root folder.
+-   Type `make` in terminal to build the program.
+-   After compilation has completed, navigate to folder build/
+-   Type `./output` to run the program.
 
 ### Supported platforms
 
