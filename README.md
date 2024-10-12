@@ -14,7 +14,8 @@ Weight Tracker: Record and monitor your weight each day to track your fitness jo
     cd build/
 
 -   Compile and run by typing
-
+    
+    make
     ./output
 
 ### Supported platforms
