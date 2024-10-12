@@ -1,5 +1,4 @@
-#ifndef _USER_INTERFACE_H_
-#define _USER_INTERFACE_H_
+#pragma once
 
 #include <iostream>
 #include <string>
@@ -26,5 +25,3 @@ class UI{
         void enter_height();
         void read_height();
 };
-
-#endif

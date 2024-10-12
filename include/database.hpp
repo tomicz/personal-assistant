@@ -1,6 +1,6 @@
-#include <iostream>
+#pragma once
+
 #include <string>
-#include <filesystem>
 
 void write_to_table(std::string &file_path, std::string &data);
 void write_to_file(std::string file_path, std::string file_name, std::string data);

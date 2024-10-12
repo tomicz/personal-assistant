@@ -6,8 +6,8 @@
 #include <vector>
 #include <filesystem>
 #include <sstream>
-#include "../include/database.h"
-#include "../include/dairy.h"
+#include "../include/database.hpp"
+#include "../include/dairy.hpp"
 
 namespace fs = std::filesystem;
 

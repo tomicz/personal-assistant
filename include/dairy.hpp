@@ -1,5 +1,4 @@
-#ifndef _DIARY_H_
-#define _DIARY_H_
+#pragma once
 
 #include <string>
 #include <fstream>
@@ -28,5 +27,3 @@ class Dairy {
         std::string add_meal_entry();
         std::string get_meal_time();
 };
-
-#endif
