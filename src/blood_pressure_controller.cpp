@@ -1,6 +1,6 @@
 #include <string>
-#include "../include/parser.h"
-#include "../include/database.h"
+#include "../include/parser.hpp"
+#include "../include/database.hpp"
 
 void enter_pulse(int pulse)
 {

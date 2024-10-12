@@ -2,11 +2,11 @@
 #include <string>
 #include <fstream>
 #include <sstream>
-#include "../include/database.h"
-#include "../include/user_interface.h"
-#include "../include/dairy.h"
-#include "../include/parser.h"
-#include "../include/weight.h"
+#include "../include/database.hpp"
+#include "../include/user_interface.hpp"
+#include "../include/dairy.hpp"
+#include "../include/parser.hpp"
+#include "../include/weight.hpp"
 
 const std::string CYAN = "\033[36m";
 const std::string RESET = "\033[0m";

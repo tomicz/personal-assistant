@@ -6,8 +6,8 @@
 #include <algorithm>
 #include <iomanip>
 #include <sstream>
-#include "../include/weight.h"
-#include "../include/parser.h"
+#include "../include/weight.hpp"
+#include "../include/parser.hpp"
 
 namespace fs = std::filesystem;
 

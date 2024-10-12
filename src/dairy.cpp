@@ -2,9 +2,9 @@
 #include <fstream>
 #include <string>
 #include <sstream>
-#include "../include/dairy.h"
-#include "../include/parser.h"
-#include "../include/database.h"
+#include "../include/dairy.hpp"
+#include "../include/parser.hpp"
+#include "../include/database.hpp"
 
 std::vector<Food*> Dairy::get_food_entries(std::string& meal_name) {
     std::vector<Food*> entries;

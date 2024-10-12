@@ -17,25 +17,24 @@ $(BUILD_DIR):
 $(BUILD_DIR)/main.o: $(SRC_DIR)/main.cpp | $(BUILD_DIR)
 	$(CXX) $(CXXFLAGS) -I$(INCLUDE_DIR) -c $(SRC_DIR)/main.cpp -o $(BUILD_DIR)/main.o
 
-$(BUILD_DIR)/database.o: $(SRC_DIR)/database.cpp $(INCLUDE_DIR)/database.h | $(BUILD_DIR)
+$(BUILD_DIR)/database.o: $(SRC_DIR)/database.cpp $(INCLUDE_DIR)/database.hpp | $(BUILD_DIR)
 	$(CXX) $(CXXFLAGS) -I$(INCLUDE_DIR) -c $(SRC_DIR)/database.cpp -o $(BUILD_DIR)/database.o
 
-$(BUILD_DIR)/blood_pressure_controller.o: $(SRC_DIR)/blood_pressure_controller.cpp $(INCLUDE_DIR)/blood_pressure_controller.h | $(BUILD_DIR)
+$(BUILD_DIR)/blood_pressure_controller.o: $(SRC_DIR)/blood_pressure_controller.cpp $(INCLUDE_DIR)/blood_pressure_controller.hpp | $(BUILD_DIR)
 	$(CXX) $(CXXFLAGS) -I$(INCLUDE_DIR) -c $(SRC_DIR)/blood_pressure_controller.cpp -o $(BUILD_DIR)/blood_pressure_controller.o
 
-$(BUILD_DIR)/parser.o: $(SRC_DIR)/parser.cpp $(INCLUDE_DIR)/parser.h | $(BUILD_DIR)
+$(BUILD_DIR)/parser.o: $(SRC_DIR)/parser.cpp $(INCLUDE_DIR)/parser.hpp | $(BUILD_DIR)
 	$(CXX) $(CXXFLAGS) -I$(INCLUDE_DIR) -c $(SRC_DIR)/parser.cpp -o $(BUILD_DIR)/parser.o
 
-$(BUILD_DIR)/user_interface.o: $(SRC_DIR)/user_interface.cpp $(INCLUDE_DIR)/user_interface.h | $(BUILD_DIR)
+$(BUILD_DIR)/user_interface.o: $(SRC_DIR)/user_interface.cpp $(INCLUDE_DIR)/user_interface.hpp | $(BUILD_DIR)
 	$(CXX) $(CXXFLAGS) -I$(INCLUDE_DIR) -c $(SRC_DIR)/user_interface.cpp -o $(BUILD_DIR)/user_interface.o
 
-$(BUILD_DIR)/dairy.o: $(SRC_DIR)/dairy.cpp $(INCLUDE_DIR)/dairy.h | $(BUILD_DIR)
+$(BUILD_DIR)/dairy.o: $(SRC_DIR)/dairy.cpp $(INCLUDE_DIR)/dairy.hpp | $(BUILD_DIR)
 	$(CXX) $(CXXFLAGS) -I$(INCLUDE_DIR) -c $(SRC_DIR)/dairy.cpp -o $(BUILD_DIR)/dairy.o
 
-$(BUILD_DIR)/weight.o: $(SRC_DIR)/weight.cpp $(INCLUDE_DIR)/weight.h | $(BUILD_DIR)
+$(BUILD_DIR)/weight.o: $(SRC_DIR)/weight.cpp $(INCLUDE_DIR)/weight.hpp | $(BUILD_DIR)
 	$(CXX) $(CXXFLAGS) -I$(INCLUDE_DIR) -c $(SRC_DIR)/weight.cpp -o $(BUILD_DIR)/weight.o
 
 # Clean rule
 clean:
 	rm -rf $(BUILD_DIR)/*.o $(BUILD_DIR)/output
-
