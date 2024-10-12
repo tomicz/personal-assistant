@@ -3,10 +3,10 @@
 #include <ctime>
 #include "../include/user_interface.h"
 
-UI ui;
 
 int main()
 {
+    UI ui;
     clock_t start;
     clock_t end;
 
