@@ -2,6 +2,7 @@
 #include <string>
 #include <fstream>
 #include <sstream>
+#include <filesystem>
 #include "../include/database.hpp"
 #include "../include/user_interface.hpp"
 #include "../include/dairy.hpp"
@@ -63,6 +64,7 @@ void UI::open_health_menu(){
         case '2':
             read_weight();
             open_health_menu();
+            break;
         case '3':
             enter_height();
             open_health_menu();
@@ -282,30 +284,24 @@ void UI::enter_height(){
     double height;
     std::cout << "Enter height: ";
     std::cin >> height;
-    std::string file_path = "../db/personal_data.txt";
-    std::ofstream weightstream(file_path);
+    std::filesystem::path file_path = "../db/personal_data.txt";
+    std::ofstream weightstream(file_path, std::ios_base::app);
 
-    if(!weightstream.is_open()){
-        std::cerr << "Failed to create personal_data.txt file";
-        return;
-    }
+    if(!weightstream) return;
 
     std::string data = "height: " + std::to_string(height);
-    weightstream << data;
-    weightstream.close();
+    weightstream << data << std::endl;
+
     std::cout << "Successfully added height " << height << " to a database.";
 } 
 
 void UI::read_height(){
-    double height{};
-    std::string file_path = "../db/personal_data.txt";
+    double height = 0;
+    std::filesystem::path file_path = "../db/personal_data.txt";
     std::fstream file(file_path); 
     std::string line;
 
-    if(!file.is_open()){
-        std::cerr << "Cannot open file";
-        return;
-    }
+    if(!file) return;
 
     while(std::getline(file, line)){
         if(line.find("height:") != std::string::npos){
@@ -317,6 +313,4 @@ void UI::read_height(){
             break;
         }
     }
-
-    file.close();
 }
