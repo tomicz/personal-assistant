@@ -14,6 +14,10 @@ Weight Tracker: Record and monitor your weight each day to track your fitness jo
 -   After compilation has completed, navigate to folder build/
 -   Type `./output` to run the program.
 
+# Features
+
+![Alt text](https://imgur.com/OHHqiRl)
+
 ### Supported platforms
 
 Currently only UNIX is supported. If you need the applicatin to run on Windows, feel free to contribute.
