@@ -16,7 +16,7 @@ Weight Tracker: Record and monitor your weight each day to track your fitness jo
 
 # Features
 
-![Alt text](https://imgur.com/OHHqiRl)
+![Alt text](https://i.imgur.com/OHHqiRl.png)
 
 ### Supported platforms
 
