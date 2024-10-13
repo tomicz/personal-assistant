@@ -24,4 +24,5 @@ class UI{
         void read_meal_data(std::string meal_name);
         void enter_height();
         void read_height();
+        void read_bmi();
 };

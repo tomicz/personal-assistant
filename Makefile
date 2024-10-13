@@ -6,8 +6,8 @@ SRC_DIR = src
 INCLUDE_DIR = include
 
 # Targets and rules
-output: $(BUILD_DIR)/main.o $(BUILD_DIR)/database.o $(BUILD_DIR)/blood_pressure_controller.o $(BUILD_DIR)/parser.o $(BUILD_DIR)/user_interface.o $(BUILD_DIR)/dairy.o $(BUILD_DIR)/weight.o
-	$(CXX) $(CXXFLAGS) $(BUILD_DIR)/main.o $(BUILD_DIR)/database.o $(BUILD_DIR)/blood_pressure_controller.o $(BUILD_DIR)/parser.o $(BUILD_DIR)/user_interface.o $(BUILD_DIR)/dairy.o $(BUILD_DIR)/weight.o -o $(BUILD_DIR)/output
+output: $(BUILD_DIR)/main.o $(BUILD_DIR)/database.o $(BUILD_DIR)/blood_pressure_controller.o $(BUILD_DIR)/parser.o $(BUILD_DIR)/user_interface.o $(BUILD_DIR)/dairy.o $(BUILD_DIR)/weight.o $(BUILD_DIR)/bmi_calculator.o
+	$(CXX) $(CXXFLAGS) $(BUILD_DIR)/main.o $(BUILD_DIR)/database.o $(BUILD_DIR)/blood_pressure_controller.o $(BUILD_DIR)/parser.o $(BUILD_DIR)/user_interface.o $(BUILD_DIR)/dairy.o $(BUILD_DIR)/weight.o $(BUILD_DIR)/bmi_calculator.o -o $(BUILD_DIR)/output
 
 # Rule to create the build directory if it doesn't exist
 $(BUILD_DIR):
@@ -34,6 +34,10 @@ $(BUILD_DIR)/dairy.o: $(SRC_DIR)/dairy.cpp $(INCLUDE_DIR)/dairy.hpp | $(BUILD_DI
 
 $(BUILD_DIR)/weight.o: $(SRC_DIR)/weight.cpp $(INCLUDE_DIR)/weight.hpp | $(BUILD_DIR)
 	$(CXX) $(CXXFLAGS) -I$(INCLUDE_DIR) -c $(SRC_DIR)/weight.cpp -o $(BUILD_DIR)/weight.o
+
+# Add the BmiCalculator files
+$(BUILD_DIR)/bmi_calculator.o: $(SRC_DIR)/bmi_calculator.cpp $(INCLUDE_DIR)/bmi_calculator.hpp | $(BUILD_DIR)
+	$(CXX) $(CXXFLAGS) -I$(INCLUDE_DIR) -c $(SRC_DIR)/bmi_calculator.cpp -o $(BUILD_DIR)/bmi_calculator.o
 
 # Clean rule
 clean:

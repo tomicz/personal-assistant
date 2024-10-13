@@ -8,6 +8,7 @@
 #include "../include/dairy.hpp"
 #include "../include/parser.hpp"
 #include "../include/weight.hpp"
+#include "../include/bmi_calculator.hpp"
 
 const std::string CYAN = "\033[36m";
 const std::string RESET = "\033[0m";
@@ -49,7 +50,7 @@ void UI::set_header(std::string header_name)
 
 void UI::open_health_menu(){
     set_header("Health Menu");
-    std::string menu_options = "1. Enter Weight \n2. Read Weight \n3. Enter Height \n4. Read Height \n(Q)uit";
+    std::string menu_options = "1. Enter Weight \n2. Read Weight \n3. Enter Height \n4. Read Height \n5. Read BMI \n(Q)uit";
     std::cout << menu_options;
     std::cout << std::endl;
     std::cout << "Enter command: ";
@@ -71,6 +72,10 @@ void UI::open_health_menu(){
             break;
         case '4':
             read_height();
+            open_health_menu();
+            break;
+        case '5':
+            read_bmi();
             open_health_menu();
             break;
         case 'Q':
@@ -313,4 +318,47 @@ void UI::read_height(){
             break;
         }
     }
+}
+
+void UI::read_bmi(){
+    BmiCalculator* calculator = new BmiCalculator();
+
+    int age = 0;
+    double height = 0.0;
+    double weight = 0.0;
+    char gender = 'm';
+    
+    std::cout << "Enter age: ";
+    std::cin >> age;
+    std::cout << "Enter your gender m/f: ";
+    std::cin >> gender;
+    std::cout << "Enter height(cm): ";
+    std::cin >> height;
+    std::cout << "Enter weight(kg): ";
+    std::cin >> weight;
+    
+    std::cout << std::endl;
+    std::cout << CYAN << "BMI table for adults" << RESET << std::endl;
+    std::cout << std::string(38, '-') << std::endl;
+    std::cout << std::left << std::setw(20) << "Classification" << "|" << std::right << std::setw(10) << "BMI range - kg/m2" << std::endl;
+    std::cout << std::string(38, '-') << std::endl;
+    std::cout 
+        << std::left << std::setw(20) << "Severe Thinness" << "|"<< std::setw(17) << std::right << "< 16" << std::endl
+        << std::left << std::setw(20) << "Moderate Thinness" << "|" << std::setw(17) << std::right << "16 - 17" << std::endl
+        << std::left << std::setw(20) << "Mild Thinness" << "|" << std::setw(17) << std::right << "17 - 18.5" << std::endl
+        << std::left << std::setw(20) << "Normal" << "|" << std::setw(17) << std::right << "18.5 - 25" << std::endl
+        << std::left << std::setw(20) << "Overweight" << "|" << std::setw(17) << std::right << "25 - 30" << std::endl
+        << std::left << std::setw(20) << "Obese Class I" << "|" << std::setw(17) << std::right << "30 - 35" << std::endl
+        << std::left << std::setw(20) << "Obese Class II" << "|" << std::setw(17) << std::right << "35 - 40" << std::endl
+        << std::left << std::setw(20) << "Obese Class III" << "|" << std::setw(17) << std::right << "> 40" << std::endl;
+    std::cout << std::string(38, '-') << std::endl;
+
+    double bmi = calculator->get_bmi(age, gender, height, weight);
+
+    std::cout << "Your BMI is: " << bmi << std::endl;
+
+    std::string classification = calculator->get_classification(bmi);
+    std::cout << "Your Classification is: " << classification << std::endl;
+
+    delete calculator;
 }
