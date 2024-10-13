@@ -356,10 +356,10 @@ void UI::read_bmi(){
     double bmi = calculator->get_bmi(age, gender, height, weight);
 
     std::string selected_gender = "Male"; 
-    if(gender == 'm' || 'M'){
+    if(gender == 'm' || gender == 'M'){
         selected_gender = "Male";
     }
-    if(gender == 'f' || 'F'){
+    if(gender == 'f' || gender == 'F'){
         selected_gender = "Female";
     }
 
