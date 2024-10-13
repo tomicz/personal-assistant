@@ -34,6 +34,12 @@ Users can log their weight each day, and the program stores this data for easy r
 
 ![Weight](https://i.imgur.com/YM9PmJP.png)
 
+## BMI Calculator
+
+The BMI Calculator feature allows users to easily calculate their Body Mass Index (BMI) based on their height and weight. By entering their height in centimeters and weight in kilograms, users can receive an immediate calculation of their BMI value. The feature also provides classifications (underweight, normal weight, overweight, and obesity) to help users understand their health status in relation to their BMI. This tool aims to promote awareness of healthy weight management and facilitate discussions about nutrition and wellness.
+
+![bmi calculator](https://i.imgur.com/AS9f4h2.png)
+
 ### Supported platforms
 
 Currently only UNIX is supported. If you need the applicatin to run on Windows, feel free to contribute.

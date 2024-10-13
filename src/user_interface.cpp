@@ -355,7 +355,15 @@ void UI::read_bmi(){
 
     double bmi = calculator->get_bmi(age, gender, height, weight);
 
-    std::cout << "Your BMI is: " << bmi << std::endl;
+    std::string selected_gender = "Male"; 
+    if(gender == 'm' || 'M'){
+        selected_gender = "Male";
+    }
+    if(gender == 'f' || 'F'){
+        selected_gender = "Female";
+    }
+
+    std::cout << "Your BMI is " << "(" << selected_gender << "): " << bmi << std::endl;
 
     std::string classification = calculator->get_classification(bmi);
     std::cout << "Your Classification is: " << classification << std::endl;
