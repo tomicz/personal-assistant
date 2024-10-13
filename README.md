@@ -1,11 +1,6 @@
 # Welcome
 
-This C++-based app is your go-to tool for managing daily meals and tracking your progress!
-Features:
-
-Food Database: Log your daily meals and view detailed information, including calories and macro breakdowns (proteins, carbs, fats, etc.).
-Daily Meal Tracker: Easily enter and retrieve meals, with an automatic calculation of total calories and macros for the day.
-Weight Tracker: Record and monitor your weight each day to track your fitness journey.
+Your personal assistant application is a C++ program designed to help users manage their nutrition and fitness by offering a food database to log daily meals, track calories and macronutrients, and monitor daily weight. It simplifies tracking progress and maintaining healthy habits with its user-friendly interface for entering and reading data.
 
 # Getting Started
 
@@ -16,7 +11,28 @@ Weight Tracker: Record and monitor your weight each day to track your fitness jo
 
 # Features
 
-![Alt text](https://i.imgur.com/OHHqiRl.png)
+## Food Database
+
+This feature allows users to enter detailed information about their food, including:
+
+-   Name: Enter the name of the food item.
+-   Brand: Record the brand of the food, providing more specific tracking for branded products.
+-   Amount: Specify the serving size or quantity of the food.
+-   Macros: Track the fat, carbs, and protein content of each food item.
+
+![Food database](https://i.imgur.com/OHHqiRl.png)
+
+## Daily Calorie Intake
+
+This feature lets users select food items from the database and enter the amount consumed. The program then calculates the total calories based on the consumed amount, providing a clear overview of daily intake and the specific food consumed.
+
+![Daily Entries](https://i.imgur.com/dwYXomd.png)
+
+## Daily Weight Tracking
+
+Users can log their weight each day, and the program stores this data for easy reading and tracking over time, helping to monitor progress.
+
+![Weight](https://i.imgur.com/M5aEWul.png)
 
 ### Supported platforms
 
