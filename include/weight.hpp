@@ -5,5 +5,5 @@
 
 class Weight{
     public:   
-        std::vector<std::string> get_weight_all();
+        std::vector<std::pair<std::string, double>> get_everyday_weight();
 };

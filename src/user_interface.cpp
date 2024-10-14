@@ -276,12 +276,20 @@ void UI::enter_weight(){
 }
 
 void UI::read_weight(){
-    set_header("Total weight entries");
     Weight* weight = new Weight();
-    weight->get_weight_all();
-    for(std::string entry: weight->get_weight_all()){
-        std::cout << entry << "\n";
+    auto all_weight = weight->get_everyday_weight();
+    
+    int table_width = 27; 
+    std::cout << std::string(table_width, '-') << std::endl;
+    std::cout << CYAN << std::left << std::setw(12) << "Date" << RESET << "|" << CYAN << std::right << std::setw(14) << "Weight(kg)" << RESET << std::endl;
+    std::cout << std::string(table_width, '-') << std::endl;
+
+    for(const auto& entry: all_weight){
+        std::cout <<std::left << std::setw(12) << entry.first << "|" << std::right << std::setw(11) << entry.second << " kg"<< std::endl;
     }
+
+    std::cout << std::string(table_width, '-') << std::endl;
+
     delete weight;
 }
 
