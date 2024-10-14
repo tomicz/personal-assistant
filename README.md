@@ -32,7 +32,7 @@ This feature lets users select food items from the database and enter the amount
 
 Users can log their weight each day, and the program stores this data for easy reading and tracking over time, helping to monitor progress.
 
-![Weight](https://i.imgur.com/YM9PmJP.png)
+![Weight](https://i.imgur.com/0fDG1Zr.png)
 
 ## BMI Calculator
 
