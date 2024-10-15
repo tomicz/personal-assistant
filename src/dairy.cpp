@@ -191,13 +191,11 @@ void Dairy::remove_food(){
         return;
     }
 
-    // Display all lines with indices
     std::cout << "Current entries in the database:\n";
     read_db();
 
-    // Reopen the file to reset the read position
-    database.clear(); // Clear EOF and other flags
-    database.seekg(0); // Rewind to the beginning of the file
+    database.clear();
+    database.seekg(0);
 
     char user_choice;
     std::cout << "\n Want to proceed? (Y)es?, (N)o?";
@@ -238,7 +236,6 @@ void Dairy::remove_food(){
         database.close();
         temp_database.close();
 
-        // Replace the original file with the modified file
         remove("../db/db.txt");
         rename("temp_database.txt", "../db/db.txt");
     }
@@ -299,27 +296,19 @@ void Dairy::add_new_daily_entry()
 
 std::string Dairy::get_meal_time()
 {
+	const std::vector<std::string> meal_options = {"Breakfast", "Lunch", "Dinner"};
+	
 	std::cout << "Select:" << std::endl;
-	std::cout << "1. Breakfast" <<std::endl;	
-	std::cout << "2. Lunch" <<std::endl;	
-	std::cout << "3. Dinner" <<std::endl;	
+	for (size_t i = 0; i < meal_options.size(); ++i) {
+		std::cout << i + 1 << ". " << meal_options[i] << std::endl;
+	}
 
-	char option{};
-
+	int option;
 	std::cout << "Enter option: ";
 	std::cin >> option;
 	
-	if(option == '1')
-	{
-		return "breakfast";
-	}
-	else if(option == '2')
-	{
-		return "lunch";
-	}
-	else if(option == '3')
-	{
-		return "dinner";	
+	if (option >= 1 && option <= static_cast<int>(meal_options.size())) {
+		return meal_options[option - 1];
 	}
 
 	return "Invalid option";
