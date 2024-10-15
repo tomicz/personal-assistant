@@ -4,10 +4,10 @@ Your personal assistant application is a C++ program designed to help users mana
 
 # Getting Started
 
--   Navigate to the root folder.
--   Type `make` in terminal to build the program.
--   After compilation has completed, navigate to folder build/
--   Type `./output` to run the program.
+- Navigate to the root folder.
+- Type `make` in terminal to build the program.
+- After compilation has completed, navigate to folder build/
+- Type `./output` to run the program.
 
 # Features
 
@@ -15,10 +15,10 @@ Your personal assistant application is a C++ program designed to help users mana
 
 This feature allows users to enter detailed information about their food, including:
 
--   Name: Enter the name of the food item.
--   Brand: Record the brand of the food, providing more specific tracking for branded products.
--   Amount: Specify the serving size or quantity of the food.
--   Macros: Track the fat, carbs, and protein content of each food item.
+- Name: Enter the name of the food item.
+- Brand: Record the brand of the food, providing more specific tracking for branded products.
+- Amount: Specify the serving size or quantity of the food.
+- Macros: Track the fat, carbs, and protein content of each food item.
 
 ![Food database](https://i.imgur.com/OHHqiRl.png)
 
@@ -39,6 +39,10 @@ Users can log their weight each day, and the program stores this data for easy r
 The BMI Calculator feature allows users to easily calculate their Body Mass Index (BMI) based on their height and weight. By entering their height in centimeters and weight in kilograms, users can receive an immediate calculation of their BMI value. The feature also provides classifications (underweight, normal weight, overweight, and obesity) to help users understand their health status in relation to their BMI. This tool aims to promote awareness of healthy weight management and facilitate discussions about nutrition and wellness.
 
 ![bmi calculator](https://i.imgur.com/AS9f4h2.png)
+
+## Goals
+
+The Goals feature allows users to set and track their fitness goals. Users can set their weight loss or gain goals, and the program will help them track their progress towards these goals. The feature provides a clear overview of the user's current progress and the remaining distance to their goal, motivating them to stay on track and achieve their desired results.
 
 ### Supported platforms
 
