@@ -123,23 +123,30 @@ void UI::open_food_database(bool show_as_list){
 
     char command{};
     std::cin >> command;
-    if(command == '1'){
-        dairy->add_new_food(); 
-        open_food_database(true);
-        delete dairy;
-    }
-    else if(command == '2'){
-        dairy->remove_food();
-        open_food_database(true);
-        delete dairy;
-    }
-    else if(command == '3'){
-        read_db();                
-        open_food_database(true);
-    }
-    else if(command == 'q'){
-
-        open_dairy_menu();
+    switch (command) {
+        case '1':
+            dairy->add_new_food();
+            open_food_database(true);
+            delete dairy;
+            break;
+        case '2':
+            dairy->remove_food();
+            open_food_database(true);
+            delete dairy;
+            break;
+        case '3':
+            read_db();
+            open_food_database(true);
+            break;
+        case 'b':
+            open_dairy_menu();
+            break;
+        case 'B':
+            open_dairy_menu();
+            break;
+        default:
+            open_food_database(true);
+            break;
     }
 }
 
