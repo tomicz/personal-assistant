@@ -329,7 +329,7 @@ void UI::read_height(){
 }
 
 void UI::read_bmi(){
-    BmiCalculator* calculator = new BmiCalculator();
+    std::unique_ptr<BmiCalculator> calculator = std::make_unique<BmiCalculator>();
 
     int age = 0;
     double height = 0.0;
@@ -375,6 +375,4 @@ void UI::read_bmi(){
 
     std::string classification = calculator->get_classification(bmi);
     std::cout << "Your Classification is: " << classification << std::endl;
-
-    delete calculator;
 }
