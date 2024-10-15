@@ -6,11 +6,7 @@
 
 class UI{
     public:
-        std::string root = "root/";
-        std::string dairy = root + "dairy/";
-        std::string current_path;
-        
-        void start_program();
+        void open_home_menu();
         void set_header(std::string header_name);
         void open_dairy_menu();
         void open_food_database(bool show_as_list);

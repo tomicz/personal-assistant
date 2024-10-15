@@ -12,7 +12,7 @@ int main()
     std::cout << "Visit tomiczengineering.com for more information." << std::endl;
     
     UI ui;
-    ui.start_program();
+    ui.open_home_menu();
 
     auto end = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> timeToExecute = end - start;

@@ -9,21 +9,23 @@
 #include "../include/parser.hpp"
 #include "../include/weight.hpp"
 #include "../include/bmi_calculator.hpp"
+#include "../include/goals_interface.hpp"
 
 const std::string CYAN = "\033[36m";
 const std::string RESET = "\033[0m";
 
-void UI::start_program()
+void UI::open_home_menu()
 {
 	set_header("Home");
 
-    std::cout << "1. Diary." << std::endl;
-	std::cout << "2. Health." << std::endl;
-	std::cout << "(Q)uit application." << std::endl;
+    std::cout << "1. Diary" << std::endl;
+	std::cout << "2. Health" << std::endl;
+	std::cout << "3. Goals" << std::endl;
+	std::cout << "(Q)uit application" << std::endl;
 	
 	std::cout << "Select options: ";
     char command{};
-
+    GoalsInterface goals_interface;
     std::cin >> command;
     switch(command) 
     {
@@ -33,8 +35,16 @@ void UI::start_program()
         case '2':
             open_health_menu();
             break;
+        case '3':
+            goals_interface.start();
+            break;
+        case 'q':
+            exit(0);
+        case 'Q':
+            exit(0);
         default:
             std::cout << "Invalid command" << std::endl;
+            open_home_menu();
     }
 }
 
@@ -50,8 +60,17 @@ void UI::set_header(std::string header_name)
 
 void UI::open_health_menu(){
     set_header("Health Menu");
-    std::string menu_options = "1. Enter Weight \n2. Read Weight \n3. Enter Height \n4. Read Height \n5. Read BMI \n(Q)uit";
-    std::cout << menu_options;
+    std::vector<std::string> menu_options = {
+        "1. Enter Weight",
+        "2. Read Weight",
+        "3. Enter Height",
+        "4. Read Height",
+        "5. Read BMI",
+        "(B)ack"
+    };
+    for (const auto& option : menu_options) {
+        std::cout << option << std::endl;
+    }
     std::cout << std::endl;
     std::cout << "Enter command: ";
 
@@ -78,14 +97,14 @@ void UI::open_health_menu(){
             read_bmi();
             open_health_menu();
             break;
-        case 'Q':
-           start_program(); 
+        case 'B':
+           open_home_menu(); 
             break;
-        case 'q':
-           start_program(); 
+        case 'b':
+           open_home_menu(); 
             break;
         default:
-           start_program(); 
+           open_home_menu(); 
     }
 }
 
@@ -97,7 +116,7 @@ void UI::open_food_database(bool show_as_list){
         "1. Add " + seperator + 
         "2. Remove " + seperator +
         "3. Read " + seperator +
-        "(Q)uit";
+        "(B)ack";
     std::cout << menu_options;
     std::cout << std::endl;
     std::cout << "Enter command: ";
@@ -126,9 +145,14 @@ void UI::open_food_database(bool show_as_list){
 
 void UI::open_dairy_menu(){
     set_header("Dairy Menu");
-    std::string menu_options = "1. Daily Entries \n2. Food Database \n(Q)uit";
-    std::cout << menu_options;
-    std::cout << std::endl;
+    std::vector<std::string> menu_options = {
+        "1. Daily Entries",
+        "2. Food Database",
+        "(B)ack"
+    };
+    for (const auto& option : menu_options) {
+        std::cout << option << std::endl;
+    }
     std::cout << "Enter command: ";
 
     char command{};
@@ -140,22 +164,28 @@ void UI::open_dairy_menu(){
         case '2':
             open_food_database(false);
             break;
-        case 'q':
-            start_program();  
+        case 'b':
+            open_home_menu();  
             break;
-        case 'Q':
-            start_program();  
+        case 'B':
+            open_home_menu();  
             break;
         default: 
-            start_program();  
+            open_home_menu();  
     }
 }
 
 void UI::open_daily_entries_menu(){
     Dairy* dairy = new Dairy();
     set_header("Daily Entries Menu");
-    std::string menu_options = "1. Add | 2. Read | (Q)uit";
-    std::cout << menu_options;
+    std::vector<std::string> menu_options = {
+        "1. Add",
+        "2. Read",
+        "(B)ack"
+    };
+    for (const auto& option : menu_options) {
+        std::cout << option << std::endl;
+    }
     std::cout << std::endl;
     std::cout << "Enter command: ";
 
