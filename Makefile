@@ -6,8 +6,8 @@ SRC_DIR = src
 INCLUDE_DIR = include
 
 # Targets and rules
-output: $(BUILD_DIR)/main.o $(BUILD_DIR)/database.o $(BUILD_DIR)/blood_pressure_controller.o $(BUILD_DIR)/parser.o $(BUILD_DIR)/user_interface.o $(BUILD_DIR)/dairy.o $(BUILD_DIR)/weight.o $(BUILD_DIR)/bmi_calculator.o $(BUILD_DIR)/goals_interface.o
-	$(CXX) $(CXXFLAGS) $(BUILD_DIR)/main.o $(BUILD_DIR)/database.o $(BUILD_DIR)/blood_pressure_controller.o $(BUILD_DIR)/parser.o $(BUILD_DIR)/user_interface.o $(BUILD_DIR)/dairy.o $(BUILD_DIR)/weight.o $(BUILD_DIR)/bmi_calculator.o $(BUILD_DIR)/goals_interface.o -o $(BUILD_DIR)/output
+output: $(BUILD_DIR)/main.o $(BUILD_DIR)/database.o $(BUILD_DIR)/blood_pressure_controller.o $(BUILD_DIR)/parser.o $(BUILD_DIR)/user_interface.o $(BUILD_DIR)/dairy.o $(BUILD_DIR)/weight.o $(BUILD_DIR)/bmi_calculator.o $(BUILD_DIR)/goals_interface.o $(BUILD_DIR)/exercise_controller.o $(BUILD_DIR)/fitness_interface.o
+	$(CXX) $(CXXFLAGS) $(BUILD_DIR)/main.o $(BUILD_DIR)/database.o $(BUILD_DIR)/blood_pressure_controller.o $(BUILD_DIR)/parser.o $(BUILD_DIR)/user_interface.o $(BUILD_DIR)/dairy.o $(BUILD_DIR)/weight.o $(BUILD_DIR)/bmi_calculator.o $(BUILD_DIR)/goals_interface.o $(BUILD_DIR)/exercise_controller.o $(BUILD_DIR)/fitness_interface.o -o $(BUILD_DIR)/output
 
 # Rule to create the build directory if it doesn't exist
 $(BUILD_DIR):
@@ -41,6 +41,12 @@ $(BUILD_DIR)/bmi_calculator.o: $(SRC_DIR)/bmi_calculator.cpp $(INCLUDE_DIR)/bmi_
 
 $(BUILD_DIR)/goals_interface.o: $(SRC_DIR)/interface/goals_interface.cpp $(INCLUDE_DIR)/goals_interface.hpp | $(BUILD_DIR)
 	$(CXX) $(CXXFLAGS) -I$(INCLUDE_DIR) -c $(SRC_DIR)/interface/goals_interface.cpp -o $(BUILD_DIR)/goals_interface.o
+
+$(BUILD_DIR)/exercise_controller.o: $(SRC_DIR)/controllers/exercise_controller.cpp $(INCLUDE_DIR)/exercise_controller.hpp | $(BUILD_DIR)
+	$(CXX) $(CXXFLAGS) -I$(INCLUDE_DIR) -c $(SRC_DIR)/controllers/exercise_controller.cpp -o $(BUILD_DIR)/exercise_controller.o
+
+$(BUILD_DIR)/fitness_interface.o: $(SRC_DIR)/interface/fitness_interface.cpp $(INCLUDE_DIR)/fitness_interface.hpp | $(BUILD_DIR)
+	$(CXX) $(CXXFLAGS) -I$(INCLUDE_DIR) -c $(SRC_DIR)/interface/fitness_interface.cpp -o $(BUILD_DIR)/fitness_interface.o
 
 # Clean rule
 clean:

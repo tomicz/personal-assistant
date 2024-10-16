@@ -10,6 +10,7 @@
 #include "../include/weight.hpp"
 #include "../include/bmi_calculator.hpp"
 #include "../include/goals_interface.hpp"
+#include "../include/fitness_interface.hpp"
 
 const std::string RED = "\033[31m";
 const std::string CYAN = "\033[36m";
@@ -17,17 +18,22 @@ const std::string RESET = "\033[0m";
 
 void UI::open_home_menu()
 {
+    GoalsInterface goals_interface;
+    fitness::FitnessInterface fitness_interface;
+
 	set_header("Home");
 
     std::cout << "1. Diary" << std::endl;
 	std::cout << "2. Health" << std::endl;
 	std::cout << "3. Goals" << std::endl;
+	std::cout << "4. Fitness" << std::endl;
 	std::cout << "(Q)uit application" << std::endl;
-	
+    std::cout << std::endl;
 	std::cout << "Select options: ";
+
     char command{};
-    GoalsInterface goals_interface;
     std::cin >> command;
+
     switch(command) 
     {
         case '1':
@@ -38,6 +44,9 @@ void UI::open_home_menu()
             break;
         case '3':
             goals_interface.start();
+            break;
+        case '4':
+            fitness_interface.start();
             break;
         case 'q':
             exit(0);
@@ -109,12 +118,19 @@ void UI::open_health_menu(){
 void UI::open_food_database(bool show_as_list){
     std::unique_ptr<Dairy> dairy = std::make_unique<Dairy>();
     set_header("Food Database");
+
+    std::cout << std::endl;
+    read_db();
+    std::cout << std::endl;
+
     std::string seperator = show_as_list ? "| " : "\n";
+
     std::string menu_options = 
         "1. Add " + seperator + 
         "2. Remove " + seperator +
         "3. Read " + seperator +
         "(B)ack";
+
     std::cout << menu_options;
     std::cout << std::endl;
     std::cout << "Enter command: ";
@@ -159,6 +175,7 @@ void UI::open_dairy_menu(){
         std::cout << option << std::endl;
     }
 
+    std::cout << std::endl;
     std::cout << "Enter command: ";
     char command{};
     std::cin >> command;
@@ -168,7 +185,7 @@ void UI::open_dairy_menu(){
             open_daily_entries_menu();
             break;
         case '2':
-            open_food_database(false);
+            open_food_database(true);
             break;
         case 'b':
             open_home_menu();  
@@ -183,7 +200,7 @@ void UI::open_dairy_menu(){
 
 void UI::open_daily_entries_menu(){
     auto dairy = std::make_unique<Dairy>();
-    set_header("Daily Entries Menu");
+    read_daily_entry(create_date_stamp());
 
     std::vector<std::string> menu_options = {
         "1. Add",
