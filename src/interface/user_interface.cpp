@@ -109,7 +109,7 @@ void UI::open_health_menu(){
 }
 
 void UI::open_food_database(bool show_as_list){
-    Dairy* dairy = new Dairy();
+    std::unique_ptr<Dairy> dairy = std::make_unique<Dairy>();
     set_header("Food Database");
     std::string seperator = show_as_list ? "| " : "\n";
     std::string menu_options = 
@@ -127,12 +127,10 @@ void UI::open_food_database(bool show_as_list){
         case '1':
             dairy->add_new_food();
             open_food_database(true);
-            delete dairy;
             break;
         case '2':
             dairy->remove_food();
             open_food_database(true);
-            delete dairy;
             break;
         case '3':
             read_db();
