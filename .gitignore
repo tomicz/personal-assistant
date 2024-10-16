@@ -37,6 +37,7 @@
 # Project
 *.swp
 *.txt
+*.cursorrules
 
 # App Store
 .DS_Store

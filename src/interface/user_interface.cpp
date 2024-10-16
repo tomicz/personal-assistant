@@ -11,6 +11,7 @@
 #include "../include/bmi_calculator.hpp"
 #include "../include/goals_interface.hpp"
 
+const std::string RED = "\033[31m";
 const std::string CYAN = "\033[36m";
 const std::string RESET = "\033[0m";
 
@@ -48,13 +49,10 @@ void UI::open_home_menu()
     }
 }
 
-void UI::set_header(std::string header_name)
+void UI::set_header(const std::string& header_name)
 {
     std::cout << std::endl;
-	std::transform(header_name.begin(), header_name.end(), header_name.begin(), ::toupper);	
-	std::cout << std::string(100, '-') << std::endl;
-	std::cout << "--- " << CYAN << header_name << RESET << " " << std::string(96 - header_name.size()-1, '-') << std::endl;
-	std::cout << std::string(100, '-') << std::endl;
+	std::cout << "    " << CYAN << header_name << RESET << std::endl;
     std::cout << std::endl;
 }
 
@@ -150,18 +148,21 @@ void UI::open_food_database(bool show_as_list){
 
 void UI::open_dairy_menu(){
     set_header("Dairy Menu");
+
     std::vector<std::string> menu_options = {
         "1. Daily Entries",
         "2. Food Database",
         "(B)ack"
     };
+
     for (const auto& option : menu_options) {
         std::cout << option << std::endl;
     }
-    std::cout << "Enter command: ";
 
+    std::cout << "Enter command: ";
     char command{};
     std::cin >> command;
+
     switch(command){
         case '1':
             open_daily_entries_menu();
@@ -181,31 +182,33 @@ void UI::open_dairy_menu(){
 }
 
 void UI::open_daily_entries_menu(){
-    Dairy* dairy = new Dairy();
+    auto dairy = std::make_unique<Dairy>();
     set_header("Daily Entries Menu");
+
     std::vector<std::string> menu_options = {
         "1. Add",
         "2. Read",
         "(B)ack"
     };
+
     for (const auto& option : menu_options) {
         std::cout << option << std::endl;
     }
-    std::cout << std::endl;
-    std::cout << "Enter command: ";
 
+    std::cout << std::endl;
+
+    std::cout << "Enter command: ";
     char command{};
     std::cin >> command;
+
     switch(command){
         case '1':
             dairy->add_new_daily_entry();
             open_daily_entries_menu();
-            delete dairy;
             break;
         case '2':
             read_daily_entry();
             open_daily_entries_menu();
-            delete dairy;
             break;
         case 'q':
             open_dairy_menu();
@@ -218,8 +221,6 @@ void UI::open_daily_entries_menu(){
     }
 }
 void UI::read_daily_entry(){
-    const std::string CYAN = "\033[36m";
-    const std::string RESET = "\033[0m";
     std::cout << std::endl;
     std::cout << CYAN << "YOUR DAILY ENTRIES" << RESET;
     std::cout << std::endl;
@@ -228,7 +229,7 @@ void UI::read_daily_entry(){
     read_meal_data("dinner");
 
     std::cout << std::string(128, '-') << std::endl;
-    Dairy* dairy = new Dairy();
+    std::unique_ptr<Dairy> dairy = std::make_unique<Dairy>();
     Food* total = dairy->get_total_all_meals();
     std::cout << std::left 
         << std::setw(3)  << ""
@@ -242,17 +243,43 @@ void UI::read_daily_entry(){
         << std::endl;
 
     std::cout << std::string(128, '-') << std::endl;
+    read_remaining(total->calories);
+    std::cout << std::string(128, '-') << std::endl;
+}
 
+void UI::read_remaining(double calories){
+    std::filesystem::path goal_path = "../db/goals.txt";
+    std::ifstream goal_file(goal_path);
+    std::string line;
+    double calories_goal = 0;
+
+    while(std::getline(goal_file, line)){
+        if(line.find("Calories:") != std::string::npos){
+            std::stringstream ss(line);
+            std::string label;
+            ss >> label >> calories_goal;
+        }
+    }
+
+    double remaining_calories = calories_goal - calories;
+    std::cout 
+    << std::left 
+    << std::setw(3) << ""
+    << CYAN << "Remaining: " << RESET 
+    << std::setw(59) << "" 
+    << (calories > calories_goal ? RED : CYAN) 
+    << remaining_calories 
+    << RESET
+    << std::endl;
 }
 
 void UI::read_meal_data(std::string meal_name){
     const std::string CYAN = "\033[36m";
     const std::string RESET = "\033[0m";
-    Dairy* dairy = new Dairy();
+    std::unique_ptr<Dairy> dairy = std::make_unique<Dairy>();
     std::string entry_path = meal_name;
     std::vector<Food*> entries = dairy->get_food_entries(entry_path);
     if(entries.empty()){
-        delete dairy;
         return;
     }
     std::cout << std::string(128, '-') << std::endl;
@@ -268,6 +295,7 @@ void UI::read_meal_data(std::string meal_name){
         << CYAN << std::setw(15) << meal_name << RESET
         << std::endl;
     std::cout << std::endl;
+
     int i = 0;
     for(Food* entry: entries){
         i++;
@@ -282,6 +310,7 @@ void UI::read_meal_data(std::string meal_name){
             << std::setw(15) << entry->protein
             << std::endl;
     }
+
     Food* meal = dairy->get_meal_total(entry_path);
     std::cout << std::left 
         << std::setw(3)  << ""
@@ -293,9 +322,6 @@ void UI::read_meal_data(std::string meal_name){
         << std::setw(15) << meal->carbs
         << std::setw(15) << meal->protein << RESET
         << std::endl;
-
-
-    delete dairy;
 }
 
 void UI::enter_weight(){
@@ -311,7 +337,7 @@ void UI::enter_weight(){
 }
 
 void UI::read_weight(){
-    Weight* weight = new Weight();
+    auto weight = std::make_unique<Weight>();
     auto all_weight = weight->get_everyday_weight();
     
     int table_width = 27; 
@@ -324,8 +350,6 @@ void UI::read_weight(){
     }
 
     std::cout << std::string(table_width, '-') << std::endl;
-
-    delete weight;
 }
 
 void UI::enter_height(){

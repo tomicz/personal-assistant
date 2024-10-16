@@ -7,7 +7,7 @@
 class UI{
     public:
         void open_home_menu();
-        void set_header(std::string header_name);
+        void set_header(const std::string& header_name);
         void open_dairy_menu();
         void open_food_database(bool show_as_list);
         void open_daily_entries_menu();
@@ -21,4 +21,5 @@ class UI{
         void enter_height();
         void read_height();
         void read_bmi();
+        void read_remaining(double calories);
 };

@@ -92,7 +92,6 @@ void GoalsInterface::print_goal_types()
     }
 }
 
-
 void GoalsInterface::add_goal()
 {
     print_goal_types();
