@@ -188,6 +188,7 @@ void UI::open_daily_entries_menu(){
     std::vector<std::string> menu_options = {
         "1. Add",
         "2. Read",
+        "3. Read by date",
         "(B)ack"
     };
 
@@ -207,44 +208,76 @@ void UI::open_daily_entries_menu(){
             open_daily_entries_menu();
             break;
         case '2':
-            read_daily_entry();
+            read_daily_entry(create_date_stamp());
             open_daily_entries_menu();
             break;
-        case 'q':
+        case '3':
+            read_daily_entry_by_date();
+            open_daily_entries_menu();
+            break;
+        case 'b':
             open_dairy_menu();
             break;
-        case 'Q':
+        case 'B':
             open_dairy_menu();
             break;
         default: 
             open_dairy_menu();
     }
 }
-void UI::read_daily_entry(){
+void UI::read_daily_entry(const std::string& date){
     std::cout << std::endl;
     std::cout << CYAN << "YOUR DAILY ENTRIES" << RESET;
     std::cout << std::endl;
-    read_meal_data("breakfast");
-    read_meal_data("lunch");
-    read_meal_data("dinner");
+
+    read_meal_data(date, "breakfast");
+    read_meal_data(date, "lunch");
+    read_meal_data(date, "dinner");
 
     std::cout << std::string(128, '-') << std::endl;
+
     std::unique_ptr<Dairy> dairy = std::make_unique<Dairy>();
-    Food* total = dairy->get_total_all_meals();
+    Food total = dairy->get_total_all_meals(date);
+
     std::cout << std::left 
         << std::setw(3)  << ""
-        << CYAN << std::setw(30) << total->name
-        << std::setw(25) << total->brand
-        << std::setw(15) << total->amount
-        << std::setw(15) << total->calories
-        << std::setw(15) << total->fat
-        << std::setw(15) << total->carbs
-        << std::setw(15) << total->protein << RESET
+        << CYAN << std::setw(30) << total.name
+        << std::setw(25) << total.brand
+        << std::setw(15) << total.amount
+        << std::setw(15) << total.calories
+        << std::setw(15) << total.fat
+        << std::setw(15) << total.carbs
+        << std::setw(15) << total.protein << RESET
         << std::endl;
 
     std::cout << std::string(128, '-') << std::endl;
-    read_remaining(total->calories);
+    read_remaining(total.calories);
     std::cout << std::string(128, '-') << std::endl;
+}
+
+void UI::read_daily_entry_by_date(){
+    std::cout << std::endl;
+    std::cout << "Enter date(dd/mm/yyyy): ";
+    std::string date;
+    std::cin >> date;
+    std::string original_date = date;
+
+    date.erase(std::remove(date.begin(), date.end(), '/'), date.end());
+
+    if (date.length() == 8) {
+        std::string year = date.substr(4, 4);
+        std::string month = date.substr(2, 2);
+        std::string day = date.substr(0, 2);
+        date = year + month + day;
+    } else {
+        std::cerr << "Invalid date format. Please use dd/mm/yyyy." << std::endl;
+        return;
+    }
+    std::cout << date << std::endl;
+    std::cout << std::endl;
+    std::cout << CYAN << "Your entry on date " << RESET << original_date << std::endl;
+
+    read_daily_entry(date);
 }
 
 void UI::read_remaining(double calories){
@@ -273,15 +306,15 @@ void UI::read_remaining(double calories){
     << std::endl;
 }
 
-void UI::read_meal_data(std::string meal_name){
-    const std::string CYAN = "\033[36m";
-    const std::string RESET = "\033[0m";
+void UI::read_meal_data(const std::string& date, const std::string& meal_name){
     std::unique_ptr<Dairy> dairy = std::make_unique<Dairy>();
     std::string entry_path = meal_name;
-    std::vector<Food*> entries = dairy->get_food_entries(entry_path);
+    std::vector<Food> entries = dairy->get_food_entries(date, entry_path);
+
     if(entries.empty()){
         return;
     }
+
     std::cout << std::string(128, '-') << std::endl;
     std::cout << std::left
         << std::setw(3) << "" 
@@ -297,30 +330,30 @@ void UI::read_meal_data(std::string meal_name){
     std::cout << std::endl;
 
     int i = 0;
-    for(Food* entry: entries){
+    for(Food entry: entries){
         i++;
         std::cout << std::left
             << std::setw(3)  << std::to_string(i) + "."
-            << std::setw(29) << entry->name
-            << std::setw(26) << entry->brand
-            << std::setw(15) << entry->amount
-            << std::setw(15) << entry->calories
-            << std::setw(15) << entry->fat
-            << std::setw(15) << entry->carbs
-            << std::setw(15) << entry->protein
+            << std::setw(29) << entry.name
+            << std::setw(26) << entry.brand
+            << std::setw(15) << entry.amount
+            << std::setw(15) << entry.calories
+            << std::setw(15) << entry.fat
+            << std::setw(15) << entry.carbs
+            << std::setw(15) << entry.protein
             << std::endl;
     }
 
-    Food* meal = dairy->get_meal_total(entry_path);
+    Food meal = dairy->get_meal_total(date, entry_path);
     std::cout << std::left 
         << std::setw(3)  << ""
-        << CYAN << std::setw(30) << meal->name
-        << std::setw(25) << meal->brand
-        << std::setw(15) << meal->amount
-        << std::setw(15) << meal->calories
-        << std::setw(15) << meal->fat
-        << std::setw(15) << meal->carbs
-        << std::setw(15) << meal->protein << RESET
+        << CYAN << std::setw(30) << meal.name
+        << std::setw(25) << meal.brand
+        << std::setw(15) << meal.amount
+        << std::setw(15) << meal.calories
+        << std::setw(15) << meal.fat
+        << std::setw(15) << meal.carbs
+        << std::setw(15) << meal.protein << RESET
         << std::endl;
 }
 
