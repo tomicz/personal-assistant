@@ -18,6 +18,7 @@ void GoalsInterface::start()
 {
     UI ui;
 
+    std::cout << std::endl;
     const std::vector<std::string> options = {
         "1. Add Goal", 
         "2. View Goals", 
