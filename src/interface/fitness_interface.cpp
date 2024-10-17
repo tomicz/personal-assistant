@@ -52,8 +52,7 @@ namespace fitness{
         std::vector<std::string> options = {
             "1. Create Plan",
             "2. Delete Plan",
-            "3. Update Plan",
-            "4. List Plans",
+            "3. List Plans",
             "(B)ack"
         };  
 
@@ -75,9 +74,6 @@ namespace fitness{
                 delete_plan();
                 break;
             case '3':
-                update_plan();
-                break;
-            case '4':
                 list_plans();
                 break;
             case 'b':
@@ -176,13 +172,17 @@ namespace fitness{
 
             int current_index = 1;
             for(const auto& file: std::filesystem::directory_iterator(plans_path)){
+
                 std::string file_name = file.path().filename().string();
                 file_name.erase(file_name.size() - 4, 4);
+
                 if(current_index == plan_index){
+
                     std::cout << "Are you sure you want to delete plan " << file_name << "? (y/n): ";
                     char command;
                     std::cin >> command;
                     std::cout << std::endl;
+
                     if(command == 'y'){
                         std::filesystem::remove(file.path());
                         std::cout << RED_COLOR << "Plan " << file_name << " deleted successfully." << RESET_COLOR << std::endl;
@@ -204,10 +204,6 @@ namespace fitness{
         }
 
         open_plan_maker();
-    }
-
-    void FitnessInterface::update_plan(){
-        std::cout << "Update plan\n";
     }
 
     void FitnessInterface::list_plans(){
