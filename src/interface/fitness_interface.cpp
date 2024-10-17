@@ -2,6 +2,7 @@
 #include <filesystem>
 #include <fstream>
 #include <algorithm>
+#include <limits>
 #include "../../include/fitness_interface.hpp"
 #include "../../include/user_interface.hpp"
 #include "../../include/exercise_controller.hpp"
@@ -93,7 +94,8 @@ namespace fitness{
 
         std::string plan_name;
         std::cout << "Enter plan name: ";
-        std::cin >> plan_name;
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Clear input buffer
+        std::getline(std::cin, plan_name);
 
         std::string path = create_fitness_folder() + "/" + plan_name + ".txt";
 
@@ -115,13 +117,14 @@ namespace fitness{
 
                 if(command == 'y'){
                     std::string exercise_name, exercise_description;
+                    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); 
                     int reps, sets;
                     float interval;
 
                     std::cout << "Enter exercise name: ";
-                    std::cin >> exercise_name;
+                    std::getline(std::cin, exercise_name);
                     std::cout << "Enter exercise description: ";
-                    std::cin >> exercise_description;
+                    std::getline(std::cin, exercise_description);
                     std::cout << "Enter exercise reps: ";
                     std::cin >> reps;
                     std::cout << "Enter exercise sets: ";
