@@ -14,5 +14,6 @@ namespace fitness {
         void delete_plan();
         void list_plans();
         std::string create_fitness_folder();
+        void list_exercises();
     };
 }

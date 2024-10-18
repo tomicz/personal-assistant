@@ -3,14 +3,17 @@
 #include <fstream>
 #include <algorithm>
 #include <limits>
+#include <sstream>
 #include "../../include/fitness_interface.hpp"
 #include "../../include/user_interface.hpp"
 #include "../../include/exercise_controller.hpp"
 
 namespace fitness{
+    const std::string CYAN = "\033[1;36m";
+    const std::string RESET = "\033[0m";
+
     void FitnessInterface::start(){
         UI ui;
-
         ui.set_header("Fitness Menu");
 
         std::vector<std::string> options = {
@@ -32,7 +35,7 @@ namespace fitness{
 
         switch(command){
             case '1':
-                open_plan_maker();
+                open_fitness_runner();
                 break;
             case '2':
                 open_plan_maker();
@@ -54,6 +57,7 @@ namespace fitness{
             "1. Create Plan",
             "2. Delete Plan",
             "3. List Plans",
+            "4. List Exercises",
             "(B)ack"
         };  
 
@@ -76,6 +80,9 @@ namespace fitness{
                 break;
             case '3':
                 list_plans();
+                break;
+            case '4':
+                list_exercises();
                 break;
             case 'b':
                 start();
@@ -231,6 +238,98 @@ namespace fitness{
         }
 
         open_plan_maker();
+    }
+
+    void FitnessInterface::list_exercises(){
+        std::filesystem::path fitness_dir = "../db/fitness";
+        if(std::filesystem::exists(fitness_dir)){
+
+            int index = 1;
+            for(const auto& file: std::filesystem::directory_iterator(fitness_dir)){
+                if(file.path().filename().string().find(".txt") != std::string::npos){    
+                    std::string file_name = file.path().filename().string();
+                    file_name.erase(file_name.size() - 4, 4);
+                    std::cout << index << ". " << file_name << std::endl;
+                    index++;
+                }
+            }
+            std::cout << std::endl;
+
+            std::cout << "Select plan: ";
+            int plan_index;
+            std::cin >> plan_index;
+            std::cout << std::endl;
+
+            const int WIDTH = 80;
+            std::cout << CYAN << std::string(WIDTH, '-') << RESET << std::endl;
+            std::cout << std::setw(3) << "" 
+                      << std::left 
+                      << std::setw(21) << "Name" 
+                      << std::setw(25) << "Description" 
+                      << std::right
+                      << std::setw(9) << "Sets" 
+                      << std::setw(10) << "Reps" 
+                      << std::setw(10) << "Interval" 
+                      << std::endl;
+            std::cout << CYAN << std::string(WIDTH, '-') << RESET << std::endl;
+
+            for(const auto& file: std::filesystem::directory_iterator(fitness_dir)){
+                if(file.path().filename().string().find(".txt") != std::string::npos){    
+                    std::string file_name = file.path().filename().string();
+                    file_name.erase(file_name.size() - 4, 4);
+                    if(file_name == file_name){
+                        std::ifstream file((fitness_dir / (file_name + ".txt")).string());
+                        std::string line;
+
+                        std::string name, description;
+                        int sets, reps;
+                        double interval;
+
+                        int index = 1;
+                        while(std::getline(file, line)){
+                            std::stringstream ss(line);
+                            std::getline(ss, name, ',');
+                            std::getline(ss, description, ',');
+                            ss >> sets;
+                            ss.ignore(1);
+                            ss >> reps;
+                            ss.ignore(1);
+                            ss >> interval;
+
+                            if (name.length() > 15) {
+                                name = name.substr(0, 12) + "...";
+                            }
+                            if (description.length() > 20) {
+                                description = description.substr(0, 17) + "...";
+                            }
+
+                            std::cout << "\033[36m" << index << "\033[0m. " 
+                                      << std::left 
+                                      << std::setw(20) << name 
+                                      << std::setw(25) << description 
+                                      << std::right
+                                      << std::setw(10) << sets 
+                                      << std::setw(10) << reps 
+                                      << std::setw(10) << interval 
+                                      << std::endl;
+                            index++;
+                        }
+                    }
+            std::cout << CYAN << std::string(WIDTH, '-') << RESET << std::endl;
+                }
+            }
+
+            std::cout << std::endl;
+        }
+        else{
+            std::cout << "No plans found.\n";
+        }
+
+        open_plan_maker();
+    }
+
+    void FitnessInterface::open_fitness_runner(){
+        std::cout << "Fitness Runner\n";
     }
 
     std::string FitnessInterface::create_fitness_folder(){
