@@ -117,8 +117,6 @@ void UI::open_health_menu(){
 
 void UI::open_food_database(bool show_as_list){
     std::unique_ptr<Dairy> dairy = std::make_unique<Dairy>();
-    set_header("Food Database");
-
     std::cout << std::endl;
     read_db();
     std::cout << std::endl;
