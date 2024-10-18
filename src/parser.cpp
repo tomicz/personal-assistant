@@ -1,8 +1,9 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include "../include/parser.hpp"
 
-std::string remove_symbols(const std::string& input) 
+std::string Parser::remove_symbols(const std::string& input) 
 {
     std::string result;
 	
@@ -17,7 +18,7 @@ std::string remove_symbols(const std::string& input)
     return result;
 }
 
-void read_file(std::string &file_path)
+void Parser::read_file(const std::string& file_path)
 {
 	std::ifstream file(file_path);
 	
@@ -35,7 +36,7 @@ void read_file(std::string &file_path)
 	}
 }
 
-std::string create_date_stamp() {
+std::string Parser::create_date_stamp() {
     std::time_t date_now = std::time(0);
     std::tm* time = std::localtime(&date_now);
 
@@ -52,7 +53,7 @@ std::string create_date_stamp() {
     return date_string;
 }
 
-std::string convert_to_date(const std::string& file_name) {
+std::string Parser::convert_to_date(const std::string& file_name) {
     if (file_name.length() != 8) {
         return "Invalid folder name format";
     }

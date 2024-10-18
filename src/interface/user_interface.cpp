@@ -200,7 +200,8 @@ void UI::open_dairy_menu(){
 
 void UI::open_daily_entries_menu(){
     auto dairy = std::make_unique<Dairy>();
-    read_daily_entry(create_date_stamp());
+    Parser parser;
+    read_daily_entry(parser.create_date_stamp());
 
     std::vector<std::string> menu_options = {
         "1. Add",
@@ -225,7 +226,7 @@ void UI::open_daily_entries_menu(){
             open_daily_entries_menu();
             break;
         case '2':
-            read_daily_entry(create_date_stamp());
+            read_daily_entry(parser.create_date_stamp());
             open_daily_entries_menu();
             break;
         case '3':
@@ -376,9 +377,10 @@ void UI::read_meal_data(const std::string& date, const std::string& meal_name){
 
 void UI::enter_weight(){
     double weight;
+    Parser parser;
     std::cout << "Enter weight: ";
     std::cin >> weight;
-    std::string file_path = "../db/dailies/" + create_date_stamp();
+    std::string file_path = "../db/dailies/" + parser.create_date_stamp();
 
     create_directory(file_path);
     add_weight(file_path, weight);

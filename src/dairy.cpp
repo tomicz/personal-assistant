@@ -280,7 +280,8 @@ std::string Dairy::add_meal_entry()
 
 void Dairy::add_new_daily_entry()
 {
-	std::string file_path = "../db/dailies/" + create_date_stamp() + "/";
+    Parser parser;
+	std::string file_path = "../db/dailies/" + parser.create_date_stamp() + "/";
 	
 	create_directory(file_path);
 	std::cout << file_path << std::endl;
