@@ -4,10 +4,10 @@ Your personal assistant application is a C++ program designed to help users mana
 
 # Getting Started
 
-- Navigate to the root folder.
-- Type `make` in terminal to build the program.
-- After compilation has completed, navigate to folder build/
-- Type `./output` to run the program.
+-   Navigate to the root folder.
+-   Type `make` in terminal to build the program.
+-   After compilation has completed, navigate to folder build/
+-   Type `./output` to run the program.
 
 # Features
 
@@ -15,10 +15,10 @@ Your personal assistant application is a C++ program designed to help users mana
 
 This feature allows users to enter detailed information about their food, including:
 
-- Name: Enter the name of the food item.
-- Brand: Record the brand of the food, providing more specific tracking for branded products.
-- Amount: Specify the serving size or quantity of the food.
-- Macros: Track the fat, carbs, and protein content of each food item.
+-   Name: Enter the name of the food item.
+-   Brand: Record the brand of the food, providing more specific tracking for branded products.
+-   Amount: Specify the serving size or quantity of the food.
+-   Macros: Track the fat, carbs, and protein content of each food item.
 
 ![Food database](https://i.imgur.com/OHHqiRl.png)
 
@@ -43,6 +43,12 @@ The BMI Calculator feature allows users to easily calculate their Body Mass Inde
 ## Goals
 
 The Goals feature allows users to set and track their fitness goals. Users can set their weight loss or gain goals, and the program will help them track their progress towards these goals. The feature provides a clear overview of the user's current progress and the remaining distance to their goal, motivating them to stay on track and achieve their desired results.
+
+## Fitness planner
+
+Your program allows users to create personalized fitness plans, helping them set up workout routines tailored to their goals. It can guide users in organizing exercises, targeting specific muscle groups, and managing their progress over time.
+
+![Exercises](https://i.imgur.com/d5gISMj.png)
 
 ### Supported platforms
 
