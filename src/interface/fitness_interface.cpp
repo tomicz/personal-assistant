@@ -132,6 +132,7 @@ namespace fitness{
                     int reps, sets = 0;
                     float interval = 0;
                     float set_pause = 0;
+                    float exercies_pause = 0;
 
                     std::cout << "Enter exercise name: ";
                     std::getline(std::cin, exercise_name);
@@ -145,8 +146,10 @@ namespace fitness{
                     std::cin >> interval;
                     std::cout << "Enter pause between sets: ";
                     std::cin >> set_pause;
+                    std::cout << "Enter pause ater exercies: ";
+                    std::cin >> exercies_pause;
 
-                    file << exercise_name + ", " + exercise_description + ", " + std::to_string(reps) + ", " + std::to_string(sets) + ", " + std::to_string(interval) + ", " + std::to_string(set_pause) + "\n";
+                    file << exercise_name + ", " + exercise_description + ", " + std::to_string(reps) + ", " + std::to_string(sets) + ", " + std::to_string(interval) + ", " + std::to_string(set_pause) + ", " + std::to_string(exercies_pause) + "\n";
 
                     std::cout << "Exercise created successfully.\n";
                 }
@@ -268,7 +271,7 @@ namespace fitness{
             std::cin >> plan_index;
             std::cout << std::endl;
 
-            const int WIDTH = 94;
+            const int WIDTH = 108;
             std::cout << CYAN << std::string(WIDTH, '-') << RESET << std::endl;
             std::cout << std::setw(3) << "" 
                       << std::left 
@@ -279,6 +282,7 @@ namespace fitness{
                       << std::setw(10) << "Reps" 
                       << std::setw(10) << "Interval" 
                       << std::setw(15) << "Set pause"
+                      << std::setw(15) << "Pause"
                       << std::endl;
             std::cout << CYAN << std::string(WIDTH, '-') << RESET << std::endl;
             
@@ -296,6 +300,7 @@ namespace fitness{
                     int sets, reps = 0;
                     float interval = 0;
                     float set_pause = 0; 
+                    float exercise_pause = 0;
 
                     while(std::getline(file, line)){
                         std::stringstream ss(line);
@@ -308,6 +313,8 @@ namespace fitness{
                         ss >> interval;
                         ss.ignore(1);
                         ss >> set_pause;
+                        ss.ignore(1);
+                        ss >> exercise_pause;
 
                         if (name.length() > 15) {
                             name = name.substr(0, 12) + "...";
@@ -325,6 +332,7 @@ namespace fitness{
                                   << std::setw(10) << reps 
                                   << std::setw(10) << interval 
                                   << std::setw(15) << set_pause 
+                                  << std::setw(15) << exercise_pause 
                                   << std::endl;
 
                         exercise_index++;
@@ -379,8 +387,10 @@ namespace fitness{
                         while(std::getline(file, line)){
                             std::stringstream ss(line);
                             std::string name, description;
-                            int sets, reps;
-                            double interval;
+                            int sets, reps = 0;
+                            float interval = 0;
+                            float set_pause = 0;
+                            float exercise_pause = 0;
 
                             std::getline(ss, name, ',');
                             std::getline(ss, description, ',');
@@ -389,8 +399,12 @@ namespace fitness{
                             ss >> reps;
                             ss.ignore(1);
                             ss >> interval;
+                            ss.ignore(1);
+                            ss >> set_pause;
+                            ss.ignore(1);
+                            ss >> exercise_pause;
 
-                            Exercise exercise(name, description, sets, reps, interval);
+                            Exercise exercise(name, description, sets, reps, interval, set_pause, exercise_pause);
                             exercises.push(exercise);
                         }
                     }
@@ -404,46 +418,58 @@ namespace fitness{
         UI ui;
         ui.set_header("Starting Workout...");
         std::cout << "Workout name: " << workout_name << std::endl;
-
-        for(int i = 0; i <= 3; i++){
+        
+        int wait_time = 5;
+        for(int i = 0; i <= wait_time; i++){
             std::this_thread::sleep_for(std::chrono::seconds(1));
         }
 
         while(exercises.size() > 0){
             std::cout << std::endl;
 
-            std::cout << CLEAR;
-            std::cout << "Exercise: " << exercises.front().name << "\n\n";
-            for(int i = 0; i <= 3; i++){
-                std::cout << "\r" << std::setw(2) << "Starting in: "<< 3 - i << std::flush;
+            for(int i = 0; i <= wait_time; i++){
+                std::cout << "\r" << std::setw(2) << "Starting in: "<< wait_time - i << std::flush;
                 std::this_thread::sleep_for(std::chrono::seconds(1));
             }
 
             std::cout << std::endl;
-            for(int i = 0; i < exercises.front().sets; i++) {
-                std::cout << CLEAR;
-                std::cout << "Exercise: " << exercises.front().name << "\n\n";
-                
+            for(int i = 0; i < exercises.front().sets - 1; i++) {
                 for (int j = exercises.front().interval; j >= 0; --j) {
+                    std::cout << CLEAR; 
+                    std::cout << "Exercise: " << exercises.front().name << "\n\n";
                     std::cout << "Set: " << i + 1 << " / " << exercises.front().sets << "\n";
                     std::cout << "Time remaining: " << j << " seconds\n";
-                    std::cout << "\033[A\033[A"; 
+                    std::this_thread::sleep_for(std::chrono::seconds(1));
+                }
+
+                float pause = exercises.front().set_pause;
+
+                for(int j = pause; j >= 0; --j){
+                    std::cout << CLEAR;
+                    std::cout << "Next set starts in: " << j << "\n";
                     std::this_thread::sleep_for(std::chrono::seconds(1));
                 }
             }
 
             std::cout << CLEAR;
 
-            std::cout << "Exercise: " << exercises.front().name << "\n\n";
-            for (int i = 15; i >= 0; --i) {
+            float next_exercise_time = exercises.front().exercise_pause;
+
+            if(exercises.size() == 1){
+                exercises.pop();
+                break;
+            }
+
+            for (int i = next_exercise_time; i >= 0; --i) {
                 std::cout << "\r" << "Next exercise in: " << i << " seconds" << std::flush;
                 std::this_thread::sleep_for(std::chrono::seconds(1));
             }
 
-            std::cout << "\nWorkout finished!" << std::endl;
             exercises.pop();
             std::cout << std::endl;
         }
+
+        std::cout << "Workout finished!" << std::endl;
         start();
     }
 
