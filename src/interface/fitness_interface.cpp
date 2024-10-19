@@ -1,7 +1,6 @@
 #include <iostream>
 #include <filesystem>
 #include <fstream>
-#include <algorithm>
 #include <limits>
 #include <sstream>
 #include "../../include/fitness_interface.hpp"
