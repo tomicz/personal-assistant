@@ -129,8 +129,9 @@ namespace fitness{
                 if(command == 'y'){
                     std::string exercise_name, exercise_description;
                     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); 
-                    int reps, sets;
-                    float interval;
+                    int reps, sets = 0;
+                    float interval = 0;
+                    float set_pause = 0;
 
                     std::cout << "Enter exercise name: ";
                     std::getline(std::cin, exercise_name);
@@ -142,8 +143,11 @@ namespace fitness{
                     std::cin >> sets;
                     std::cout << "Enter exercise interval: ";
                     std::cin >> interval;
+                    std::cout << "Enter pause between sets: ";
+                    std::cin >> set_pause;
 
-                    file << exercise_name + ", " + exercise_description + ", " + std::to_string(reps) + ", " + std::to_string(sets) + ", " + std::to_string(interval) + "\n";
+                    file << exercise_name + ", " + exercise_description + ", " + std::to_string(reps) + ", " + std::to_string(sets) + ", " + std::to_string(interval) + ", " + std::to_string(set_pause) + "\n";
+
                     std::cout << "Exercise created successfully.\n";
                 }
                 else if(command == 'n'){
@@ -264,7 +268,7 @@ namespace fitness{
             std::cin >> plan_index;
             std::cout << std::endl;
 
-            const int WIDTH = 80;
+            const int WIDTH = 94;
             std::cout << CYAN << std::string(WIDTH, '-') << RESET << std::endl;
             std::cout << std::setw(3) << "" 
                       << std::left 
@@ -274,53 +278,61 @@ namespace fitness{
                       << std::setw(9) << "Sets" 
                       << std::setw(10) << "Reps" 
                       << std::setw(10) << "Interval" 
+                      << std::setw(15) << "Set pause"
                       << std::endl;
             std::cout << CYAN << std::string(WIDTH, '-') << RESET << std::endl;
+            
+            size_t file_iterator = 0;
+            int exercise_index = 1;
 
             for(const auto& file: std::filesystem::directory_iterator(fitness_dir)){
-                if(file.path().filename().string().find(".txt") != std::string::npos){    
+                if(file.path().filename().string().find(".txt") != std::string::npos && file_iterator == plan_index){    
                     std::string file_name = file.path().filename().string();
                     file_name.erase(file_name.size() - 4, 4);
-                    if(file_name == file_name){
-                        std::ifstream file((fitness_dir / (file_name + ".txt")).string());
-                        std::string line;
+                    std::ifstream file((fitness_dir / (file_name + ".txt")).string());
+                    std::string line;
 
-                        std::string name, description;
-                        int sets, reps;
-                        double interval;
+                    std::string name, description;
+                    int sets, reps = 0;
+                    float interval = 0;
+                    float set_pause = 0; 
 
-                        int index = 1;
-                        while(std::getline(file, line)){
-                            std::stringstream ss(line);
-                            std::getline(ss, name, ',');
-                            std::getline(ss, description, ',');
-                            ss >> sets;
-                            ss.ignore(1);
-                            ss >> reps;
-                            ss.ignore(1);
-                            ss >> interval;
+                    while(std::getline(file, line)){
+                        std::stringstream ss(line);
+                        std::getline(ss, name, ',');
+                        std::getline(ss, description, ',');
+                        ss >> sets;
+                        ss.ignore(1);
+                        ss >> reps;
+                        ss.ignore(1);
+                        ss >> interval;
+                        ss.ignore(1);
+                        ss >> set_pause;
 
-                            if (name.length() > 15) {
-                                name = name.substr(0, 12) + "...";
-                            }
-                            if (description.length() > 20) {
-                                description = description.substr(0, 17) + "...";
-                            }
-
-                            std::cout << "\033[36m" << index << "\033[0m. " 
-                                      << std::left 
-                                      << std::setw(20) << name 
-                                      << std::setw(25) << description 
-                                      << std::right
-                                      << std::setw(10) << sets 
-                                      << std::setw(10) << reps 
-                                      << std::setw(10) << interval 
-                                      << std::endl;
-                            index++;
+                        if (name.length() > 15) {
+                            name = name.substr(0, 12) + "...";
                         }
+                        if (description.length() > 20) {
+                            description = description.substr(0, 17) + "...";
+                        }
+
+                        std::cout << "\033[36m" << exercise_index << "\033[0m. " 
+                                  << std::left 
+                                  << std::setw(20) << name 
+                                  << std::setw(25) << description 
+                                  << std::right
+                                  << std::setw(10) << sets 
+                                  << std::setw(10) << reps 
+                                  << std::setw(10) << interval 
+                                  << std::setw(15) << set_pause 
+                                  << std::endl;
+
+                        exercise_index++;
                     }
-            std::cout << CYAN << std::string(WIDTH, '-') << RESET << std::endl;
+                    std::cout << CYAN << std::string(WIDTH, '-') << RESET << std::endl;
+                    break;
                 }
+                file_iterator++;
             }
 
             std::cout << std::endl;
@@ -333,10 +345,9 @@ namespace fitness{
     }
 
     void FitnessInterface::open_fitness_runner(){
-        UI ui;
-        ui.set_header("Starting Workout");
         std::queue<Exercise> exercises;
         std::filesystem::path fitness_dir = "../db/fitness";
+        std::string workout_name = "na";
 
         if(std::filesystem::exists(fitness_dir)){
 
@@ -363,6 +374,7 @@ namespace fitness{
                     if(index == plan_index){
                         std::ifstream file((fitness_dir / (file_name + ".txt")).string());
                         std::string line;
+                        workout_name = file_name;
 
                         while(std::getline(file, line)){
                             std::stringstream ss(line);
@@ -389,7 +401,9 @@ namespace fitness{
 
         std::cout << std::endl;
         std::cout << CLEAR;
-        std::cout << "Starting Workout..." << std::endl;
+        UI ui;
+        ui.set_header("Starting Workout...");
+        std::cout << "Workout name: " << workout_name << std::endl;
 
         for(int i = 0; i <= 3; i++){
             std::this_thread::sleep_for(std::chrono::seconds(1));
@@ -399,6 +413,7 @@ namespace fitness{
             std::cout << std::endl;
 
             std::cout << CLEAR;
+            std::cout << "Exercise: " << exercises.front().name << "\n\n";
             for(int i = 0; i <= 3; i++){
                 std::cout << "\r" << std::setw(2) << "Starting in: "<< 3 - i << std::flush;
                 std::this_thread::sleep_for(std::chrono::seconds(1));
@@ -406,7 +421,7 @@ namespace fitness{
 
             std::cout << std::endl;
             for(int i = 0; i < exercises.front().sets; i++) {
-                std::cout << "\033[2J\033[H"; 
+                std::cout << CLEAR;
                 std::cout << "Exercise: " << exercises.front().name << "\n\n";
                 
                 for (int j = exercises.front().interval; j >= 0; --j) {
@@ -419,6 +434,7 @@ namespace fitness{
 
             std::cout << CLEAR;
 
+            std::cout << "Exercise: " << exercises.front().name << "\n\n";
             for (int i = 15; i >= 0; --i) {
                 std::cout << "\r" << "Next exercise in: " << i << " seconds" << std::flush;
                 std::this_thread::sleep_for(std::chrono::seconds(1));

@@ -9,13 +9,15 @@ namespace fitness{
         const int reps;
         const int sets;
         const float interval;
+        const float set_pause;
 
         Exercise(std::string name, std::string description, int reps, int sets, float interval)
             : name(std::move(name)), 
             description(std::move(description)), 
             reps(reps), 
             sets(sets), 
-            interval(interval) 
+            interval(interval),
+            set_pause(set_pause)
         {}
     };
 }
