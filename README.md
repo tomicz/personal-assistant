@@ -46,7 +46,7 @@ The Goals feature allows users to set and track their fitness goals. Users can s
 
 ## Fitness planner
 
-Your program allows users to create personalized fitness plans, helping them set up workout routines tailored to their goals. It can guide users in organizing exercises, targeting specific muscle groups, and managing their progress over time.
+This allows users to create personalized fitness plans, helping them set up workout routines tailored to their goals. It can guide users in organizing exercises, targeting specific muscle groups, and managing their progress over time.
 
 ![Exercises](https://i.imgur.com/d5gISMj.png)
 

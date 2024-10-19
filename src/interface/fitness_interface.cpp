@@ -8,7 +8,6 @@
 #include <queue>
 #include "../../include/fitness_interface.hpp"
 #include "../../include/user_interface.hpp"
-#include "../../include/exercise_controller.hpp"
 #include "../../include/exercise.hpp"
 
 namespace fitness{
@@ -101,8 +100,6 @@ namespace fitness{
     }
 
     void FitnessInterface::create_plan(){
-        ExerciseController exercise_controller;
-
         std::string plan_name;
         std::cout << "Enter plan name: ";
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Clear input buffer
