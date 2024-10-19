@@ -3,9 +3,13 @@
 #include <fstream>
 #include <limits>
 #include <sstream>
+#include <thread>
+#include <chrono>
+#include <queue>
 #include "../../include/fitness_interface.hpp"
 #include "../../include/user_interface.hpp"
 #include "../../include/exercise_controller.hpp"
+#include "../../include/exercise.hpp"
 
 namespace fitness{
     const std::string CYAN = "\033[1;36m";
@@ -328,7 +332,97 @@ namespace fitness{
     }
 
     void FitnessInterface::open_fitness_runner(){
-        std::cout << "Fitness Runner\n";
+
+        std::queue<Exercise> exercises;
+        std::filesystem::path fitness_dir = "../db/fitness";
+
+        if(std::filesystem::exists(fitness_dir)){
+
+            int index = 1;
+
+            for(const auto& file: std::filesystem::directory_iterator(fitness_dir)){
+                if(file.path().filename().string().find(".txt") != std::string::npos){
+                    std::string file_name = file.path().filename().string();
+                    file_name.erase(file_name.size() - 4, 4);
+                    std::cout << index << ". " << file_name << std::endl;
+                    index++;
+                }
+            }
+
+            index = 1;
+            std::cout << "Select plan: ";
+            int plan_index;
+            std::cin >> plan_index;
+
+            for(const auto& file: std::filesystem::directory_iterator(fitness_dir)){
+                if(file.path().filename().string().find(".txt") != std::string::npos){
+                    std::string file_name = file.path().filename().string();
+                    file_name.erase(file_name.size() - 4, 4);
+                    if(index == plan_index){
+                        std::ifstream file((fitness_dir / (file_name + ".txt")).string());
+                        std::string line;
+
+                        while(std::getline(file, line)){
+                            std::stringstream ss(line);
+                            std::string name, description;
+                            int sets, reps;
+                            double interval;
+
+                            std::getline(ss, name, ',');
+                            std::getline(ss, description, ',');
+                            ss >> sets;
+                            ss.ignore(1);
+                            ss >> reps;
+                            ss.ignore(1);
+                            ss >> interval;
+
+                            Exercise exercise(name, description, sets, reps, interval);
+                            exercises.push(exercise);
+                        }
+                    }
+                    index++;
+                }
+            }   
+        }
+
+        std::cout << std::endl;
+        int exercise_index = 0;
+
+        while(exercises.size() > 0){
+            std::cout << "Exercise " << exercises.front().name << " started!" << std::endl;
+            std::cout << "Starting " << exercises.front().interval << " second countdown:\n";
+
+            std::cout << std::endl;
+            std::cout << "Starting in 3 seconds" << std::endl;
+
+            for(int i = 0; i < 3; i++){
+                std::cout << "\r" << std::setw(2) << "Starting in: "<< 3 - i << std::endl;
+                std::this_thread::sleep_for(std::chrono::seconds(1));
+            }
+
+            for(int i = 0; i < exercises.front().sets; i++){
+                std::cout << std::endl;
+                std::cout << "Set: " << i + 1<< std::endl;
+                for (int j = exercises.front().interval; j >= 0; --j) {
+                    std::cout << "\r" << std::setw(2) << j << " seconds remaining" << std::flush;
+                    std::this_thread::sleep_for(std::chrono::seconds(1));
+                }
+            }
+
+            
+            std::cout << std::endl;
+            std::cout << "Get ready for the next exercise in 15 seconds:\n";
+            for (int i = 15; i >= 0; --i) {
+                std::cout << "\r" << std::setw(2) << i << " seconds remaining" << std::flush;
+                std::this_thread::sleep_for(std::chrono::seconds(1));
+            }
+
+            std::cout << "\nCountdown finished!" << std::endl;
+            exercises.pop();
+            exercise_index++;
+            std::cout << std::endl;
+        }
+        start();
     }
 
     std::string FitnessInterface::create_fitness_folder(){
