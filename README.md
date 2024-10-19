@@ -50,6 +50,10 @@ This allows users to create personalized fitness plans, helping them set up work
 
 ![Exercises](https://i.imgur.com/d5gISMj.png)
 
+## Fitness Runner
+
+The Fitness Runner seamlessly integrates with your custom fitness plan created in the Fitness Planner. Once a plan is loaded, it automates the entire workout session, tracking time and exercise intervals, so you no longer need to manually monitor the seconds—everything is handled by the program.
+
 ### Supported platforms
 
 Currently only UNIX is supported. If you need the applicatin to run on Windows, feel free to contribute.
