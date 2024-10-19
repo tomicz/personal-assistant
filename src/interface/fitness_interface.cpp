@@ -14,6 +14,7 @@
 namespace fitness{
     const std::string CYAN = "\033[1;36m";
     const std::string RESET = "\033[0m";
+    const std::string CLEAR = "\033[2J\033[H"; 
 
     void FitnessInterface::start(){
         UI ui;
@@ -332,7 +333,8 @@ namespace fitness{
     }
 
     void FitnessInterface::open_fitness_runner(){
-
+        UI ui;
+        ui.set_header("Starting Workout");
         std::queue<Exercise> exercises;
         std::filesystem::path fitness_dir = "../db/fitness";
 
@@ -386,40 +388,44 @@ namespace fitness{
         }
 
         std::cout << std::endl;
-        int exercise_index = 0;
+        std::cout << CLEAR;
+        std::cout << "Starting Workout..." << std::endl;
+
+        for(int i = 0; i <= 3; i++){
+            std::this_thread::sleep_for(std::chrono::seconds(1));
+        }
 
         while(exercises.size() > 0){
-            std::cout << "Exercise " << exercises.front().name << " started!" << std::endl;
-            std::cout << "Starting " << exercises.front().interval << " second countdown:\n";
-
             std::cout << std::endl;
-            std::cout << "Starting in 3 seconds" << std::endl;
 
-            for(int i = 0; i < 3; i++){
-                std::cout << "\r" << std::setw(2) << "Starting in: "<< 3 - i << std::endl;
+            std::cout << CLEAR;
+            for(int i = 0; i <= 3; i++){
+                std::cout << "\r" << std::setw(2) << "Starting in: "<< 3 - i << std::flush;
                 std::this_thread::sleep_for(std::chrono::seconds(1));
             }
 
-            for(int i = 0; i < exercises.front().sets; i++){
-                std::cout << std::endl;
-                std::cout << "Set: " << i + 1<< std::endl;
+            std::cout << std::endl;
+            for(int i = 0; i < exercises.front().sets; i++) {
+                std::cout << "\033[2J\033[H"; 
+                std::cout << "Exercise: " << exercises.front().name << "\n\n";
+                
                 for (int j = exercises.front().interval; j >= 0; --j) {
-                    std::cout << "\r" << std::setw(2) << j << " seconds remaining" << std::flush;
+                    std::cout << "Set: " << i + 1 << " / " << exercises.front().sets << "\n";
+                    std::cout << "Time remaining: " << j << " seconds\n";
+                    std::cout << "\033[A\033[A"; 
                     std::this_thread::sleep_for(std::chrono::seconds(1));
                 }
             }
 
-            
-            std::cout << std::endl;
-            std::cout << "Get ready for the next exercise in 15 seconds:\n";
+            std::cout << CLEAR;
+
             for (int i = 15; i >= 0; --i) {
-                std::cout << "\r" << std::setw(2) << i << " seconds remaining" << std::flush;
+                std::cout << "\r" << "Next exercise in: " << i << " seconds" << std::flush;
                 std::this_thread::sleep_for(std::chrono::seconds(1));
             }
 
-            std::cout << "\nCountdown finished!" << std::endl;
+            std::cout << "\nWorkout finished!" << std::endl;
             exercises.pop();
-            exercise_index++;
             std::cout << std::endl;
         }
         start();
