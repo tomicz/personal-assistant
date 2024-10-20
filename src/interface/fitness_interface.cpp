@@ -425,6 +425,8 @@ namespace fitness{
             std::cout << std::endl;
 
             for(int i = 0; i <= wait_time; i++){
+                std::cout << CLEAR;
+                std::cout << "Exercise: " << exercises.front().name << "\n";
                 std::cout << "\r" << std::setw(2) << "Starting in: "<< wait_time - i << std::flush;
                 std::this_thread::sleep_for(std::chrono::seconds(1));
             }
