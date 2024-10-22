@@ -354,61 +354,8 @@ namespace fitness{
         std::filesystem::path fitness_dir = "../db/fitness";
         std::string workout_name = "na";
 
-        if(std::filesystem::exists(fitness_dir)){
-
-            int index = 1;
-
-            for(const auto& file: std::filesystem::directory_iterator(fitness_dir)){
-                if(file.path().filename().string().find(".txt") != std::string::npos){
-                    std::string file_name = file.path().filename().string();
-                    file_name.erase(file_name.size() - 4, 4);
-                    std::cout << index << ". " << file_name << std::endl;
-                    index++;
-                }
-            }
-
-            index = 1;
-            std::cout << "Select plan: ";
-            int plan_index;
-            std::cin >> plan_index;
-
-            for(const auto& file: std::filesystem::directory_iterator(fitness_dir)){
-                if(file.path().filename().string().find(".txt") != std::string::npos){
-                    std::string file_name = file.path().filename().string();
-                    file_name.erase(file_name.size() - 4, 4);
-                    if(index == plan_index){
-                        std::ifstream file((fitness_dir / (file_name + ".txt")).string());
-                        std::string line;
-                        workout_name = file_name;
-
-                        while(std::getline(file, line)){
-                            std::stringstream ss(line);
-                            std::string name, description;
-                            int sets, reps = 0;
-                            float interval = 0;
-                            float set_pause = 0;
-                            float exercise_pause = 0;
-
-                            std::getline(ss, name, ',');
-                            std::getline(ss, description, ',');
-                            ss >> sets;
-                            ss.ignore(1);
-                            ss >> reps;
-                            ss.ignore(1);
-                            ss >> interval;
-                            ss.ignore(1);
-                            ss >> set_pause;
-                            ss.ignore(1);
-                            ss >> exercise_pause;
-
-                            Exercise exercise(name, description, sets, reps, interval, set_pause, exercise_pause);
-                            exercises.push(exercise);
-                        }
-                    }
-                    index++;
-                }
-            }   
-        }
+        print_all_plans(fitness_dir);
+        exercises =  parse_all_exercises(workout_name, fitness_dir);
 
         std::cout << std::endl;
         std::cout << CLEAR;
@@ -416,10 +363,9 @@ namespace fitness{
         ui.set_header("Starting Workout...");
         std::cout << "Workout name: " << workout_name << std::endl;
         
-        int wait_time = 5;
-        for(int i = 0; i <= wait_time; i++){
-            std::this_thread::sleep_for(std::chrono::seconds(1));
-        }
+        int wait_time = 5; 
+
+        wait_for_seconds(wait_time);
 
         while(exercises.size() > 0){
             std::cout << std::endl;
@@ -430,6 +376,7 @@ namespace fitness{
                 std::cout << "\r" << std::setw(2) << "Starting in: "<< wait_time - i << std::flush;
                 std::this_thread::sleep_for(std::chrono::seconds(1));
             }
+
 
             std::cout << std::endl;
             for(int i = 0; i < exercises.front().sets - 1; i++) {
@@ -470,6 +417,79 @@ namespace fitness{
 
         std::cout << "Workout finished!" << std::endl;
         start();
+    }
+
+    void FitnessInterface::print_all_plans(std::filesystem::path at_path){
+        if(std::filesystem::exists(at_path)){
+
+            int index = 1;
+
+            for(const auto& file: std::filesystem::directory_iterator(at_path)){
+                if(file.path().filename().string().find(".txt") != std::string::npos){
+
+                    std::string file_name = file.path().filename().string();
+                    file_name.erase(file_name.size() - 4, 4);
+                    std::cout << index << ". " << file_name << std::endl;
+                    index++;
+                }
+            }
+        }
+    }
+
+    std::queue<Exercise> FitnessInterface::parse_all_exercises(std::string& workout_name, std::filesystem::path at_path){
+
+        std::queue<Exercise> exercises;
+        int index = 1;
+        std::cout << "Select plan: ";
+        int plan_index;
+        std::cin >> plan_index;
+
+        for(const auto& file: std::filesystem::directory_iterator(at_path)){
+            if(file.path().filename().string().find(".txt") != std::string::npos){
+
+                std::string file_name = file.path().filename().string();
+                file_name.erase(file_name.size() - 4, 4);
+
+                if(index == plan_index){
+
+                    std::ifstream file((at_path / (file_name + ".txt")).string());
+                    std::string line;
+                    workout_name = file_name;
+
+                    while(std::getline(file, line)){
+                        std::stringstream ss(line);
+                        std::string name, description;
+                        int sets, reps = 0;
+                        float interval = 0;
+                        float set_pause = 0;
+                        float exercise_pause = 0;
+
+                        std::getline(ss, name, ',');
+                        std::getline(ss, description, ',');
+                        ss >> sets;
+                        ss.ignore(1);
+                        ss >> reps;
+                        ss.ignore(1);
+                        ss >> interval;
+                        ss.ignore(1);
+                        ss >> set_pause;
+                        ss.ignore(1);
+                        ss >> exercise_pause;
+
+                        Exercise exercise(name, description, sets, reps, interval, set_pause, exercise_pause);
+                        exercises.push(exercise);
+                    }
+                }
+                index++;
+            }
+        }   
+        return exercises;
+    }
+
+    void FitnessInterface::wait_for_seconds(int time){
+        for(int i = 0; i <= time; i++){
+            std::this_thread::sleep_for(std::chrono::seconds(1));
+        }
     }
 
     std::string FitnessInterface::create_fitness_folder(){

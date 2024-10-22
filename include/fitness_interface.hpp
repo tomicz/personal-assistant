@@ -1,5 +1,10 @@
 #pragma once
 
+#include <string>
+#include <filesystem>
+#include <queue>
+#include "exercise.hpp"
+
 namespace fitness {
     class FitnessInterface {
     public:
@@ -15,5 +20,8 @@ namespace fitness {
         void list_plans();
         std::string create_fitness_folder();
         void list_exercises();
+        void print_all_plans(std::filesystem::path at_path);
+        std::queue<Exercise> parse_all_exercises(std::string& workout_name, std::filesystem::path at_path);
+        void wait_for_seconds(int time);
     };
 }
