@@ -370,46 +370,15 @@ namespace fitness{
         while(exercises.size() > 0){
             std::cout << std::endl;
 
-            for(int i = 0; i <= wait_time; i++){
-                std::cout << CLEAR;
-                std::cout << "Exercise: " << exercises.front().name << "\n";
-                std::cout << "\r" << std::setw(2) << "Starting in: "<< wait_time - i << std::flush;
-                std::this_thread::sleep_for(std::chrono::seconds(1));
-            }
-
+            wait_for_exercise_to_start(exercises.front(), wait_time);
 
             std::cout << std::endl;
-            for(int i = 0; i < exercises.front().sets - 1; i++) {
-                for (int j = exercises.front().interval; j >= 0; --j) {
-                    std::cout << CLEAR; 
-                    std::cout << "Exercise: " << exercises.front().name << "\n\n";
-                    std::cout << "Set: " << i + 1 << " / " << exercises.front().sets << "\n";
-                    std::cout << "Time remaining: " << j << " seconds\n";
-                    std::this_thread::sleep_for(std::chrono::seconds(1));
-                }
 
-                float pause = exercises.front().set_pause;
-
-                for(int j = pause; j >= 0; --j){
-                    std::cout << CLEAR;
-                    std::cout << "Next set starts in: " << j << "\n";
-                    std::this_thread::sleep_for(std::chrono::seconds(1));
-                }
-            }
+            start_exercise(exercises.front());
 
             std::cout << CLEAR;
-
-            float next_exercise_time = exercises.front().exercise_pause;
-
-            if(exercises.size() == 1){
-                exercises.pop();
-                break;
-            }
-
-            for (int i = next_exercise_time; i >= 0; --i) {
-                std::cout << "\r" << "Next exercise in: " << i << " seconds" << std::flush;
-                std::this_thread::sleep_for(std::chrono::seconds(1));
-            }
+            
+            wait_for_next_exercise(exercises.front());
 
             exercises.pop();
             std::cout << std::endl;
@@ -488,6 +457,44 @@ namespace fitness{
 
     void FitnessInterface::wait_for_seconds(int time){
         for(int i = 0; i <= time; i++){
+            std::this_thread::sleep_for(std::chrono::seconds(1));
+        }
+    }
+
+    void FitnessInterface::wait_for_exercise_to_start(const Exercise& exercise, const int time){
+        for(int i = 0; i <= time; i++){
+            std::cout << CLEAR;
+            std::cout << "Exercise: " << exercise.name << "\n";
+            std::cout << "\r" << std::setw(2) << "Starting in: "<< time - i << std::flush;
+            std::this_thread::sleep_for(std::chrono::seconds(1));
+        }
+    }
+
+    void FitnessInterface::start_exercise(const Exercise& exercise){
+        for(int i = 0; i < exercise.sets - 1; i++) {
+            for (int j = exercise.interval; j >= 0; --j) {
+                std::cout << CLEAR; 
+                std::cout << "Exercise: " << exercise.name << "\n\n";
+                std::cout << "Set: " << i + 1 << " / " << exercise.sets << "\n";
+                std::cout << "Time remaining: " << j << " seconds\n";
+                std::this_thread::sleep_for(std::chrono::seconds(1));
+            }
+
+            float pause = exercise.set_pause;
+
+            for(int j = pause; j >= 0; --j){
+                std::cout << CLEAR;
+                std::cout << "Next set starts in: " << j << "\n";
+                std::this_thread::sleep_for(std::chrono::seconds(1));
+            }
+        }
+    }
+
+    void FitnessInterface::wait_for_next_exercise(const Exercise& exercise){
+        float next_exercise_time = exercise.exercise_pause;
+
+        for (int i = next_exercise_time; i >= 0; --i) {
+            std::cout << "\r" << "Next exercise in: " << i << " seconds" << std::flush;
             std::this_thread::sleep_for(std::chrono::seconds(1));
         }
     }

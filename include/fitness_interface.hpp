@@ -23,5 +23,8 @@ namespace fitness {
         void print_all_plans(std::filesystem::path at_path);
         std::queue<Exercise> parse_all_exercises(std::string& workout_name, std::filesystem::path at_path);
         void wait_for_seconds(int time);
+        void wait_for_exercise_to_start(const Exercise& exercise, const int time);
+        void start_exercise(const Exercise& exercise);
+        void wait_for_next_exercise(const Exercise& exercise);
     };
 }
