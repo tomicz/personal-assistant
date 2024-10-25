@@ -378,7 +378,7 @@ namespace fitness{
 
             std::cout << CLEAR;
 
-            if(exercises.size() == 1){
+            if(!exercises.empty() && exercises.size() == 1){
                 exercises.pop();
                 break;
             }
