@@ -14,6 +14,7 @@ int main()
     UI ui;
     ui.open_home_menu();
 
+
     auto end = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> timeToExecute = end - start;
     std::cout << "Time to execute: " << timeToExecute.count() << std::endl;
