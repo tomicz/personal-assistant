@@ -2,6 +2,9 @@
 
 #include <string>
 #include <fstream>
+#include <iostream>
+#include "user_interface.hpp"
+#include <limits>
 
 struct Food{
     std::string name;
@@ -21,6 +24,7 @@ class Dairy {
         void add_new_food();
         void remove_food();
         void add_new_daily_entry();
+        void write_to_db(const std::string& itemData);
 
     private:
         Food return_total(std::ifstream& file);

@@ -2,7 +2,6 @@
 #include <chrono>
 #include "../include/user_interface.hpp"
 
-
 int main()
 {
     auto start = std::chrono::high_resolution_clock::now();
@@ -13,7 +12,6 @@ int main()
     
     UI ui;
     ui.open_home_menu();
-
 
     auto end = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> timeToExecute = end - start;

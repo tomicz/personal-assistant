@@ -6,9 +6,14 @@
 #include "../include/parser.hpp"
 #include "../include/database.hpp"
 
+// Add these color constants
+const std::string RED = "\033[31m";
+const std::string GREEN = "\033[32m";
+const std::string RESET = "\033[0m";
+
 std::vector<Food> Dairy::get_food_entries(const std::string& date, const std::string& meal_name) {
     std::vector<Food> entries;
-    std::string file_path = "../db/dailies/" + date + "/" + meal_name + ".txt";
+    std::string file_path = "db/dailies/" + date + "/" + meal_name + ".txt";
     std::string output;
     std::ifstream file(file_path);
 
@@ -38,7 +43,7 @@ std::vector<Food> Dairy::get_food_entries(const std::string& date, const std::st
 }
 
 Food Dairy::get_meal_total(const std::string& date, const std::string& meal_name){
-    std::string file_path = "../db/dailies/" + date + "/" + meal_name + ".txt";
+    std::string file_path = "db/dailies/" + date + "/" + meal_name + ".txt";
     std::ifstream dairy_data(file_path);
 
     Food food = return_total(dairy_data);
@@ -135,14 +140,14 @@ void Dairy::add_new_food()
     double protein = {0};
 
     std::string itemData;
-	std::cin.ignore(1000, '\n');
+    std::cin.ignore(1000, '\n');
     
     std::cout << "Enter item name: ";
     std::getline(std::cin, item_name);
 
     std::cout << "Enter brand name: ";
     std::getline(std::cin, brand_name);
-	
+    
     std::cout << "Enter quantity: ";
     std::cin >> quantity;
 
@@ -169,13 +174,30 @@ void Dairy::add_new_food()
 
     itemData = item_name + ", "
         + brand_name 
-        +  ", "+ std::to_string(quantity) 
+        + ", " + std::to_string(quantity) 
         + ", " + std::to_string(calories) 
         + ", " + std::to_string(fat) 
         + ", " + std::to_string(carbohydrates) 
         + ", " + std::to_string(protein);
 
-    write_to_db(itemData);
+    std::ofstream database("db/db.txt", std::ios::app);
+    
+    if (!database.is_open()) {
+        std::cerr << "Error: Cannot open database file for writing." << std::endl;
+        return;
+    }
+
+    // Add a newline before writing if the file is not empty
+    std::ifstream check_file("db/db.txt");
+    if (check_file.peek() != std::ifstream::traits_type::eof()) {
+        database << std::endl;
+    }
+    check_file.close();
+
+    database << itemData;
+    database.close();
+
+    std::cout << "Successfully added to database!" << std::endl;
 }
 
 void Dairy::remove_food(){
@@ -240,56 +262,83 @@ void Dairy::remove_food(){
 
 std::string Dairy::add_meal_entry()
 {
-	std::cout << "Select a meal from database by entering a number" << std::endl;
-	read_db();
-	std::cout << "Enter meal number: ";
+    // First, display the database
+    UI ui;
+    if (!ui.read_db()) {
+        std::cerr << RED << "Error: Could not read food database. Please ensure it exists and has items." << RESET << std::endl;
+        return "";
+    }
 
-	int option{};
-	
-	std::cin >> option;
-	std::cout << "You selected: " << option << std::endl;
-	
-	std::string result = get_element_from_db(option);
-	std::cout << result << std::endl;
+    int food_choice;
+    double amount;
+    std::string line;
 
-	double amount{};
-	std::cout << "Enter amount(g): ";
-	std::cin >> amount;
+    std::cout << "\nEnter the number of the food item you want to add: ";
+    while (!(std::cin >> food_choice)) {
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cout << RED << "Invalid input. Please enter a number: " << RESET;
+    }
 
-	std::string calories = modify_data_at_index(2, result);
-	std::string fat = modify_data_at_index(3, result);
-	std::string ug = modify_data_at_index(4, result);
-	std::string protein = modify_data_at_index(5, result);
+    std::cout << "Enter amount in grams: ";
+    while (!(std::cin >> amount)) {
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cout << RED << "Invalid input. Please enter a number: " << RESET;
+    }
 
-	double calories_formula = std::stod(calories) / 100.0 * amount;
-	double fat_formula = std::stod(fat) / 100.0 * amount;
-	double ug_formula = std::stod(ug) / 100.0 * amount;
-	double protein_formula = std::stod(protein) / 100.0 * amount;
+    // Get the selected food item from database
+    std::ifstream database("db/db.txt");
+    if (!database.is_open()) {
+        std::cerr << RED << "Error: Cannot open database file." << RESET << std::endl;
+        return "";
+    }
 
-	enter_new_data_at_index(1, amount, result); 
-	enter_new_data_at_index(2, calories_formula, result); 
-	enter_new_data_at_index(3, fat_formula, result); 
-	enter_new_data_at_index(4, ug_formula, result); 
-	enter_new_data_at_index(5, protein_formula, result); 
+    int current_line = 0;
+    while (std::getline(database, line)) {
+        if (current_line == food_choice - 1) { // -1 because we displayed numbers starting from 1
+            break;
+        }
+        current_line++;
+    }
+    database.close();
 
-	std::cout << "Data: " << result << std::endl;
+    if (current_line != food_choice - 1) {
+        std::cerr << RED << "Error: Selected item number not found in database." << RESET << std::endl;
+        return "";
+    }
 
-	return result;
+    // Modify the amount in the selected item
+    std::string modified_line = line;
+    size_t first_comma = modified_line.find(',');
+    if (first_comma != std::string::npos) {
+        size_t second_comma = modified_line.find(',', first_comma + 1);
+        if (second_comma != std::string::npos) {
+            size_t third_comma = modified_line.find(',', second_comma + 1);
+            if (third_comma != std::string::npos) {
+                // Replace the amount (between second and third comma)
+                std::string before = modified_line.substr(0, second_comma + 2); // +2 to include comma and space
+                std::string after = modified_line.substr(third_comma);
+                modified_line = before + std::to_string(amount) + after;
+            }
+        }
+    }
+
+    return modified_line;
 }
-
 
 void Dairy::add_new_daily_entry()
 {
     Parser parser;
-	std::string file_path = "../db/dailies/" + parser.create_date_stamp() + "/";
-	
-	create_directory(file_path);
-	std::cout << file_path << std::endl;
-	std::string meal_data = add_meal_entry() + "\n";
-	
+    std::string file_path = "db/dailies/" + parser.create_date_stamp() + "/";
+    
+    create_directory(file_path);
+    std::cout << file_path << std::endl;
+    std::string meal_data = add_meal_entry() + "\n";
+    
     std::ofstream timestamp(file_path + get_meal_time() + ".txt", std::ios::app);
-	timestamp << meal_data;
-	timestamp.close();
+    timestamp << meal_data;
+    timestamp.close();
 }
 
 std::string Dairy::get_meal_time()
@@ -310,4 +359,25 @@ std::string Dairy::get_meal_time()
 	}
 
 	return "Invalid option";
+}
+
+void Dairy::write_to_db(const std::string& itemData) {
+    std::ofstream database("db/db.txt", std::ios::app);  // Changed path and added append mode
+    
+    if (!database.is_open()) {
+        std::cerr << RED << "Error: Cannot open database file for writing." << RESET << std::endl;
+        return;
+    }
+
+    // Add a newline before writing if the file is not empty
+    std::ifstream check_file("db/db.txt");
+    if (check_file.peek() != std::ifstream::traits_type::eof()) {
+        database << std::endl;
+    }
+    check_file.close();
+
+    database << itemData;
+    database.close();
+
+    std::cout << GREEN << "Successfully added to database!" << RESET << std::endl;
 }

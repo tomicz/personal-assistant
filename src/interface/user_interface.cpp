@@ -11,12 +11,15 @@
 #include "../include/bmi_calculator.hpp"
 #include "../include/goals_interface.hpp"
 #include "../include/fitness_interface.hpp"
+#include <cerrno>    // for errno
+#include <cstring>   // for std::strerror
+#include <iomanip>
 
 const std::string RED = "\033[31m";
 const std::string CYAN = "\033[36m";
 const std::string RESET = "\033[0m";
 
-void UI::open_home_menu()
+bool UI::open_home_menu()
 {
     GoalsInterface goals_interface;
     fitness::FitnessInterface fitness_interface;
@@ -115,12 +118,31 @@ void UI::open_health_menu(){
     }
 }
 
-void UI::open_food_database(bool show_as_list){
+void UI::open_food_database(bool show_as_list) {
     std::unique_ptr<Dairy> dairy = std::make_unique<Dairy>();
     std::cout << std::endl;
-    read_db();
-    std::cout << std::endl;
+    
+    try {
+        // Ensure the database directory exists
+        std::filesystem::path db_path = "../db";
+        if (!std::filesystem::exists(db_path)) {
+            std::filesystem::create_directories(db_path);
+        }
+        
+        // Try to read the database
+        if (!read_db()) {
+            std::cout << RED << "Warning: Could not read food database. A new one will be created." << RESET << std::endl;
+        }
+    } catch (const std::exception& e) {
+        std::cerr << RED << "Error accessing database: " << e.what() << RESET << std::endl;
+        std::cout << "Press any key to return to previous menu..." << std::endl;
+        std::cin.ignore();
+        std::cin.get();
+        open_dairy_menu();
+        return;
+    }
 
+    std::cout << std::endl;
     std::string seperator = show_as_list ? "| " : "\n";
 
     std::string menu_options = 
@@ -158,6 +180,94 @@ void UI::open_food_database(bool show_as_list){
             open_food_database(true);
             break;
     }
+}
+
+bool UI::read_db() {
+    std::filesystem::path db_file = "db/db.txt";
+    
+    if (!std::filesystem::exists(db_file)) {
+        std::cerr << RED << "Database file does not exist." << RESET << std::endl;
+        return false;
+    }
+
+    std::ifstream file(db_file, std::ios::binary);
+    if (!file.is_open()) {
+        std::cerr << RED << "Cannot open database file." << RESET << std::endl;
+        return false;
+    }
+
+    std::string content((std::istreambuf_iterator<char>(file)),
+                        std::istreambuf_iterator<char>());
+    
+    if (content.empty()) {
+        std::cout << CYAN << "Database file is empty." << RESET << std::endl;
+        return false;
+    }
+
+    std::istringstream stream(content);
+    std::string line;
+    bool has_content = false;
+    int item_number = 1;
+
+    std::cout << std::string(100, '-') << std::endl;
+    std::cout << std::left 
+              << std::setw(5)  << "No."
+              << std::setw(30) << "Name"
+              << std::setw(20) << "Brand"
+              << std::setw(15) << "Amount(g)"
+              << std::setw(15) << "Calories"
+              << std::setw(15) << "Fat"
+              << std::setw(15) << "Carbs"
+              << "Protein"
+              << std::endl;
+    std::cout << std::string(100, '-') << std::endl;
+
+    while (std::getline(stream, line)) {
+        if (!line.empty() && line.back() == '\r') {
+            line.pop_back();
+        }
+        
+        if (!line.empty()) {
+            std::stringstream ss(line);
+            std::string name, brand;
+            double amount, calories, fat, carbs, protein;
+            
+            // Parse the line using commas as delimiters
+            std::getline(ss, name, ',');
+            std::getline(ss, brand, ',');
+            ss >> amount;
+            ss.ignore(); // skip comma
+            ss >> calories;
+            ss.ignore();
+            ss >> fat;
+            ss.ignore();
+            ss >> carbs;
+            ss.ignore();
+            ss >> protein;
+
+            std::cout << std::left 
+                      << std::setw(5)  << item_number++
+                      << std::setw(30) << name
+                      << std::setw(20) << brand
+                      << std::setw(15) << amount
+                      << std::setw(15) << calories
+                      << std::setw(15) << fat
+                      << std::setw(15) << carbs
+                      << protein
+                      << std::endl;
+            has_content = true;
+        }
+    }
+    
+    std::cout << std::string(100, '-') << std::endl;
+
+    if (!has_content) {
+        std::cout << CYAN << "Database file contains only empty lines." << RESET << std::endl;
+        return false;
+    }
+
+    file.close();
+    return true;
 }
 
 void UI::open_dairy_menu(){
@@ -241,34 +351,60 @@ void UI::open_daily_entries_menu(){
             open_dairy_menu();
     }
 }
-void UI::read_daily_entry(const std::string& date){
+
+void UI::read_daily_entry(const std::string& date) {
     std::cout << std::endl;
-    std::cout << CYAN << "YOUR DAILY ENTRIES" << RESET;
+    std::cout << CYAN << "YOUR DAILY ENTRIES FOR DATE: " << date << RESET << std::endl;
     std::cout << std::endl;
 
-    read_meal_data(date, "breakfast");
-    read_meal_data(date, "lunch");
-    read_meal_data(date, "dinner");
+    // Check if the daily entries directory exists
+    std::filesystem::path entries_path = "../db/dailies/" + date;
+    if (!std::filesystem::exists(entries_path)) {
+        std::cout << RED << "No entries found for date: " << date << RESET << std::endl;
+        return;
+    }
 
-    std::cout << std::string(128, '-') << std::endl;
+    try {
+        bool has_entries = false;
+        
+        // Try to read each meal, track if we found any entries
+        if (read_meal_data(date, "breakfast")) has_entries = true;
+        if (read_meal_data(date, "lunch")) has_entries = true;
+        if (read_meal_data(date, "dinner")) has_entries = true;
 
-    std::unique_ptr<Dairy> dairy = std::make_unique<Dairy>();
-    Food total = dairy->get_total_all_meals(date);
+        if (!has_entries) {
+            std::cout << CYAN << "No food entries found for this date." << RESET << std::endl;
+            return;
+        }
 
-    std::cout << std::left 
-        << std::setw(3)  << ""
-        << CYAN << std::setw(30) << total.name
-        << std::setw(25) << total.brand
-        << std::setw(15) << total.amount
-        << std::setw(15) << total.calories
-        << std::setw(15) << total.fat
-        << std::setw(15) << total.carbs
-        << std::setw(15) << total.protein << RESET
-        << std::endl;
+        std::cout << std::string(128, '-') << std::endl;
 
-    std::cout << std::string(128, '-') << std::endl;
-    read_remaining(total.calories);
-    std::cout << std::string(128, '-') << std::endl;
+        std::unique_ptr<Dairy> dairy = std::make_unique<Dairy>();
+        Food total = dairy->get_total_all_meals(date);
+
+        // Only display totals if they are valid
+        if (total.calories >= 0) {  // Basic validation check
+            std::cout << std::left 
+                << std::setw(3)  << ""
+                << CYAN << std::setw(30) << "DAILY TOTAL"
+                << std::setw(25) << ""
+                << std::fixed << std::setprecision(1)  // Set fixed precision for numbers
+                << std::setw(15) << total.amount
+                << std::setw(15) << total.calories
+                << std::setw(15) << total.fat
+                << std::setw(15) << total.carbs
+                << std::setw(15) << total.protein << RESET
+                << std::endl;
+
+            std::cout << std::string(128, '-') << std::endl;
+            read_remaining(total.calories);
+            std::cout << std::string(128, '-') << std::endl;
+        } else {
+            std::cout << CYAN << "Invalid total values found." << RESET << std::endl;
+        }
+    } catch (const std::exception& e) {
+        std::cerr << RED << "Error reading daily entries: " << e.what() << RESET << std::endl;
+    }
 }
 
 void UI::read_daily_entry_by_date(){
@@ -322,13 +458,13 @@ void UI::read_remaining(double calories){
     << std::endl;
 }
 
-void UI::read_meal_data(const std::string& date, const std::string& meal_name){
+bool UI::read_meal_data(const std::string& date, const std::string& meal_name) {
     std::unique_ptr<Dairy> dairy = std::make_unique<Dairy>();
     std::string entry_path = meal_name;
     std::vector<Food> entries = dairy->get_food_entries(date, entry_path);
 
     if(entries.empty()){
-        return;
+        return false;
     }
 
     std::cout << std::string(128, '-') << std::endl;
@@ -346,9 +482,10 @@ void UI::read_meal_data(const std::string& date, const std::string& meal_name){
     std::cout << std::endl;
 
     int i = 0;
-    for(Food entry: entries){
+    for(const auto& entry: entries){
         i++;
         std::cout << std::left
+            << std::fixed << std::setprecision(1)  // Set fixed precision for numbers
             << std::setw(3)  << std::to_string(i) + "."
             << std::setw(29) << entry.name
             << std::setw(26) << entry.brand
@@ -365,12 +502,15 @@ void UI::read_meal_data(const std::string& date, const std::string& meal_name){
         << std::setw(3)  << ""
         << CYAN << std::setw(30) << meal.name
         << std::setw(25) << meal.brand
+        << std::fixed << std::setprecision(1)  // Set fixed precision for numbers
         << std::setw(15) << meal.amount
         << std::setw(15) << meal.calories
         << std::setw(15) << meal.fat
         << std::setw(15) << meal.carbs
         << std::setw(15) << meal.protein << RESET
         << std::endl;
+
+    return true;
 }
 
 void UI::enter_weight(){
