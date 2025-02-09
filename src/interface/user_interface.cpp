@@ -309,7 +309,6 @@ void UI::open_dairy_menu(){
 void UI::open_daily_entries_menu(){
     auto dairy = std::make_unique<Dairy>();
     Parser parser;
-    read_daily_entry(parser.create_date_stamp());
 
     std::vector<std::string> menu_options = {
         "1. Add",
@@ -357,8 +356,8 @@ void UI::read_daily_entry(const std::string& date) {
     std::cout << CYAN << "YOUR DAILY ENTRIES FOR DATE: " << date << RESET << std::endl;
     std::cout << std::endl;
 
-    // Check if the daily entries directory exists
-    std::filesystem::path entries_path = "../db/dailies/" + date;
+    // Update path to match the one used in dairy.cpp
+    std::filesystem::path entries_path = "db/dailies/" + date;  // Remove "../" prefix
     if (!std::filesystem::exists(entries_path)) {
         std::cout << RED << "No entries found for date: " << date << RESET << std::endl;
         return;
@@ -460,7 +459,11 @@ void UI::read_remaining(double calories){
 
 bool UI::read_meal_data(const std::string& date, const std::string& meal_name) {
     std::unique_ptr<Dairy> dairy = std::make_unique<Dairy>();
+    // Convert first letter to uppercase for the file name
     std::string entry_path = meal_name;
+    if (!entry_path.empty()) {
+        entry_path[0] = std::toupper(entry_path[0]);
+    }
     std::vector<Food> entries = dairy->get_food_entries(date, entry_path);
 
     if(entries.empty()){

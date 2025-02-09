@@ -96,9 +96,9 @@ Food Dairy::return_total(std::ifstream& file){
 Food Dairy::get_total_all_meals(const std::string& date) {
     std::vector<Food> totals;
     Food total;
-    Food breakfast_total = get_meal_total(date, "breakfast");
-    Food lunch_total = get_meal_total(date, "lunch");
-    Food dinner_total = get_meal_total(date, "dinner");
+    Food breakfast_total = get_meal_total(date, "Breakfast");
+    Food lunch_total = get_meal_total(date, "Lunch");
+    Food dinner_total = get_meal_total(date, "Dinner");
     totals.push_back(breakfast_total);
     totals.push_back(lunch_total);
     totals.push_back(dinner_total);
@@ -109,21 +109,21 @@ Food Dairy::get_total_all_meals(const std::string& date) {
     double total_carbs = 0.0;
     double total_protein = 0.0;
     
-    for(Food entry: totals){
+    for(const Food& entry: totals){
         total_amount += entry.amount;
         total_calories += entry.calories;
-        total_fat += entry.carbs;
+        total_fat += entry.fat;
         total_carbs += entry.carbs;
         total_protein += entry.protein;
     }
 
-    total.name =  "Total all";
+    total.name = "Total all";
     total.brand = "";
     total.amount = total_amount;
     total.calories = total_calories;
     total.fat = total_fat;
-    total.carbs = total_carbs; 
-    total.protein = total_protein; 
+    total.carbs = total_carbs;
+    total.protein = total_protein;
 
     return total;
 }
