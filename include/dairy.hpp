@@ -25,9 +25,11 @@ class Dairy {
         void remove_food();
         void add_new_daily_entry();
         void write_to_db(const std::string& itemData);
+        void fix_meal_entries(const std::string& date, const std::string& meal_name);
 
     private:
         Food return_total(std::ifstream& file);
         std::string add_meal_entry();
         std::string get_meal_time();
+        Food find_food_in_database(const std::string& name, const std::string& brand);
 };

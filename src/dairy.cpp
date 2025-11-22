@@ -2,6 +2,8 @@
 #include <fstream>
 #include <string>
 #include <sstream>
+#include <iomanip>
+#include <filesystem>
 #include "../include/dairy.hpp"
 #include "../include/parser.hpp"
 #include "../include/database.hpp"
@@ -9,6 +11,7 @@
 // Add these color constants
 const std::string RED = "\033[31m";
 const std::string GREEN = "\033[32m";
+const std::string CYAN = "\033[36m";
 const std::string RESET = "\033[0m";
 
 std::vector<Food> Dairy::get_food_entries(const std::string& date, const std::string& meal_name) {
@@ -22,10 +25,22 @@ std::vector<Food> Dairy::get_food_entries(const std::string& date, const std::st
     }
 
     while (std::getline(file, output)) {
+        if (output.empty() || output.find_first_not_of(" \t") == std::string::npos) {
+            continue; // Skip empty lines
+        }
+        
         std::stringstream ss(output); 
         Food entry;
         std::getline(ss, entry.name, ','); 
+        // Trim whitespace from name
+        entry.name.erase(0, entry.name.find_first_not_of(" \t"));
+        entry.name.erase(entry.name.find_last_not_of(" \t") + 1);
+        
         std::getline(ss, entry.brand, ',');
+        // Trim whitespace from brand
+        entry.brand.erase(0, entry.brand.find_first_not_of(" \t"));
+        entry.brand.erase(entry.brand.find_last_not_of(" \t") + 1);
+        
         ss >> entry.amount;
         ss.ignore(1);
         ss >> entry.calories;
@@ -308,23 +323,51 @@ std::string Dairy::add_meal_entry()
         return "";
     }
 
-    // Modify the amount in the selected item
-    std::string modified_line = line;
-    size_t first_comma = modified_line.find(',');
-    if (first_comma != std::string::npos) {
-        size_t second_comma = modified_line.find(',', first_comma + 1);
-        if (second_comma != std::string::npos) {
-            size_t third_comma = modified_line.find(',', second_comma + 1);
-            if (third_comma != std::string::npos) {
-                // Replace the amount (between second and third comma)
-                std::string before = modified_line.substr(0, second_comma + 2); // +2 to include comma and space
-                std::string after = modified_line.substr(third_comma);
-                modified_line = before + std::to_string(amount) + after;
-            }
-        }
-    }
+    // Parse the database line to extract all values
+    std::stringstream ss(line);
+    std::string name, brand;
+    double db_amount, db_calories, db_fat, db_carbs, db_protein;
+    
+    std::getline(ss, name, ',');
+    // Remove leading/trailing spaces from name
+    name.erase(0, name.find_first_not_of(" \t"));
+    name.erase(name.find_last_not_of(" \t") + 1);
+    
+    std::getline(ss, brand, ',');
+    // Remove leading/trailing spaces from brand
+    brand.erase(0, brand.find_first_not_of(" \t"));
+    brand.erase(brand.find_last_not_of(" \t") + 1);
+    
+    ss >> db_amount;
+    ss.ignore(1); // Skip comma
+    ss >> db_calories;
+    ss.ignore(1); // Skip comma
+    ss >> db_fat;
+    ss.ignore(1); // Skip comma
+    ss >> db_carbs;
+    ss.ignore(1); // Skip comma
+    ss >> db_protein;
 
-    return modified_line;
+    // Calculate scaling ratio based on amount
+    double ratio = (db_amount > 0) ? amount / db_amount : 1.0;
+    
+    // Scale all nutritional values proportionally
+    double scaled_calories = db_calories * ratio;
+    double scaled_fat = db_fat * ratio;
+    double scaled_carbs = db_carbs * ratio;
+    double scaled_protein = db_protein * ratio;
+
+    // Build the modified line with scaled values
+    std::stringstream modified_ss;
+    modified_ss << name << ", " 
+                << brand << ", " 
+                << std::fixed << std::setprecision(6) << amount << ", "
+                << std::fixed << std::setprecision(6) << scaled_calories << ", "
+                << std::fixed << std::setprecision(6) << scaled_fat << ", "
+                << std::fixed << std::setprecision(6) << scaled_carbs << ", "
+                << std::fixed << std::setprecision(6) << scaled_protein;
+
+    return modified_ss.str();
 }
 
 void Dairy::add_new_daily_entry()
@@ -359,6 +402,128 @@ std::string Dairy::get_meal_time()
 	}
 
 	return "Invalid option";
+}
+
+Food Dairy::find_food_in_database(const std::string& name, const std::string& brand) {
+    Food result;
+    result.name = "";
+    result.amount = 0;
+    
+    std::ifstream database("db/db.txt");
+    if (!database.is_open()) {
+        return result;
+    }
+    
+    std::string line;
+    while (std::getline(database, line)) {
+        std::stringstream ss(line);
+        std::string db_name, db_brand;
+        
+        std::getline(ss, db_name, ',');
+        db_name.erase(0, db_name.find_first_not_of(" \t"));
+        db_name.erase(db_name.find_last_not_of(" \t") + 1);
+        
+        std::getline(ss, db_brand, ',');
+        db_brand.erase(0, db_brand.find_first_not_of(" \t"));
+        db_brand.erase(db_brand.find_last_not_of(" \t") + 1);
+        
+        // Match by name and brand (case-insensitive)
+        if (db_name == name && db_brand == brand) {
+            result.name = db_name;
+            result.brand = db_brand;
+            ss >> result.amount;
+            ss.ignore(1);
+            ss >> result.calories;
+            ss.ignore(1);
+            ss >> result.fat;
+            ss.ignore(1);
+            ss >> result.carbs;
+            ss.ignore(1);
+            ss >> result.protein;
+            break;
+        }
+    }
+    
+    database.close();
+    return result;
+}
+
+void Dairy::fix_meal_entries(const std::string& date, const std::string& meal_name) {
+    std::string file_path = "db/dailies/" + date + "/" + meal_name + ".txt";
+    
+    if (!std::filesystem::exists(file_path)) {
+        std::cout << RED << "Meal file does not exist: " << file_path << RESET << std::endl;
+        return;
+    }
+    
+    // Read all entries from the meal file
+    std::vector<Food> entries = get_food_entries(date, meal_name);
+    
+    if (entries.empty()) {
+        std::cout << CYAN << "No entries found in " << meal_name << " for date " << date << RESET << std::endl;
+        return;
+    }
+    
+    std::vector<std::string> corrected_lines;
+    int fixed_count = 0;
+    
+    // Fix each entry
+    for (const auto& entry : entries) {
+        // Look up the food in the database
+        Food db_food = find_food_in_database(entry.name, entry.brand);
+        
+        if (db_food.amount == 0) {
+            std::cerr << RED << "Warning: Food not found in database: " << entry.name << " (" << entry.brand << ")" << RESET << std::endl;
+            // Keep the original entry if not found
+            std::stringstream ss;
+            ss << entry.name << ", " << entry.brand << ", "
+               << std::fixed << std::setprecision(6) << entry.amount << ", "
+               << std::fixed << std::setprecision(6) << entry.calories << ", "
+               << std::fixed << std::setprecision(6) << entry.fat << ", "
+               << std::fixed << std::setprecision(6) << entry.carbs << ", "
+               << std::fixed << std::setprecision(6) << entry.protein;
+            corrected_lines.push_back(ss.str());
+            continue;
+        }
+        
+        // Calculate scaling ratio
+        double ratio = (db_food.amount > 0) ? entry.amount / db_food.amount : 1.0;
+        
+        // Scale all nutritional values proportionally
+        double scaled_calories = db_food.calories * ratio;
+        double scaled_fat = db_food.fat * ratio;
+        double scaled_carbs = db_food.carbs * ratio;
+        double scaled_protein = db_food.protein * ratio;
+        
+        // Build corrected line
+        std::stringstream corrected_ss;
+        corrected_ss << entry.name << ", " << entry.brand << ", "
+                     << std::fixed << std::setprecision(6) << entry.amount << ", "
+                     << std::fixed << std::setprecision(6) << scaled_calories << ", "
+                     << std::fixed << std::setprecision(6) << scaled_fat << ", "
+                     << std::fixed << std::setprecision(6) << scaled_carbs << ", "
+                     << std::fixed << std::setprecision(6) << scaled_protein;
+        
+        corrected_lines.push_back(corrected_ss.str());
+        fixed_count++;
+    }
+    
+    // Write corrected entries back to file
+    std::ofstream out_file(file_path, std::ios::trunc);
+    if (!out_file.is_open()) {
+        std::cerr << RED << "Error: Cannot write to file: " << file_path << RESET << std::endl;
+        return;
+    }
+    
+    for (size_t i = 0; i < corrected_lines.size(); ++i) {
+        out_file << corrected_lines[i];
+        if (i < corrected_lines.size() - 1) {
+            out_file << std::endl;
+        }
+    }
+    
+    out_file.close();
+    std::cout << GREEN << "Fixed " << fixed_count << " entries in " << meal_name << " for date " << date << RESET << std::endl;
 }
 
 void Dairy::write_to_db(const std::string& itemData) {

@@ -14,10 +14,19 @@
 #include <cerrno>    // for errno
 #include <cstring>   // for std::strerror
 #include <iomanip>
+#include <algorithm>
 
 const std::string RED = "\033[31m";
 const std::string CYAN = "\033[36m";
 const std::string RESET = "\033[0m";
+
+// Helper function to truncate strings for display
+std::string truncate_string(const std::string& str, size_t max_width) {
+    if (str.length() <= max_width) {
+        return str;
+    }
+    return str.substr(0, max_width - 3) + "...";
+}
 
 bool UI::open_home_menu()
 {
@@ -383,21 +392,33 @@ void UI::read_daily_entry(const std::string& date) {
 
         // Only display totals if they are valid
         if (total.calories >= 0) {  // Basic validation check
+            // Use consistent column widths matching the meal table
+            const int COL_NUM = 3;
+            const int COL_NAME = 28;
+            const int COL_BRAND = 22;
+            const int COL_AMOUNT = 12;
+            const int COL_CALORIES = 12;
+            const int COL_FAT = 12;
+            const int COL_CARBS = 12;
+            const int COL_PROTEIN = 12;
+            const int TOTAL_WIDTH = COL_NUM + COL_NAME + COL_BRAND + COL_AMOUNT + COL_CALORIES + COL_FAT + COL_CARBS + COL_PROTEIN + 5;
+            
+            std::cout << std::string(TOTAL_WIDTH, '-') << std::endl;
             std::cout << std::left 
-                << std::setw(3)  << ""
-                << CYAN << std::setw(30) << "DAILY TOTAL"
-                << std::setw(25) << ""
+                << std::setw(COL_NUM)  << ""
+                << CYAN << std::setw(COL_NAME) << "DAILY TOTAL"
+                << std::setw(COL_BRAND) << ""
                 << std::fixed << std::setprecision(1)  // Set fixed precision for numbers
-                << std::setw(15) << total.amount
-                << std::setw(15) << total.calories
-                << std::setw(15) << total.fat
-                << std::setw(15) << total.carbs
-                << std::setw(15) << total.protein << RESET
+                << std::setw(COL_AMOUNT) << total.amount
+                << std::setw(COL_CALORIES) << total.calories
+                << std::setw(COL_FAT) << total.fat
+                << std::setw(COL_CARBS) << total.carbs
+                << std::setw(COL_PROTEIN) << total.protein << RESET
                 << std::endl;
 
-            std::cout << std::string(128, '-') << std::endl;
+            std::cout << std::string(TOTAL_WIDTH, '-') << std::endl;
             read_remaining(total.calories);
-            std::cout << std::string(128, '-') << std::endl;
+            std::cout << std::string(TOTAL_WIDTH, '-') << std::endl;
         } else {
             std::cout << CYAN << "Invalid total values found." << RESET << std::endl;
         }
@@ -432,29 +453,67 @@ void UI::read_daily_entry_by_date(){
 }
 
 void UI::read_remaining(double calories){
-    std::filesystem::path goal_path = "../db/goals.txt";
+    // Try both paths for compatibility
+    std::filesystem::path goal_path = "db/goals.txt";
+    if (!std::filesystem::exists(goal_path)) {
+        goal_path = "../db/goals.txt";
+    }
+    
     std::ifstream goal_file(goal_path);
     std::string line;
     double calories_goal = 0;
+    bool goal_found = false;
 
-    while(std::getline(goal_file, line)){
-        if(line.find("Calories:") != std::string::npos){
-            std::stringstream ss(line);
-            std::string label;
-            ss >> label >> calories_goal;
+    if (goal_file.is_open()) {
+        while(std::getline(goal_file, line)){
+            if(line.find("Calories:") == 0 || line.find("Calories:") != std::string::npos){
+                std::stringstream ss(line);
+                std::string label;
+                ss >> label >> calories_goal;
+                goal_found = true;
+                break;
+            }
         }
+        goal_file.close();
+    }
+
+    if (!goal_found || calories_goal == 0) {
+        // Use consistent column widths matching the table
+        const int COL_NUM = 3;
+        const int COL_NAME = 28;
+        const int COL_BRAND = 22;
+        const int COL_AMOUNT = 12;
+        int label_width = COL_NUM + COL_NAME + COL_BRAND + COL_AMOUNT;
+        
+        std::cout << std::left 
+                  << std::setw(label_width) << ""
+                  << CYAN << "Remaining: " << RESET 
+                  << "No calorie goal set. Set in: Home → Goals → Add Goal → Calorie Goal"
+                  << std::endl;
+        return;
     }
 
     double remaining_calories = calories_goal - calories;
-    std::cout 
-    << std::left 
-    << std::setw(3) << ""
-    << CYAN << "Remaining: " << RESET 
-    << std::setw(59) << "" 
-    << (calories > calories_goal ? RED : CYAN) 
-    << remaining_calories 
-    << RESET
-    << std::endl;
+    
+    // Use consistent column widths matching the table
+    const int COL_NUM = 3;
+    const int COL_NAME = 28;
+    const int COL_BRAND = 22;
+    const int COL_AMOUNT = 12;
+    const int COL_CALORIES = 12;
+    
+    // Calculate position to align with Calories column
+    int label_width = COL_NUM + COL_NAME + COL_BRAND + COL_AMOUNT;
+    
+    std::cout << std::left 
+              << std::setw(label_width) << ""
+              << CYAN << "Remaining: " << RESET 
+              << std::fixed << std::setprecision(1)
+              << (calories > calories_goal ? RED : CYAN) 
+              << std::setw(COL_CALORIES) << remaining_calories 
+              << RESET
+              << " / " << calories_goal << " goal"
+              << std::endl;
 }
 
 bool UI::read_meal_data(const std::string& date, const std::string& meal_name) {
@@ -470,47 +529,61 @@ bool UI::read_meal_data(const std::string& date, const std::string& meal_name) {
         return false;
     }
 
-    std::cout << std::string(128, '-') << std::endl;
+    // Consistent column widths
+    const int COL_NUM = 3;
+    const int COL_NAME = 28;
+    const int COL_BRAND = 22;
+    const int COL_AMOUNT = 12;
+    const int COL_CALORIES = 12;
+    const int COL_FAT = 12;
+    const int COL_CARBS = 12;
+    const int COL_PROTEIN = 12;
+    const int COL_MEAL = 12;
+    
+    const int TOTAL_WIDTH = COL_NUM + COL_NAME + COL_BRAND + COL_AMOUNT + COL_CALORIES + COL_FAT + COL_CARBS + COL_PROTEIN + COL_MEAL + 5; // +5 for spacing
+    
+    std::cout << std::string(TOTAL_WIDTH, '-') << std::endl;
     std::cout << std::left
-        << std::setw(3) << "" 
-        << std::setw(30) << "Name" 
-        << std::setw(25) << "Brand"
-        << std::setw(15) << "Amount(g)"
-        << std::setw(15) << "Calories"
-        << std::setw(15) << "Fat"
-        << std::setw(15) << "Carbs"
-        << std::setw(15) << "Protein"
-        << CYAN << std::setw(15) << meal_name << RESET
+        << std::setw(COL_NUM) << "" 
+        << std::setw(COL_NAME) << "Name" 
+        << std::setw(COL_BRAND) << "Brand"
+        << std::setw(COL_AMOUNT) << "Amount(g)"
+        << std::setw(COL_CALORIES) << "Calories"
+        << std::setw(COL_FAT) << "Fat"
+        << std::setw(COL_CARBS) << "Carbs"
+        << std::setw(COL_PROTEIN) << "Protein"
+        << CYAN << std::setw(COL_MEAL) << meal_name << RESET
         << std::endl;
-    std::cout << std::endl;
+    std::cout << std::string(TOTAL_WIDTH, '-') << std::endl;
 
     int i = 0;
     for(const auto& entry: entries){
         i++;
         std::cout << std::left
             << std::fixed << std::setprecision(1)  // Set fixed precision for numbers
-            << std::setw(3)  << std::to_string(i) + "."
-            << std::setw(29) << entry.name
-            << std::setw(26) << entry.brand
-            << std::setw(15) << entry.amount
-            << std::setw(15) << entry.calories
-            << std::setw(15) << entry.fat
-            << std::setw(15) << entry.carbs
-            << std::setw(15) << entry.protein
+            << std::setw(COL_NUM)  << (std::to_string(i) + ".")
+            << std::setw(COL_NAME) << truncate_string(entry.name, COL_NAME)
+            << std::setw(COL_BRAND) << truncate_string(entry.brand, COL_BRAND)
+            << std::setw(COL_AMOUNT) << entry.amount
+            << std::setw(COL_CALORIES) << entry.calories
+            << std::setw(COL_FAT) << entry.fat
+            << std::setw(COL_CARBS) << entry.carbs
+            << std::setw(COL_PROTEIN) << entry.protein
             << std::endl;
     }
 
     Food meal = dairy->get_meal_total(date, entry_path);
+    std::cout << std::string(TOTAL_WIDTH, '-') << std::endl;
     std::cout << std::left 
-        << std::setw(3)  << ""
-        << CYAN << std::setw(30) << meal.name
-        << std::setw(25) << meal.brand
+        << std::setw(COL_NUM)  << ""
+        << CYAN << std::setw(COL_NAME) << truncate_string(meal.name, COL_NAME)
+        << std::setw(COL_BRAND) << truncate_string(meal.brand, COL_BRAND)
         << std::fixed << std::setprecision(1)  // Set fixed precision for numbers
-        << std::setw(15) << meal.amount
-        << std::setw(15) << meal.calories
-        << std::setw(15) << meal.fat
-        << std::setw(15) << meal.carbs
-        << std::setw(15) << meal.protein << RESET
+        << std::setw(COL_AMOUNT) << meal.amount
+        << std::setw(COL_CALORIES) << meal.calories
+        << std::setw(COL_FAT) << meal.fat
+        << std::setw(COL_CARBS) << meal.carbs
+        << std::setw(COL_PROTEIN) << meal.protein << RESET
         << std::endl;
 
     return true;
