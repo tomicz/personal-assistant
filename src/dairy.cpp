@@ -311,6 +311,11 @@ std::string Dairy::add_meal_entry()
 
     int current_line = 0;
     while (std::getline(database, line)) {
+        // Skip empty lines to match the display logic in read_db()
+        if (line.empty() || line.find_first_not_of(" \t") == std::string::npos) {
+            continue;
+        }
+        
         if (current_line == food_choice - 1) { // -1 because we displayed numbers starting from 1
             break;
         }
@@ -318,6 +323,12 @@ std::string Dairy::add_meal_entry()
     }
     database.close();
 
+    // Check if we found a valid line (not empty)
+    if (line.empty() || line.find_first_not_of(" \t") == std::string::npos) {
+        std::cerr << RED << "Error: Selected item number not found in database." << RESET << std::endl;
+        return "";
+    }
+    
     if (current_line != food_choice - 1) {
         std::cerr << RED << "Error: Selected item number not found in database." << RESET << std::endl;
         return "";
